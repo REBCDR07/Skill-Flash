@@ -1,0 +1,427 @@
+{
+  "courseId": "html",
+  "title": "QCM HTML5 Fondamentaux",
+  "passingScore": 70,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que signifie HTML ?",
+      "options": [
+        "Hyper Text Markup Language",
+        "High Tech Modern Language",
+        "Hyper Transfer Markup Language",
+        "Home Tool Markup Language"
+      ],
+      "correctAnswer": 0,
+      "explanation": "HTML signifie HyperText Markup Language, le langage standard pour créer des pages web."
+    },
+    {
+      "id": 2,
+      "question": "Quelle balise définit le titre d'une page web affiché dans l'onglet du navigateur ?",
+      "options": [
+        "<header>",
+        "<h1>",
+        "<title>",
+        "<meta>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "La balise <title> dans le <head> définit le titre affiché dans l'onglet du navigateur."
+    },
+    {
+      "id": 3,
+      "question": "Où doit être placée la balise <title> ?",
+      "options": [
+        "Dans le <body>",
+        "Dans le <head>",
+        "Dans le <footer>",
+        "N'importe où"
+      ],
+      "correctAnswer": 1,
+      "explanation": "La balise <title> doit obligatoirement être dans la section <head> du document."
+    },
+    {
+      "id": 4,
+      "question": "Quelle balise est utilisée pour créer un lien hypertexte ?",
+      "options": [
+        "<link>",
+        "<href>",
+        "<a>",
+        "<url>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "La balise <a> (anchor) avec l'attribut href est utilisée pour créer des liens."
+    },
+    {
+      "id": 5,
+      "question": "Quelle est la bonne syntaxe pour insérer une image ?",
+      "options": [
+        "<image src=\"photo.jpg\">",
+        "<img href=\"photo.jpg\">",
+        "<img src=\"photo.jpg\">",
+        "<picture src=\"photo.jpg\">"
+      ],
+      "correctAnswer": 2,
+      "explanation": "La syntaxe correcte est <img src=\"photo.jpg\"> avec l'attribut src pour la source."
+    },
+    {
+      "id": 6,
+      "question": "Quelle balise définit le contenu principal unique d'une page ?",
+      "options": [
+        "<content>",
+        "<main>",
+        "<article>",
+        "<section>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "La balise <main> identifie le contenu principal et doit être unique sur chaque page."
+    },
+    {
+      "id": 7,
+      "question": "Quel attribut spécifie la langue du document HTML ?",
+      "options": [
+        "language",
+        "lang",
+        "locale",
+        "idiom"
+      ],
+      "correctAnswer": 1,
+      "explanation": "L'attribut lang sur la balise <html> définit la langue du document."
+    },
+    {
+      "id": 8,
+      "question": "Quelle balise crée une liste non ordonnée ?",
+      "options": [
+        "<ol>",
+        "<list>",
+        "<ul>",
+        "<nl>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<ul> (unordered list) crée une liste à puces, tandis que <ol> crée une liste numérotée."
+    },
+    {
+      "id": 9,
+      "question": "Quel élément représente un saut de ligne ?",
+      "options": [
+        "<break>",
+        "<lb>",
+        "<br>",
+        "<newline>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<br> est une balise auto-fermante qui insère un saut de ligne."
+    },
+    {
+      "id": 10,
+      "question": "Quelle balise définit l'en-tête d'une page ou d'une section ?",
+      "options": [
+        "<head>",
+        "<header>",
+        "<top>",
+        "<heading>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<header> est une balise sémantique pour l'en-tête, <head> contient les métadonnées."
+    },
+    {
+      "id": 11,
+      "question": "Quel attribut rend un champ de formulaire obligatoire ?",
+      "options": [
+        "mandatory",
+        "required",
+        "needed",
+        "must"
+      ],
+      "correctAnswer": 1,
+      "explanation": "L'attribut required empêche la soumission du formulaire si le champ est vide."
+    },
+    {
+      "id": 12,
+      "question": "Quelle balise crée un champ de saisie dans un formulaire ?",
+      "options": [
+        "<textfield>",
+        "<input>",
+        "<field>",
+        "<entry>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<input> est la balise standard pour créer différents types de champs de saisie."
+    },
+    {
+      "id": 13,
+      "question": "Comment définir un commentaire en HTML ?",
+      "options": [
+        "// Commentaire",
+        "/* Commentaire */",
+        "<!-- Commentaire -->",
+        "# Commentaire"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Les commentaires HTML utilisent la syntaxe <!-- contenu -->."
+    },
+    {
+      "id": 14,
+      "question": "Quelle balise est utilisée pour le pied de page ?",
+      "options": [
+        "<bottom>",
+        "<foot>",
+        "<footer>",
+        "<end>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<footer> est la balise sémantique HTML5 pour le pied de page."
+    },
+    {
+      "id": 15,
+      "question": "Quel type d'input crée un champ pour mot de passe ?",
+      "options": [
+        "type=\"secret\"",
+        "type=\"password\"",
+        "type=\"hidden\"",
+        "type=\"secure\""
+      ],
+      "correctAnswer": 1,
+      "explanation": "type=\"password\" masque les caractères saisis avec des points ou astérisques."
+    },
+    {
+      "id": 16,
+      "question": "Quelle balise crée un tableau ?",
+      "options": [
+        "<grid>",
+        "<table>",
+        "<tab>",
+        "<board>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<table> est la balise pour créer des tableaux, avec <tr> pour les lignes et <td> pour les cellules."
+    },
+    {
+      "id": 17,
+      "question": "Quel attribut spécifie l'URL de destination d'un lien ?",
+      "options": [
+        "link",
+        "src",
+        "href",
+        "url"
+      ],
+      "correctAnswer": 2,
+      "explanation": "L'attribut href (hypertext reference) contient l'URL de destination du lien."
+    },
+    {
+      "id": 18,
+      "question": "Quelle balise définit une ligne de tableau ?",
+      "options": [
+        "<tl>",
+        "<row>",
+        "<tr>",
+        "<line>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<tr> (table row) définit une ligne dans un tableau."
+    },
+    {
+      "id": 19,
+      "question": "Quel est le plus grand niveau de titre en HTML ?",
+      "options": [
+        "<h6>",
+        "<h1>",
+        "<title>",
+        "<heading1>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<h1> est le titre le plus important, <h6> le moins important."
+    },
+    {
+      "id": 20,
+      "question": "Quelle balise intègre une vidéo HTML5 ?",
+      "options": [
+        "<movie>",
+        "<media>",
+        "<video>",
+        "<film>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<video> permet d'intégrer des vidéos avec des contrôles natifs."
+    },
+    {
+      "id": 21,
+      "question": "Quel attribut ouvre un lien dans un nouvel onglet ?",
+      "options": [
+        "target=\"_new\"",
+        "target=\"_blank\"",
+        "open=\"new\"",
+        "window=\"new\""
+      ],
+      "correctAnswer": 1,
+      "explanation": "target=\"_blank\" ouvre le lien dans un nouvel onglet ou fenêtre."
+    },
+    {
+      "id": 22,
+      "question": "Quelle balise crée un bouton cliquable ?",
+      "options": [
+        "<click>",
+        "<btn>",
+        "<button>",
+        "<action>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<button> crée un bouton interactif, personnalisable avec du contenu HTML."
+    },
+    {
+      "id": 23,
+      "question": "Quel doctype déclare un document HTML5 ?",
+      "options": [
+        "<!DOCTYPE HTML5>",
+        "<!DOCTYPE html>",
+        "<html5>",
+        "<?xml version=\"1.0\"?>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<!DOCTYPE html> est la déclaration simplifiée pour HTML5."
+    },
+    {
+      "id": 24,
+      "question": "Quelle balise définit un paragraphe ?",
+      "options": [
+        "<text>",
+        "<para>",
+        "<p>",
+        "<paragraph>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<p> est la balise standard pour définir un paragraphe de texte."
+    },
+    {
+      "id": 25,
+      "question": "Quel attribut alt est utilisé pour ?",
+      "options": [
+        "Ajouter un lien alternatif",
+        "Définir un texte alternatif pour les images",
+        "Créer une mise en page alternative",
+        "Spécifier une couleur alternative"
+      ],
+      "correctAnswer": 1,
+      "explanation": "L'attribut alt fournit un texte descriptif si l'image ne peut pas s'afficher."
+    },
+    {
+      "id": 26,
+      "question": "Quelle balise crée une zone de texte multiligne ?",
+      "options": [
+        "<input type=\"text\">",
+        "<textbox>",
+        "<textarea>",
+        "<multiline>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<textarea> permet de saisir du texte sur plusieurs lignes."
+    },
+    {
+      "id": 27,
+      "question": "Quelle balise définit la navigation principale ?",
+      "options": [
+        "<menu>",
+        "<navigation>",
+        "<nav>",
+        "<links>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<nav> est la balise sémantique pour les sections de navigation."
+    },
+    {
+      "id": 28,
+      "question": "Quel élément crée une liste déroulante ?",
+      "options": [
+        "<dropdown>",
+        "<list>",
+        "<select>",
+        "<options>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<select> avec des <option> crée une liste déroulante de choix."
+    },
+    {
+      "id": 29,
+      "question": "Quelle balise met le texte en gras avec importance sémantique ?",
+      "options": [
+        "<b>",
+        "<bold>",
+        "<strong>",
+        "<heavy>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<strong> indique une importance sémantique, <b> est purement visuel."
+    },
+    {
+      "id": 30,
+      "question": "Quel meta tag est essentiel pour le responsive design ?",
+      "options": [
+        "meta charset",
+        "meta description",
+        "meta viewport",
+        "meta keywords"
+      ],
+      "correctAnswer": 2,
+      "explanation": "meta viewport contrôle les dimensions et le zoom sur les appareils mobiles."
+    },
+    {
+      "id": 31,
+      "question": "Quelle balise définit un contenu indépendant comme un article de blog ?",
+      "options": [
+        "<content>",
+        "<post>",
+        "<article>",
+        "<blog>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<article> représente un contenu autonome et redistribuable."
+    },
+    {
+      "id": 32,
+      "question": "Quel type d'input crée un champ email avec validation ?",
+      "options": [
+        "type=\"mail\"",
+        "type=\"email\"",
+        "type=\"text\" email",
+        "type=\"address\""
+      ],
+      "correctAnswer": 1,
+      "explanation": "type=\"email\" active la validation automatique du format email."
+    },
+    {
+      "id": 33,
+      "question": "Quelle balise définit un contenu complémentaire (sidebar) ?",
+      "options": [
+        "<sidebar>",
+        "<side>",
+        "<aside>",
+        "<extra>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<aside> contient du contenu indirectement lié au contenu principal."
+    },
+    {
+      "id": 34,
+      "question": "Comment lier une feuille de style CSS externe ?",
+      "options": [
+        "<style src=\"style.css\">",
+        "<link rel=\"stylesheet\" href=\"style.css\">",
+        "<css href=\"style.css\">",
+        "<stylesheet>style.css</stylesheet>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<link> avec rel=\"stylesheet\" lie une feuille de style externe."
+    },
+    {
+      "id": 35,
+      "question": "Quelle balise met le texte en italique avec emphase sémantique ?",
+      "options": [
+        "<i>",
+        "<italic>",
+        "<em>",
+        "<emphasis>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<em> ajoute une emphase sémantique, <i> est purement visuel."
+    }
+  ]
+}
