@@ -1,0 +1,36 @@
+{
+  "courseId": "html",
+  "title": "Questions Réponses HTML5",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Expliquez la différence entre les balises sémantiques et non-sémantiques en HTML5. Donnez des exemples de chaque type.",
+      "expectedKeywords": ["sémantique", "signification", "sens", "header", "footer", "nav", "article", "section", "div", "span", "accessibilité", "SEO"],
+      "sampleAnswer": "Les balises sémantiques (comme <header>, <nav>, <article>, <section>, <footer>) ont un sens et décrivent leur contenu. Les balises non-sémantiques (<div>, <span>) sont des conteneurs génériques sans signification. Les balises sémantiques améliorent l'accessibilité pour les lecteurs d'écran et le référencement SEO car les moteurs de recherche comprennent mieux la structure du contenu."
+    },
+    {
+      "id": 2,
+      "question": "Qu'est-ce que l'attribut 'alt' pour les images et pourquoi est-il important ? Dans quels cas peut-il être laissé vide ?",
+      "expectedKeywords": ["alternative", "texte", "accessibilité", "lecteur d'écran", "SEO", "décorative", "vide", "image", "description"],
+      "sampleAnswer": "L'attribut alt fournit un texte alternatif pour les images. Il est crucial pour l'accessibilité (lecteurs d'écran pour malvoyants), le SEO (indexation par les moteurs de recherche), et s'affiche si l'image ne charge pas. Il peut être laissé vide (alt=\"\") uniquement pour les images purement décoratives qui n'apportent pas d'information."
+    },
+    {
+      "id": 3,
+      "question": "Décrivez le rôle du DOCTYPE en HTML5 et expliquez ce qui se passe si on l'omet.",
+      "expectedKeywords": ["DOCTYPE", "html", "déclaration", "navigateur", "mode", "quirks", "standards", "rendu", "compatibilité"],
+      "sampleAnswer": "Le DOCTYPE (<!DOCTYPE html>) déclare au navigateur que le document est en HTML5. Sans lui, le navigateur passe en 'quirks mode' pour compatibilité avec d'anciennes pages, ce qui peut causer des rendus incohérents entre navigateurs. Avec le DOCTYPE, le navigateur utilise le 'standards mode' pour un rendu conforme aux spécifications."
+    },
+    {
+      "id": 4,
+      "question": "Expliquez la structure correcte d'un formulaire HTML avec validation côté client. Quels attributs permettent la validation ?",
+      "expectedKeywords": ["form", "input", "required", "pattern", "type", "email", "validation", "submit", "action", "method", "minlength", "maxlength"],
+      "sampleAnswer": "Un formulaire utilise <form> avec action (URL de traitement) et method (GET/POST). La validation côté client utilise : type (email, number, url...) pour validation de format, required pour champs obligatoires, pattern pour regex personnalisée, minlength/maxlength pour limites de caractères. Le navigateur valide avant soumission et affiche des messages d'erreur natifs."
+    },
+    {
+      "id": 5,
+      "question": "Quelle est la différence entre les éléments block et inline en HTML ? Donnez des exemples et expliquez comment modifier ce comportement.",
+      "expectedKeywords": ["block", "inline", "display", "div", "span", "p", "a", "largeur", "hauteur", "ligne", "CSS", "inline-block"],
+      "sampleAnswer": "Les éléments block (<div>, <p>, <h1>) prennent toute la largeur disponible et commencent sur une nouvelle ligne. Les éléments inline (<span>, <a>, <strong>) s'affichent sur la même ligne et ne prennent que l'espace nécessaire. On peut modifier ce comportement avec CSS display: block, inline, ou inline-block (combine les caractéristiques des deux)."
+    }
+  ]
+}

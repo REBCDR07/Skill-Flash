@@ -1,0 +1,64 @@
+{
+  "courses": [
+    {
+      "id": "html",
+      "title": "HTML5 Fondamentaux",
+      "description": "Apprenez les bases du langage HTML5 pour créer des pages web structurées et sémantiques.",
+      "category": "development",
+      "icon": "Code",
+      "color": "html",
+      "duration": "4 heures",
+      "difficulty": "Débutant",
+      "chapters": 5,
+      "totalQuestions": 35
+    },
+    {
+      "id": "css",
+      "title": "CSS3 & Design Moderne",
+      "description": "Maîtrisez CSS3 pour styliser vos pages web avec des animations, flexbox et grid.",
+      "category": "development",
+      "icon": "Palette",
+      "color": "css",
+      "duration": "6 heures",
+      "difficulty": "Débutant",
+      "chapters": 6,
+      "totalQuestions": 40
+    },
+    {
+      "id": "javascript",
+      "title": "JavaScript ES6+",
+      "description": "Découvrez JavaScript moderne avec ES6+, manipulation du DOM et programmation asynchrone.",
+      "category": "development",
+      "icon": "Braces",
+      "color": "javascript",
+      "duration": "8 heures",
+      "difficulty": "Intermédiaire",
+      "chapters": 8,
+      "totalQuestions": 40
+    },
+    {
+      "id": "marketing",
+      "title": "Marketing Digital",
+      "description": "Stratégies de marketing digital : SEO, réseaux sociaux, publicité en ligne et analytics.",
+      "category": "business",
+      "icon": "TrendingUp",
+      "color": "marketing",
+      "duration": "5 heures",
+      "difficulty": "Débutant",
+      "chapters": 5,
+      "totalQuestions": 30
+    },
+    {
+      "id": "communication",
+      "title": "Communication Professionnelle",
+      "description": "Développez vos compétences en communication écrite, orale et interpersonnelle.",
+      "category": "business",
+      "icon": "MessageCircle",
+      "color": "communication",
+      "duration": "4 heures",
+      "difficulty": "Débutant",
+      "chapters": 4,
+      "totalQuestions": 30
+    }
+  ]
+}

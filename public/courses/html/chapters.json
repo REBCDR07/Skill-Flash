@@ -1,0 +1,35 @@
+{
+  "courseId": "html",
+  "chapters": [
+    {
+      "id": 1,
+      "title": "Introduction au HTML",
+      "description": "Découvrez l'histoire du web et les bases du langage HTML",
+      "duration": "45 min"
+    },
+    {
+      "id": 2,
+      "title": "Structure d'une page HTML",
+      "description": "Apprenez la structure de base d'un document HTML5",
+      "duration": "50 min"
+    },
+    {
+      "id": 3,
+      "title": "Texte et Typographie",
+      "description": "Balises pour le texte, titres, paragraphes et mise en forme",
+      "duration": "45 min"
+    },
+    {
+      "id": 4,
+      "title": "Liens et Images",
+      "description": "Créez des liens hypertexte et intégrez des images",
+      "duration": "50 min"
+    },
+    {
+      "id": 5,
+      "title": "Formulaires HTML",
+      "description": "Créez des formulaires interactifs avec validation",
+      "duration": "60 min"
+    }
+  ]
+}
