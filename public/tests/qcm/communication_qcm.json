@@ -1,0 +1,487 @@
+{
+    "courseId": "communication",
+    "title": "Test de Certification Communication Professionnelle",
+    "passingScore": 80,
+    "questions": [
+        {
+            "id": 1,
+            "question": "Qui est responsable du 'codage' du message dans le schéma de communication ?",
+            "options": [
+                "Le Récepteur",
+                "L'Émetteur",
+                "Le Canal",
+                "Le Feedback"
+            ],
+            "correctAnswer": 1,
+            "explanation": "L'émetteur traduit son idée en message codé."
+        },
+        {
+            "id": 2,
+            "question": "Qu'est-ce que l'écoute active ?",
+            "options": [
+                "Écouter de la musique en travaillant",
+                "Écouter pour comprendre plutôt que pour répondre",
+                "Parler plus fort que l'autre",
+                "Prendre des notes dictées"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Elle nécessite une pleine présence et de la reformulation."
+        },
+        {
+            "id": 3,
+            "question": "Quel pourcentage approximatif de la communication est non-verbal ?",
+            "options": [
+                "7%",
+                "50%",
+                "93%",
+                "100%"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Le corps et le ton de voix dominent largement le sens des mots."
+        },
+        {
+            "id": 4,
+            "question": "Quel est le but de la 'reformulation' ?",
+            "options": [
+                "Répéter bêtement",
+                "Identifier un mensonge",
+                "Valider la compréhension du message",
+                "Changer de sujet"
+            ],
+            "correctAnswer": 2,
+            "explanation": "C'est un outil clé pour éviter les malentendus."
+        },
+        {
+            "id": 5,
+            "question": "Que signifie l'assertivité ?",
+            "options": [
+                "Agresser les autres pour gagner",
+                "Se taire pour éviter les conflits",
+                "S'exprimer clairement dans le respect de soi et de l'autre",
+                "Manipuler les émotions"
+            ],
+            "correctAnswer": 2,
+            "explanation": "C'est l'équilibre entre passivité et agressivité."
+        },
+        {
+            "id": 6,
+            "question": "Dans la méthode DESC, que signifie le 'D' ?",
+            "options": [
+                "Décider",
+                "Décrire les faits",
+                "Demander pardon",
+                "Défendre sa position"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Il faut commencer par des faits objectifs, sans jugement."
+        },
+        {
+            "id": 7,
+            "question": "Qu'est-ce qu'une question ouverte ?",
+            "options": [
+                "Une question qui appelle une réponse par oui ou non",
+                "Une question qui encourage un développement",
+                "Une question indiscrète",
+                "Une question sans réponse"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Elle commence souvent par 'Comment', 'Pourquoi', 'Que penses-tu de...'."
+        },
+        {
+            "id": 8,
+            "question": "Quelle est la durée idéale d'un 'Elevator Pitch' ?",
+            "options": [
+                "10 secondes",
+                "30 à 60 secondes",
+                "10 minutes",
+                "1 heure"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Il doit être assez court pour être délivré lors d'un trajet en ascenseur."
+        },
+        {
+            "id": 9,
+            "question": "Qu'est-ce que la 'Proxémie' ?",
+            "options": [
+                "La vitesse de parole",
+                "La gestion de l'espace entre les individus",
+                "L'étude des emails",
+                "Le stress"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est létude des distances physiques dans l'interaction."
+        },
+        {
+            "id": 10,
+            "question": "Quelle attitude favorise la confiance lors d'un discours ?",
+            "options": [
+                "Regarder ses pieds",
+                "Avoir les bras croisés",
+                "Maintenir un contact visuel",
+                "Lire ses notes mot pour mot"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Le contact visuel montre l'engagement et l'honnêteté."
+        },
+        {
+            "id": 11,
+            "question": "Comment appelle-t-on le retour d'information donné par le récepteur ?",
+            "options": [
+                "Le Feedback",
+                "Le Code",
+                "La Sortie",
+                "Le Bruit"
+            ],
+            "correctAnswer": 0,
+            "explanation": "Il permet à l'émetteur de savoir si son message est passé."
+        },
+        {
+            "id": 12,
+            "question": "Qu'est-ce qu'une 'barrière psychologique' à la communication ?",
+            "options": [
+                "Une porte fermée",
+                "Une émotion forte ou un préjugé",
+                "Un mauvais micro",
+                "Une langue étrangère"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Nos états internes filtrent et déforment les messages reçus."
+        },
+        {
+            "id": 13,
+            "question": "L'empathie consiste à...",
+            "options": [
+                "Souffrir autant que l'autre",
+                "Comprendre le point de vue de l'autre sans le juger",
+                "Donner son avis tout de suite",
+                "Faire semblant d'écouter"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est une compétence émotionnelle majeure."
+        },
+        {
+            "id": 14,
+            "question": "Quel canal de communication est 'asynchrone' ?",
+            "options": [
+                "Un appel téléphonique",
+                "Une réunion en face à face",
+                "Un email",
+                "Un débat"
+            ],
+            "correctAnswer": 2,
+            "explanation": "L'émetteur et le récepteur ne communiquent pas au même moment."
+        },
+        {
+            "id": 15,
+            "question": "Que signifie l'acronyme 'MESORE' en négociation ?",
+            "options": [
+                "Meilleure Solution de Rechange",
+                "Maximum d'Énergie et de Sortie",
+                "Méthode Simple d'Organisation",
+                "Mesure Sociale"
+            ],
+            "correctAnswer": 0,
+            "explanation": "C'est votre plan B si la négociation échoue (BATNA en anglais)."
+        },
+        {
+            "id": 16,
+            "question": "Quel est le risque principal du 'Silence' en communication ?",
+            "options": [
+                "Il n'y en a aucun",
+                "Il peut être interprété comme de l'accord ou du désaccord",
+                "Il rend sourd",
+                "Il accélère la conversation"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le silence est un message en soi qui doit être géré avec soin."
+        },
+        {
+            "id": 17,
+            "question": "Quel outil est recommandé pour gérer un conflit de manière constructive ?",
+            "options": [
+                "L'ironie",
+                "Le triangle de Karpman",
+                "La méthode DESC",
+                "L'ignorance"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Elle permet de parler des faits et des besoins sans attaquer l'autre."
+        },
+        {
+            "id": 18,
+            "question": "Qu'est-ce que le 'Personal Branding' ?",
+            "options": [
+                "Marquer ses vêtements",
+                "Gérer son image professionnelle comme une marque",
+                "Vendre des produits dérivés",
+                "Changer de nom"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est la manière dont vous communiquez sur votre valeur ajoutée."
+        },
+        {
+            "id": 19,
+            "question": "Dans une présentation, l''Amorce' sert à ?",
+            "options": [
+                "Finir le discours",
+                "Capter l'attention immédiatement",
+                "Remercier le public",
+                "Présenter les chiffres"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Les premières secondes sont cruciales pour l'engagement du public."
+        },
+        {
+            "id": 20,
+            "question": "Dans le cadre de la communication de crise, que signifie 'Candeur' ?",
+            "options": [
+                "Naiveté",
+                "Honnêteté et transparence",
+                "Lenteur",
+                "Sécurité"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Cacher la vérité aggrave souvent les crises d'image."
+        },
+        {
+            "id": 21,
+            "question": "Qu'est-ce qu'une communication de 'Contexte Fort' ?",
+            "options": [
+                "Une communication très directe (Allemagne)",
+                "Une communication où le non-dit est important (Japon)",
+                "Une conversation bruyante",
+                "Une communication par écrit uniquement"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le sens dépend beaucoup de la situation et des relations."
+        },
+        {
+            "id": 22,
+            "question": "Quel comportement indique un manque d'écoute ?",
+            "options": [
+                "Hocher la tête",
+                "Regarder sa montre ou son téléphone",
+                "Prendre des notes",
+                "Reformuler"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est un signal de désintérêt ou d'impatience."
+        },
+        {
+            "id": 23,
+            "question": "Le 'Paralangage' inclut...",
+            "options": [
+                "Les mots choisis",
+                "Le volume, le débit et l'intonation",
+                "Les vêtements",
+                "Le niveau de diplôme"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est tout ce qui entoure la parole sans être les mots."
+        },
+        {
+            "id": 24,
+            "question": "Quelle est la règle d'or pour un email professionnel ?",
+            "options": [
+                "Être le plus long possible",
+                "Utiliser beaucoup d'emojis",
+                "Être clair et concis avec un objet explicite",
+                "Ne jamais mettre de signature"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Le temps de vos interlocuteurs est précieux."
+        },
+        {
+            "id": 25,
+            "question": "L'un des 6 principes de persuasion de Cialdini est la 'Réciprocité'. C'est ?",
+            "options": [
+                "Être méchant avec ceux qui le sont",
+                "Donner quelque chose avant de demander",
+                "Copier l'autre",
+                "Ne rien faire"
+            ],
+            "correctAnswer": 1,
+            "explanation": "On se sent naturellement redevable envers ceux qui nous ont aidés."
+        },
+        {
+            "id": 26,
+            "question": "Quel canal privilégier pour une annonce sensible (ex: licenciement ou promotion) ?",
+            "options": [
+                "Le face à face (ou visio)",
+                "L'email",
+                "Slack",
+                "Un post LinkedIn"
+            ],
+            "correctAnswer": 0,
+            "explanation": "L'humain et les émotions nécessitent un canal direct et riche."
+        },
+        {
+            "id": 27,
+            "question": "Qu'est-ce qu'une 'attaque ad hominem' ?",
+            "options": [
+                "Attaquer l'argument",
+                "Attaquer la personne plutôt que l'idée",
+                "Une félicitation",
+                "Une technique de vente"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est un frein majeur à une communication saine."
+        },
+        {
+            "id": 28,
+            "question": "Dans une équipe, que favorise la 'sécurité psychologique' ?",
+            "options": [
+                "Le silence par peur du jugement",
+                "La liberté de prendre des risques et d'admettre ses erreurs",
+                "Le port du casque",
+                "L'anonymat"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Concept clé des équipes performantes (étude Google Aristotle)."
+        },
+        {
+            "id": 29,
+            "question": "Quelle méthode de respiration aide à gérer le trac ?",
+            "options": [
+                "L'apnée",
+                "La respiration abdominale lente",
+                "L'hyperventilation",
+                "La respiration buccale rapide"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Elle calme le système nerveux parasympathique."
+        },
+        {
+            "id": 30,
+            "question": "Comment désamorcer un début d'agressivité chez un client ?",
+            "options": [
+                "Lui dire de se calmer",
+                "Écouter sans interrompre et valider son émotion",
+                "Lui raccrocher au nez",
+                "Rire de la situation"
+            ],
+            "correctAnswer": 1,
+            "explanation": "L'empathie tactique désamorce la tension."
+        },
+        {
+            "id": 31,
+            "question": "Quel est le rôle du 'Sauveur' dans le triangle de Karpman ?",
+            "options": [
+                "Il aide sans qu'on lui demande pour se sentir supérieur",
+                "Il répare les serveurs",
+                "Il est une victime",
+                "Il ne fait rien"
+            ],
+            "correctAnswer": 0,
+            "explanation": "C'est un rôle relationnel toxique qui infantilise l'autre."
+        },
+        {
+            "id": 32,
+            "question": "Quelle plateforme privilégier pour établir son autorité professionnelle en 2024 ?",
+            "options": [
+                "Snapchat",
+                "LinkedIn",
+                "Facebook",
+                "Tumblr"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est le réseau où se trouvent les décideurs et experts."
+        },
+        {
+            "id": 33,
+            "question": "Qu'est-ce que la 'Cohérence Cardiaque' ?",
+            "options": [
+                "Une maladie",
+                "Une technique respiratoire pour réguler le stress",
+                "Un exercice physique intense",
+                "Un test de performance"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Pratique régulière de 5 ou 6 respirations par minute."
+        },
+        {
+            "id": 34,
+            "question": "Dans un conflit, exprimer son 'Sentiment' (le E du DESC) permet de ?",
+            "options": [
+                "Faire culpabiliser l'autre",
+                "Rendre la situation humaine et moins frontale",
+                "Se mettre en colère",
+                "Gagner du temps"
+            ],
+            "correctAnswer": 1,
+            "explanation": "On ne peut pas contester le ressenti de quelqu'un."
+        },
+        {
+            "id": 35,
+            "question": "Quelle est la clé d'un bon Leadership selon le cours ?",
+            "options": [
+                "Donner des ordres",
+                "Incarner une vision et motiver les troupes",
+                "Être le plus diplômé",
+                "Avoir le plus gros bureau"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le leader communique du sens."
+        },
+        {
+            "id": 36,
+            "question": "Que signifie être 'Éthnocentrique' ?",
+            "options": [
+                "Avoir peur du vide",
+                "Juger les autres cultures selon ses propres normes",
+                "Parler plusieurs langues",
+                "Être très poli"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est un obstacle majeur à la communication interculturelle."
+        },
+        {
+            "id": 37,
+            "question": "Qu'est-ce que l''Ancrage' en négociation ?",
+            "options": [
+                "Le fait de dormir sur place",
+                "La première offre qui fixe le cadre mental de la discussion",
+                "Un bouton marin",
+                "Une technique de relaxation"
+            ],
+            "correctAnswer": 1,
+            "explanation": "La première valeur citée influence fortement la suite."
+        },
+        {
+            "id": 38,
+            "question": "Un feedback constructif doit être...",
+            "options": [
+                "Vague et poli",
+                "Spécifique, factuel et orienté vers l'avenir",
+                "Anonyme et brutal",
+                "Donné uniquement une fois par an"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Il doit aider la personne à s'améliorer concrètement."
+        },
+        {
+            "id": 39,
+            "question": "Quel est le but d'un 'Lead' (en communication média) ?",
+            "options": [
+                "Le chapeau d'un article qui résume l'essentiel",
+                "Le titre",
+                "La publicité",
+                "La conclusion"
+            ],
+            "correctAnswer": 0,
+            "explanation": "Il doit donner envie de lire la suite."
+        },
+        {
+            "id": 40,
+            "question": "La communication est réussie si...",
+            "options": [
+                "On a parlé plus longtemps",
+                "Le récepteur a compris l'intention de l'émetteur",
+                "On a utilisé des mots compliqués",
+                "Il n'y a eu aucun silence"
+            ],
+            "correctAnswer": 1,
+            "explanation": "La compréhension mutuelle est l'objectif final."
+        }
+    ]
+}

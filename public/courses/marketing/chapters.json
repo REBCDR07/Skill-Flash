@@ -1,0 +1,65 @@
+{
+    "courseId": "marketing",
+    "chapters": [
+        {
+            "id": 1,
+            "title": "Bases du Marketing Digital",
+            "description": "Introduction aux concepts fondamentaux.",
+            "duration": "45 min"
+        },
+        {
+            "id": 2,
+            "title": "SEO & Moteurs de Recherche",
+            "description": "Apprenez à dominer les résultats de Google.",
+            "duration": "60 min"
+        },
+        {
+            "id": 3,
+            "title": "Content Marketing",
+            "description": "Racontez une histoire qui vend.",
+            "duration": "50 min"
+        },
+        {
+            "id": 4,
+            "title": "Social Media Strategy",
+            "description": "Maîtrisez les réseaux sociaux.",
+            "duration": "60 min"
+        },
+        {
+            "id": 5,
+            "title": "Email & Automation",
+            "description": "Fidélisez votre audience au quotidien.",
+            "duration": "55 min"
+        },
+        {
+            "id": 6,
+            "title": "Publicité Payante (SEA)",
+            "description": "Boostez votre trafic avec Google Ads.",
+            "duration": "65 min"
+        },
+        {
+            "id": 7,
+            "title": "Web Analytics",
+            "description": "Prenez des décisions basées sur la donnée.",
+            "duration": "70 min"
+        },
+        {
+            "id": 8,
+            "title": "E-reputation & Influence",
+            "description": "Gérez l'image de votre marque.",
+            "duration": "45 min"
+        },
+        {
+            "id": 9,
+            "title": "Copywriting",
+            "description": "L'art de convaincre avec les mots.",
+            "duration": "60 min"
+        },
+        {
+            "id": 10,
+            "title": "Growth Hacking",
+            "description": "Stratégies de croissance rapide.",
+            "duration": "75 min"
+        }
+    ]
+}

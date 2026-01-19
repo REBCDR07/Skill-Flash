@@ -1,0 +1,18 @@
+{
+    "courseId": "marketing",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Décrivez la différence entre le SEO et le SEA.",
+            "expectedKeywords": [
+                "naturel",
+                "gratuit",
+                "payant",
+                "publicité",
+                "immédiat",
+                "long terme"
+            ],
+            "minKeywords": 2
+        }
+    ]
+}

@@ -1,14 +1,21 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
 import { UserProfile } from '@/types/course';
+import { toast } from 'sonner';
+
+// Mock User type to replace Supabase User
+interface LocalUser {
+  id: string;
+  email: string;
+  user_metadata: {
+    full_name: string;
+  };
+}
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: LocalUser | null;
   profile: UserProfile | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -16,90 +23,134 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const STORAGE_KEYS = {
+  USERS: 'sf_users',
+  SESSION: 'sf_session',
+  PROFILES: 'sf_profiles'
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<LocalUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .maybeSingle();
-    
-    if (data) {
-      setProfile(data as UserProfile);
+  // Initialize from localStorage
+  useEffect(() => {
+    try {
+      const savedSession = localStorage.getItem(STORAGE_KEYS.SESSION);
+      if (savedSession && savedSession !== 'undefined') {
+        const sessionData = JSON.parse(savedSession);
+        if (sessionData && sessionData.user) {
+          setUser(sessionData.user);
+
+          const savedProfiles = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROFILES) || '[]');
+          const userProfile = savedProfiles.find((p: UserProfile) => p.user_id === sessionData.user.id);
+          if (userProfile) {
+            setProfile(userProfile);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to restore session:', error);
+      localStorage.removeItem(STORAGE_KEYS.SESSION);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
   const refreshProfile = async () => {
     if (user) {
-      await fetchProfile(user.id);
+      const savedProfiles = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROFILES) || '[]');
+      const userProfile = savedProfiles.find((p: UserProfile) => p.user_id === user.id);
+      if (userProfile) {
+        setProfile(userProfile);
+      }
     }
   };
 
-  useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Defer profile fetch to avoid deadlock
-        if (session?.user) {
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-          }, 0);
-        } else {
-          setProfile(null);
-        }
-      }
-    );
+  const signUp = async (email: string, password: string, fullName: string) => {
+    try {
+      const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
+      if (users.find((u: { email: string }) => u.email === email)) {
+        throw new Error('Cet email est déjà utilisé.');
       }
-      setLoading(false);
-    });
 
-    return () => subscription.unsubscribe();
-  }, []);
+      const newUserId = Math.random().toString(36).substr(2, 9);
+      const newUser = { id: newUserId, email, password, full_name: fullName };
 
-  const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl
-      }
-    });
-    return { error };
+      users.push(newUser);
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+
+      // Create Profile
+      const profiles = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROFILES) || '[]');
+      const newProfile: UserProfile = {
+        id: newUserId,
+        user_id: newUserId,
+        username: email.split('@')[0],
+        full_name: fullName,
+        avatar_url: null,
+        total_points: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      profiles.push(newProfile);
+      localStorage.setItem(STORAGE_KEYS.PROFILES, JSON.stringify(profiles));
+
+      // Auto login
+      const localUser: LocalUser = {
+        id: newUserId,
+        email,
+        user_metadata: { full_name: fullName }
+      };
+
+      localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify({ user: localUser }));
+      setUser(localUser);
+      setProfile(newProfile);
+
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    return { error };
+    try {
+      const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+      const foundUser = users.find((u: { email: string; password: string; id: string; full_name: string }) => u.email === email && u.password === password);
+
+      if (!foundUser) {
+        throw new Error('Email ou mot de passe incorrect.');
+      }
+
+      const localUser: LocalUser = {
+        id: foundUser.id,
+        email: foundUser.email,
+        user_metadata: { full_name: foundUser.full_name }
+      };
+
+      localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify({ user: localUser }));
+      setUser(localUser);
+
+      const profiles = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROFILES) || '[]');
+      const userProfile = profiles.find((p: UserProfile) => p.user_id === foundUser.id);
+      setProfile(userProfile || null);
+
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    localStorage.removeItem(STORAGE_KEYS.SESSION);
+    setUser(null);
     setProfile(null);
   };
 
   return (
     <AuthContext.Provider value={{
       user,
-      session,
       profile,
       loading,
       signUp,

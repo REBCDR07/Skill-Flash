@@ -1,5 +1,8 @@
 import type { Config } from "tailwindcss";
 
+import tailwindAnimate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
+
 export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
@@ -66,7 +69,19 @@ export default {
         marketing: "hsl(var(--marketing))",
         communication: "hsl(var(--communication))",
         // Gamification
-        gold: "hsl(var(--gold))",
+        // Gamification
+        gold: {
+          DEFAULT: "hsl(var(--gold))",
+          100: "hsl(var(--gold-100))",
+          200: "hsl(var(--gold-200))",
+          300: "hsl(var(--gold-300))",
+          400: "hsl(var(--gold-400))",
+          500: "hsl(var(--gold-500))",
+          600: "hsl(var(--gold-600))",
+          700: "hsl(var(--gold-700))",
+          800: "hsl(var(--gold-800))",
+          900: "hsl(var(--gold-900))",
+        },
         silver: "hsl(var(--silver))",
         bronze: "hsl(var(--bronze))",
         points: "hsl(var(--points))",
@@ -129,5 +144,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate, typography],
 } satisfies Config;

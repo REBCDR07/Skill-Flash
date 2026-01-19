@@ -1,0 +1,17 @@
+{
+    "courseId": "communication",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Pourquoi le langage corporel est-il crucial lors d'un entretien professionnel ?",
+            "expectedKeywords": [
+                "posture",
+                "confiance",
+                "non-verbal",
+                "regard",
+                "attitude"
+            ],
+            "minKeywords": 2
+        }
+    ]
+}

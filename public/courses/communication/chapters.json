@@ -1,0 +1,65 @@
+{
+    "courseId": "communication",
+    "chapters": [
+        {
+            "id": 1,
+            "title": "Fondamentaux de la Communication",
+            "description": "Comprendre le schéma émetteur-récepteur.",
+            "duration": "45 min"
+        },
+        {
+            "id": 2,
+            "title": "Écoute Active & Empathie",
+            "description": "Apprendre à écouter pour comprendre.",
+            "duration": "50 min"
+        },
+        {
+            "id": 3,
+            "title": "Communication Non-Verbale",
+            "description": "Le corps parle plus que les mots.",
+            "duration": "60 min"
+        },
+        {
+            "id": 4,
+            "title": "Prise de Parole en Public",
+            "description": "Maîtrisez votre peur et captivez l'audience.",
+            "duration": "75 min"
+        },
+        {
+            "id": 5,
+            "title": "Communication Écrite Pro",
+            "description": "Emails, Slack et rapports efficaces.",
+            "duration": "45 min"
+        },
+        {
+            "id": 6,
+            "title": "Assertivité & Conflits",
+            "description": "Savoir dire non avec respect.",
+            "duration": "60 min"
+        },
+        {
+            "id": 7,
+            "title": "Communication Interculturelle",
+            "description": "Naviguer dans un monde globalisé.",
+            "duration": "50 min"
+        },
+        {
+            "id": 8,
+            "title": "Négociation & Persuasion",
+            "description": "L'art de l'accord gagnant-gagnant.",
+            "duration": "65 min"
+        },
+        {
+            "id": 9,
+            "title": "Personal Branding",
+            "description": "Gérez votre image professionnelle.",
+            "duration": "55 min"
+        },
+        {
+            "id": 10,
+            "title": "Communication de Crise",
+            "description": "Leadership et gestion de l'urgence.",
+            "duration": "70 min"
+        }
+    ]
+}

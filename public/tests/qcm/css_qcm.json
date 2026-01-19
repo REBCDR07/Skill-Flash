@@ -1,0 +1,727 @@
+{
+    "courseId": "css",
+    "title": "Test Final CSS3",
+    "passingScore": 80,
+    "questions": [
+        {
+            "id": 1,
+            "question": "Que signifie CSS ?",
+            "options": [
+                "Creative Style Sheets",
+                "Cascading Style Sheets",
+                "Computer Style Sheets",
+                "Colorful Style Sheets"
+            ],
+            "correctAnswer": 1,
+            "explanation": "CSS signifie Cascading Style Sheets (Feuilles de style en cascade)."
+        },
+        {
+            "id": 2,
+            "question": "Où est le bon endroit pour insérer un lien vers une feuille de style externe ?",
+            "options": [
+                "Dans la section <body>",
+                "À la fin du document",
+                "Dans la section <head>",
+                "N'importe où"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Les styles externes doivent être définis dans le <head>."
+        },
+        {
+            "id": 3,
+            "question": "Quelle propriété CSS est utilisée pour changer la couleur du texte ?",
+            "options": [
+                "text-color",
+                "fgcolor",
+                "color",
+                "font-color"
+            ],
+            "correctAnswer": 2,
+            "explanation": "La propriété 'color' définit la couleur du texte."
+        },
+        {
+            "id": 4,
+            "question": "Dans le modèle de boîte, qu'est-ce qui entoure directement le contenu ?",
+            "options": [
+                "La marge (margin)",
+                "La bordure (border)",
+                "Le remplissage (padding)",
+                "Le contour (outline)"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Le padding est l'espace entre le contenu et la bordure."
+        },
+        {
+            "id": 5,
+            "question": "Comment sélectionnez-vous un élément avec l'ID 'flash' ?",
+            "options": [
+                ".flash",
+                "*flash",
+                "#flash",
+                "flash"
+            ],
+            "correctAnswer": 2,
+            "explanation": "On utilise le symbole '#' pour cibler un ID."
+        },
+        {
+            "id": 6,
+            "question": "Quelle unité est relative à la taille de la police de l'élément racine ?",
+            "options": [
+                "em",
+                "px",
+                "rem",
+                "vh"
+            ],
+            "correctAnswer": 2,
+            "explanation": "rem (root em) est basé sur la taille de la police de l'élément <html>."
+        },
+        {
+            "id": 7,
+            "question": "Comment rendre un texte en gras ?",
+            "options": [
+                "font-weight: bold",
+                "font-style: bold",
+                "text-decoration: bold",
+                "weight: bold"
+            ],
+            "correctAnswer": 0,
+            "explanation": "La propriété font-weight définit l'épaisseur des caractères."
+        },
+        {
+            "id": 8,
+            "question": "Quelle propriété contrôle l'espace entre les lignes d'un texte ?",
+            "options": [
+                "line-height",
+                "spacing",
+                "letter-spacing",
+                "text-indent"
+            ],
+            "correctAnswer": 0,
+            "explanation": "line-height définit la hauteur de la ligne de texte."
+        },
+        {
+            "id": 9,
+            "question": "Quelle est la valeur par défaut de la propriété position ?",
+            "options": [
+                "relative",
+                "absolute",
+                "static",
+                "fixed"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Les éléments sont par défaut en position static."
+        },
+        {
+            "id": 10,
+            "question": "Comment centrez-vous un bloc horizontalement s'il a une largeur fixe ?",
+            "options": [
+                "float: center",
+                "margin: 0 auto",
+                "align: center",
+                "text-align: center"
+            ],
+            "correctAnswer": 1,
+            "explanation": "margin auto permet de répartir les marges gauche et droite équitablement."
+        },
+        {
+            "id": 11,
+            "question": "Que signifie la valeur 'z-index' ?",
+            "options": [
+                "L'ordre de zoom",
+                "L'ordre d'empilement vertical",
+                "L'alignement horizontal",
+                "La vitesse d'animation"
+            ],
+            "correctAnswer": 1,
+            "explanation": "z-index définit quel élément s'affiche au-dessus des autres (axe Z)."
+        },
+        {
+            "id": 12,
+            "question": "Quelle propriété permet d'arrondir les coins d'un élément ?",
+            "options": [
+                "corner-radius",
+                "border-radius",
+                "round-corner",
+                "border-shape"
+            ],
+            "correctAnswer": 1,
+            "explanation": "border-radius crée des coins arrondis."
+        },
+        {
+            "id": 13,
+            "question": "Quelle propriété Flexbox définit l'axe principal ?",
+            "options": [
+                "flex-axis",
+                "flex-direction",
+                "justify-content",
+                "align-items"
+            ],
+            "correctAnswer": 1,
+            "explanation": "flex-direction définit si l'axe principal est horizontal (row) ou vertical (column)."
+        },
+        {
+            "id": 14,
+            "question": "Quelle valeur de 'display' active le module Flexbox ?",
+            "options": [
+                "flex-box",
+                "display: block",
+                "display: flex",
+                "flex-container"
+            ],
+            "correctAnswer": 2,
+            "explanation": "On utilise display: flex pour transformer un élément en conteneur flex."
+        },
+        {
+            "id": 15,
+            "question": "justify-content sert à aligner les éléments sur :",
+            "options": [
+                "L'axe principal",
+                "L'axe secondaire",
+                "Le texte uniquement",
+                "Le fond"
+            ],
+            "correctAnswer": 0,
+            "explanation": "justify-content gère l'alignement sur l'axe défini par flex-direction."
+        },
+        {
+            "id": 16,
+            "question": "Quelle propriété Flexbox permet aux éléments de passer à la ligne suivante ?",
+            "options": [
+                "flex-split",
+                "flex-wrap",
+                "flex-next",
+                "auto-wrap"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Par défaut, flex-wrap est à 'nowrap', ce qui force tout sur une seule ligne."
+        },
+        {
+            "id": 17,
+            "question": "En CSS Grid, comment définit-on 3 colonnes de largeur égale ?",
+            "options": [
+                "grid-template-columns: 33% 33% 33%",
+                "grid-template-columns: repeat(3, 1fr)",
+                "columns: 3",
+                "grid-cols: 3"
+            ],
+            "correctAnswer": 1,
+            "explanation": "L'unité 'fr' (fraction) est idéale pour des colonnes flexibles et égales."
+        },
+        {
+            "id": 18,
+            "question": "Quelle propriété Grid définit l'espace entre les cellules ?",
+            "options": [
+                "grid-margin",
+                "cell-spacing",
+                "gap",
+                "grid-padding"
+            ],
+            "correctAnswer": 2,
+            "explanation": "gap (ou grid-gap) définit l'espacement entre les lignes et colonnes de la grille."
+        },
+        {
+            "id": 19,
+            "question": "Comment masquer un élément tout en conservant l'espace qu'il occupe ?",
+            "options": [
+                "display: none",
+                "visibility: hidden",
+                "opacity: 0",
+                "Les deux réponses B et C"
+            ],
+            "correctAnswer": 3,
+            "explanation": "visibility hidden et opacity 0 cachent l'élément mais il reste dans le flux."
+        },
+        {
+            "id": 20,
+            "question": "Quelle pseudo-classe cible un lien déjà visité ?",
+            "options": [
+                ":hover",
+                ":active",
+                ":visited",
+                ":focus"
+            ],
+            "correctAnswer": 2,
+            "explanation": ":visited permet de styliser les liens déjà parcourus par l'utilisateur."
+        },
+        {
+            "id": 21,
+            "question": "Comment sélectionner tous les éléments <p> qui sont des enfants directs d'un <div> ?",
+            "options": [
+                "div p",
+                "div + p",
+                "div > p",
+                "div ~ p"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Le sélecteur '>' cible uniquement les enfants de premier niveau."
+        },
+        {
+            "id": 22,
+            "question": "Quelle propriété permet de changer la police de texte ?",
+            "options": [
+                "font-family",
+                "font-style",
+                "text-font",
+                "font-type"
+            ],
+            "correctAnswer": 0,
+            "explanation": "font-family définit la liste des polices à utiliser."
+        },
+        {
+            "id": 23,
+            "question": "Quelle valeur de 'box-sizing' inclut le padding dans la largeur totale ?",
+            "options": [
+                "content-box",
+                "total-box",
+                "border-box",
+                "padding-box"
+            ],
+            "correctAnswer": 2,
+            "explanation": "border-box est la valeur recommandée pour une gestion simplifiée des dimensions."
+        },
+        {
+            "id": 24,
+            "question": "Quel sélecteur cible le premier enfant d'un parent ?",
+            "options": [
+                ":first",
+                ":start-child",
+                ":first-child",
+                ":nth-child(0)"
+            ],
+            "correctAnswer": 2,
+            "explanation": ":first-child cible le tout premier élément d'un groupe."
+        },
+        {
+            "id": 25,
+            "question": "Que fait 'overflow: hidden' ?",
+            "options": [
+                "Cache le texte trop long",
+                "Affiche une scrollbar",
+                "Augmente la taille du bloc",
+                "Cache tout ce qui dépasse du conteneur"
+            ],
+            "correctAnswer": 3,
+            "explanation": "L'overflow hidden coupe tout contenu qui sort des limites du parent."
+        },
+        {
+            "id": 26,
+            "question": "Comment s'appelle l'effet qui se produit au survol d'un élément ?",
+            "options": [
+                "Transition",
+                "Hover status",
+                "Pseudo-classe :hover",
+                "Event survol"
+            ],
+            "correctAnswer": 2,
+            "explanation": ":hover est la pseudo-classe déclenchée par la souris."
+        },
+        {
+            "id": 27,
+            "question": "Quelle propriété permet de transformer le texte en majuscules ?",
+            "options": [
+                "text-style: uppercase",
+                "text-transform: uppercase",
+                "font-variant: caps",
+                "uppercase: true"
+            ],
+            "correctAnswer": 1,
+            "explanation": "text-transform permet de passer en majuscules, minuscules ou de capitaliser."
+        },
+        {
+            "id": 28,
+            "question": "Quelle unité représente 1% de la largeur de la fenêtre ?",
+            "options": [
+                "vh",
+                "vw",
+                "vmin",
+                "vmax"
+            ],
+            "correctAnswer": 1,
+            "explanation": "vw signifie 'viewport width'."
+        },
+        {
+            "id": 29,
+            "question": "Quelle propriété permet d'ajouter une ombre portée ?",
+            "options": [
+                "text-shadow",
+                "box-shadow",
+                "element-shadow",
+                "shadow-effect"
+            ],
+            "correctAnswer": 1,
+            "explanation": "box-shadow crée une ombre à l'extérieur ou à l'intérieur d'un bloc."
+        },
+        {
+            "id": 30,
+            "question": "Comment importer une police Google Fonts ?",
+            "options": [
+                "@import",
+                "<link>",
+                "Directement dans le CSS",
+                "Les options A et B sont valides"
+            ],
+            "correctAnswer": 3,
+            "explanation": "On peut utiliser <link> dans le HTML ou @import au début du CSS."
+        },
+        {
+            "id": 31,
+            "question": "Quelle propriété définit l'espacement entre les lettres ?",
+            "options": [
+                "word-spacing",
+                "letter-spacing",
+                "text-spacing",
+                "char-spacing"
+            ],
+            "correctAnswer": 1,
+            "explanation": "letter-spacing contrôle l'interlettrage."
+        },
+        {
+            "id": 32,
+            "question": "Comment mettre le premier caractère d'un paragraphe en majuscule ?",
+            "options": [
+                "p::first-letter",
+                "p:initial",
+                "p::first-line",
+                "p:cap"
+            ],
+            "correctAnswer": 0,
+            "explanation": "Le pseudo-élément ::first-letter cible la première lettre."
+        },
+        {
+            "id": 33,
+            "question": "Quelle propriété Grid permet d'aligner les éléments horizontalement dans leur cellule ?",
+            "options": [
+                "align-items",
+                "justify-items",
+                "place-content",
+                "grid-align"
+            ],
+            "correctAnswer": 1,
+            "explanation": "justify-items aligne les éléments sur l'axe en ligne (horizontal)."
+        },
+        {
+            "id": 34,
+            "question": "Quelle transition permet un effet d'accélération au début et de décélération à la fin ?",
+            "options": [
+                "linear",
+                "ease-in",
+                "ease-out",
+                "ease-in-out"
+            ],
+            "correctAnswer": 3,
+            "explanation": "ease-in-out commence et finit doucement."
+        },
+        {
+            "id": 35,
+            "question": "Quelle propriété définit la durée d'une animation ?",
+            "options": [
+                "animation-time",
+                "animation-duration",
+                "animation-speed",
+                "transition-duration"
+            ],
+            "correctAnswer": 1,
+            "explanation": "animation-duration spécifie le temps d'un cycle d'animation."
+        },
+        {
+            "id": 36,
+            "question": "Dans @keyframes, comment définit-on l'état final ?",
+            "options": [
+                "to",
+                "100%",
+                "end",
+                "Les options A et B sont valides"
+            ],
+            "correctAnswer": 3,
+            "explanation": "On peut utiliser le mot-clé 'to' ou le pourcentage '100%'."
+        },
+        {
+            "id": 37,
+            "question": "Comment faire pour qu'une animation reste à son état final après exécution ?",
+            "options": [
+                "animation-fill-mode: forwards",
+                "animation-stop: true",
+                "animation-loop: none",
+                "animation-persist: true"
+            ],
+            "correctAnswer": 0,
+            "explanation": "forwards conserve les styles de la dernière frame."
+        },
+        {
+            "id": 38,
+            "question": "Que signifie 'Mobile First' ?",
+            "options": [
+                "Concevoir pour mobile puis agrandir",
+                "Concevoir pour desktop puis réduire",
+                "Utiliser uniquement des mobiles",
+                "Optimiser uniquement les images"
+            ],
+            "correctAnswer": 0,
+            "explanation": "On écrit d'abord le code pour les petits écrans avant d'ajouter des media queries."
+        },
+        {
+            "id": 39,
+            "question": "Quelle media query cible les écrans d'au moins 768px ?",
+            "options": [
+                "@media (max-width: 768px)",
+                "@media (min-width: 768px)",
+                "@media (width > 768px)",
+                "B et C sont valides"
+            ],
+            "correctAnswer": 3,
+            "explanation": "min-width est la syntaxe classique, la syntaxe de comparaison (> 768px) est moderne."
+        },
+        {
+            "id": 40,
+            "question": "Quelle propriété permet de masquer un élément du DOM et de l'accessibilité ?",
+            "options": [
+                "visibility: hidden",
+                "opacity: 0",
+                "display: none",
+                "filter: blur(10px)"
+            ],
+            "correctAnswer": 2,
+            "explanation": "display: none retire l'élément de l'arbre de rendu."
+        },
+        {
+            "id": 41,
+            "question": "Comment déclare-t-on une variable CSS ?",
+            "options": [
+                "$variable",
+                "var-variable",
+                "--variable",
+                "@variable"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Les variables CSS commencent toujours par deux tirets '--'."
+        },
+        {
+            "id": 42,
+            "question": "Comment utilise-t-on une variable CSS appelée '--main-bg' ?",
+            "options": [
+                "var(--main-bg)",
+                "$main-bg",
+                "use(--main-bg)",
+                "calc(--main-bg)"
+            ],
+            "correctAnswer": 0,
+            "explanation": "On utilise la fonction var() pour appeler une variable."
+        },
+        {
+            "id": 43,
+            "question": "Dans la méthodologie BEM, que représentent les deux underscores (__) ?",
+            "options": [
+                "Un modificateur",
+                "Un élément interne",
+                "Un bloc parent",
+                "Un commentaire"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Block__Element--Modifier. Les underscores séparent le bloc de ses éléments."
+        },
+        {
+            "id": 44,
+            "question": "BEM : .button--large est un exemple de :",
+            "options": [
+                "Bloc",
+                "Élément",
+                "Modificateur",
+                "Classe utilitaire"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Les deux tirets '--' indiquent une variation (modificateur) d'un bloc."
+        },
+        {
+            "id": 45,
+            "question": "Quel framework utilise des classes comme 'mt-4' ou 'flex' ?",
+            "options": [
+                "Bootstrap",
+                "Tailwind CSS",
+                "Semantic UI",
+                "Foundation"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Tailwind est un framework utilitaire basé sur des classes atomiques."
+        },
+        {
+            "id": 46,
+            "question": "La fonction calc(100% - 20px) :",
+            "options": [
+                "Est invalide",
+                "Requiert des espaces autour de l'opérateur",
+                "Ne fonctionne que pour la largeur",
+                "Est obsolète"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Il faut impérativement des espaces autour de '-' et '+' dans calc()."
+        },
+        {
+            "id": 47,
+            "question": "Laquelle de ces propriétés ne peut pas être animée ?",
+            "options": [
+                "opacity",
+                "width",
+                "display",
+                "transform"
+            ],
+            "correctAnswer": 2,
+            "explanation": "display ne peut pas être animé (état binaire). Utilisez opacity ou visibility pour des effets."
+        },
+        {
+            "id": 48,
+            "question": "Que permet la propriété 'aspect-ratio' ?",
+            "options": [
+                "Changer la résolution",
+                "Maintenir un ratio largeur/hauteur",
+                "Améliorer le contraste",
+                "Zoomer sur une image"
+            ],
+            "correctAnswer": 1,
+            "explanation": "aspect-ratio: 16/9 assure que l'élément garde ses proportions."
+        },
+        {
+            "id": 49,
+            "question": "Quelle propriété permet de changer l'ordre d'un élément Flex ou Grid ?",
+            "options": [
+                "z-index",
+                "order",
+                "flex-order",
+                "index"
+            ],
+            "correctAnswer": 1,
+            "explanation": "La propriété order change l'ordre visuel sans changer le HTML."
+        },
+        {
+            "id": 50,
+            "question": "Quel sélecteur cible les éléments pairs ?",
+            "options": [
+                ":nth-child(even)",
+                ":nth-child(2n)",
+                ":pair",
+                "A et B sont valides"
+            ],
+            "correctAnswer": 3,
+            "explanation": "even et 2n ciblent tous les éléments aux positions paires."
+        },
+        {
+            "id": 51,
+            "question": "Comment supprimer les puces d'une liste ?",
+            "options": [
+                "list-style: none",
+                "bullet: hidden",
+                "text-decoration: none",
+                "list-type: empty"
+            ],
+            "correctAnswer": 0,
+            "explanation": "list-style: none retire les marqueurs par défaut."
+        },
+        {
+            "id": 52,
+            "question": "Que fait 'text-overflow: ellipsis' ?",
+            "options": [
+                "Coupe le texte brutalement",
+                "Ajoute '...' quand le texte dépasse",
+                "Passe le texte à la ligne",
+                "Réduit la taille de police"
+            ],
+            "correctAnswer": 1,
+            "explanation": "ellipsis ajoute des points de suspension au texte tronqué."
+        },
+        {
+            "id": 53,
+            "question": "Quelle propriété définit si le fond défile avec la page ?",
+            "options": [
+                "background-scroll",
+                "background-attachment",
+                "background-fixed",
+                "scroll-behavior"
+            ],
+            "correctAnswer": 1,
+            "explanation": "background-attachment: fixed crée un effet parallaxe simple."
+        },
+        {
+            "id": 54,
+            "question": "Comment sélectionner tous les éléments ?",
+            "options": [
+                "all",
+                "body",
+                "*",
+                "html"
+            ],
+            "correctAnswer": 2,
+            "explanation": "L'astérisque '*' est le sélecteur universel."
+        },
+        {
+            "id": 55,
+            "question": "Quelle propriété Grid permet de nommer des zones de mise en page ?",
+            "options": [
+                "grid-areas",
+                "grid-template-areas",
+                "grid-zones",
+                "layout-names"
+            ],
+            "correctAnswer": 1,
+            "explanation": "grid-template-areas permet une mise en page visuelle par chaînes de caractères."
+        },
+        {
+            "id": 56,
+            "question": "Quelle pseudo-classe cible un champ d'input qui a le curseur ?",
+            "options": [
+                ":active",
+                ":focus",
+                ":select",
+                ":click"
+            ],
+            "correctAnswer": 1,
+            "explanation": ":focus est l'état actif du clavier ou du curseur de saisie."
+        },
+        {
+            "id": 57,
+            "question": "Que permet CSS Houdini ?",
+            "options": [
+                "Faire disparaître des éléments",
+                "Accéder aux APIs de bas niveau du moteur de rendu",
+                "Automatiser les media-queries",
+                "Créer des sites web sans code"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Houdini est un ensemble d'APIs permettant d'étendre les fonctionnalités de rendu du navigateur."
+        },
+        {
+            "id": 58,
+            "question": "Laquelle de ces propriétés Flex est un raccourci (shorthand) ?",
+            "options": [
+                "flex",
+                "flex-grow",
+                "flex-basis",
+                "flex-shrink"
+            ],
+            "correctAnswer": 0,
+            "explanation": "flex combine grow, shrink et basis."
+        },
+        {
+            "id": 59,
+            "question": "Quelle propriété contrôle le mélange des couleurs avec le fond ?",
+            "options": [
+                "mix-blend-mode",
+                "color-mix",
+                "background-blend",
+                "alpha-blend"
+            ],
+            "correctAnswer": 0,
+            "explanation": "mix-blend-mode permet des effets de fusion entre éléments."
+        },
+        {
+            "id": 60,
+            "question": "Quelle est la règle d'or d'un bon code CSS ?",
+            "options": [
+                "Tout mettre dans un seul fichier",
+                "Éviter la redondance (DRY)",
+                "Utiliser le plus d'IDs possible",
+                "Calculer les marges à la main"
+            ],
+            "correctAnswer": 1,
+            "explanation": "DRY (Don't Repeat Yourself) assure un code plus facile à maintenir."
+        }
+    ]
+}

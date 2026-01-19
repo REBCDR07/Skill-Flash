@@ -1,0 +1,41 @@
+{
+    "courseId": "css",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Expliquez brièvement le concept du 'Box Sizing' et pourquoi 'border-box' est souvent préféré.",
+            "expectedKeywords": [
+                "padding",
+                "border",
+                "width",
+                "calcul",
+                "dimension"
+            ],
+            "minKeywords": 2
+        },
+        {
+            "id": 2,
+            "question": "Quelle est la différence entre une unité 'px' et une unité 'em' ?",
+            "expectedKeywords": [
+                "fixe",
+                "relative",
+                "parent",
+                "taille",
+                "police"
+            ],
+            "minKeywords": 2
+        },
+        {
+            "id": 3,
+            "question": "Citez deux avantages majeurs de l'utilisation de Flexbox pour la mise en page.",
+            "expectedKeywords": [
+                "alignement",
+                "direction",
+                "espace",
+                "flexible",
+                "responsive"
+            ],
+            "minKeywords": 2
+        }
+    ]
+}

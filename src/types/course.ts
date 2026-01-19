@@ -52,7 +52,7 @@ export interface QuizResult {
   score: number;
   total_questions: number;
   correct_answers: number;
-  answers?: Record<string, any>;
+  answers?: Record<string, Record<number, number | string>>;
   completed_at: string;
 }
 

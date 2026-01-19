@@ -1,7 +1,7 @@
 {
   "courseId": "html",
   "title": "QCM HTML5 Fondamentaux",
-  "passingScore": 70,
+  "passingScore": 80,
   "questions": [
     {
       "id": 1,
@@ -422,6 +422,186 @@
       ],
       "correctAnswer": 2,
       "explanation": "<em> ajoute une emphase sémantique, <i> est purement visuel."
+    },
+    {
+      "id": 36,
+      "question": "Quelle balise définit une en-tête de cellule dans un tableau ?",
+      "options": [
+        "<td>",
+        "<tr>",
+        "<th>",
+        "<head>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<th> (table header) définit une cellule d'en-tête, généralement affichée en gras et centrée."
+    },
+    {
+      "id": 37,
+      "question": "Quel élément regroupe le contenu de l'en-tête d'un tableau ?",
+      "options": [
+        "<tbody>",
+        "<tfoot>",
+        "<thead>",
+        "<caption>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<thead> regroupe les lignes d'en-tête d'un tableau pour une meilleure structure."
+    },
+    {
+      "id": 38,
+      "question": "Quelle balise sémantique est utilisée pour une barre latérale ?",
+      "options": [
+        "<article>",
+        "<section>",
+        "<aside>",
+        "<nav>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<aside> est destiné au contenu tangentiel comme les barres latérales ou les citations."
+    },
+    {
+      "id": 39,
+      "question": "Quelle balise définit un groupe thématique de contenu ?",
+      "options": [
+        "<div>",
+        "<section>",
+        "<article>",
+        "<main>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<section> regroupe des contenus liés par une thématique commune."
+    },
+    {
+      "id": 40,
+      "question": "Comment insérer une image de remplacement avant le début d'une vidéo ?",
+      "options": [
+        "attribut src",
+        "attribut poster",
+        "attribut alt",
+        "attribut preview"
+      ],
+      "correctAnswer": 1,
+      "explanation": "L'attribut poster de la balise <video> affiche une image jusqu'à ce que l'utilisateur clique sur lecture."
+    },
+    {
+      "id": 41,
+      "question": "Quel attribut de la balise <video> permet de jouer la vidéo en boucle ?",
+      "options": [
+        "repeat",
+        "loop",
+        "autoplay",
+        "infinite"
+      ],
+      "correctAnswer": 1,
+      "explanation": "L'attribut loop relance automatiquement la vidéo une fois terminée."
+    },
+    {
+      "id": 42,
+      "question": "Quelle balise est utilisée pour intégrer un fichier audio ?",
+      "options": [
+        "<sound>",
+        "<music>",
+        "<audio>",
+        "<media>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<audio> est la balise HTML5 native pour le contenu sonore."
+    },
+    {
+      "id": 43,
+      "question": "Quelle balise meta définit l'encodage des caractères ?",
+      "options": [
+        "<meta lang=\"UTF-8\">",
+        "<meta charset=\"UTF-8\">",
+        "<meta encoding=\"UTF-8\">",
+        "<meta type=\"UTF-8\">"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<meta charset=\"UTF-8\"> est crucial pour afficher correctement les accents et caractères spéciaux."
+    },
+    {
+      "id": 44,
+      "question": "Quel meta tag facilite le partage sur les réseaux sociaux ?",
+      "options": [
+        "Meta Description",
+        "Open Graph (og:)",
+        "Meta Keywords",
+        "Canonical"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Les balises Open Graph (og:) contrôlent l'apparence du site lors d'un partage sur Facebook ou LinkedIn."
+    },
+    {
+      "id": 45,
+      "question": "Que signifie l'acronyme SEO ?",
+      "options": [
+        "Search Engine Optimization",
+        "System Engine Operation",
+        "Social Expert Optimization",
+        "Search Element Organic"
+      ],
+      "correctAnswer": 0,
+      "explanation": "SEO désigne l'optimisation pour les moteurs de recherche pour améliorer la visibilité."
+    },
+    {
+      "id": 46,
+      "question": "Quel attribut aide les lecteurs d'écran à décrire un bouton sans texte ?",
+      "options": [
+        "alt",
+        "title",
+        "aria-label",
+        "description"
+      ],
+      "correctAnswer": 2,
+      "explanation": "aria-label fournit une étiquette textuelle explicite pour les outils d'accessibilité."
+    },
+    {
+      "id": 47,
+      "question": "Quel attribut spécifie que l'audio doit commencer automatiquement ?",
+      "options": [
+        "start",
+        "play",
+        "autoplay",
+        "auto"
+      ],
+      "correctAnswer": 2,
+      "explanation": "L'attribut autoplay lance la lecture dès que possible (souvent bloqué par les navigateurs si non muet)."
+    },
+    {
+      "id": 48,
+      "question": "La balise <hr> sert à :",
+      "options": [
+        "Créer un titre",
+        "Insérer un saut de ligne",
+        "Créer une séparation thématique ligne horizontale",
+        "Souligner le texte"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<hr> (horizontal rule) représente une rupture thématique entre des paragraphes."
+    },
+    {
+      "id": 49,
+      "question": "Quel élément définit une légende pour un tableau ?",
+      "options": [
+        "<thead>",
+        "<caption>",
+        "<label>",
+        "<summary>"
+      ],
+      "correctAnswer": 1,
+      "explanation": "<caption> permet de donner un titre ou une description courte à un tableau."
+    },
+    {
+      "id": 50,
+      "question": "Quelle balise est idéale pour citer une source externe ?",
+      "options": [
+        "<quote>",
+        "<cite>",
+        "<blockquote>",
+        "<q>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "<blockquote> est utilisée pour les citations longues venant d'une autre source."
     }
   ]
 }

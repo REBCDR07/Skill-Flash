@@ -60,6 +60,17 @@
     --input: 250 20% 92%;
     --ring: 262 83% 58%;
 
+    /* Luxury Gold Palette */
+    --gold-100: 45 100% 90%;
+    --gold-200: 45 100% 80%;
+    --gold-300: 45 100% 70%;
+    --gold-400: 45 80% 55%;
+    --gold-500: 45 90% 45%;
+    --gold-600: 45 100% 35%;
+    --gold-700: 45 100% 25%;
+    --gold-800: 45 100% 15%;
+    --gold-900: 45 100% 10%;
+
     --radius: 0.75rem;
 
     --sidebar-background: 262 40% 98%;
@@ -135,7 +146,12 @@
     font-family: 'Inter', sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Space Grotesk', sans-serif;
   }
 }
@@ -144,19 +160,19 @@
   .gradient-primary {
     background: var(--gradient-primary);
   }
-  
+
   .gradient-accent {
     background: var(--gradient-accent);
   }
-  
+
   .gradient-success {
     background: var(--gradient-success);
   }
-  
+
   .gradient-gold {
     background: var(--gradient-gold);
   }
-  
+
   .gradient-hero {
     background: var(--gradient-hero);
   }
@@ -169,6 +185,7 @@
   }
 
   .glass {
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     background: hsl(var(--card) / 0.8);
   }
@@ -186,11 +203,27 @@
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
   }
 
   .animate-pulse-slow {
     animation: pulse 3s ease-in-out infinite;
+  }
+
+  .bg-certificate-dots {
+    background-image: radial-gradient(circle at 2px 2px, #000 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+
+  .w-progress {
+    width: var(--progress, 0%);
   }
 }

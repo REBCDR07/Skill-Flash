@@ -1,0 +1,65 @@
+{
+    "courseId": "javascript",
+    "chapters": [
+        {
+            "id": 1,
+            "title": "Introduction & Variables",
+            "description": "Les bases de la programmation en JavaScript.",
+            "duration": "45 min"
+        },
+        {
+            "id": 2,
+            "title": "Types de données & Opérateurs",
+            "description": "Comprendre comment manipuler les données.",
+            "duration": "60 min"
+        },
+        {
+            "id": 3,
+            "title": "Fonctions & ES6+",
+            "description": "Arrow functions, template literals et plus.",
+            "duration": "90 min"
+        },
+        {
+            "id": 4,
+            "title": "Tableaux et Objets",
+            "description": "Les structures de données fondamentales.",
+            "duration": "90 min"
+        },
+        {
+            "id": 5,
+            "title": "Manipulation du DOM",
+            "description": "Rendre vos pages interactives.",
+            "duration": "60 min"
+        },
+        {
+            "id": 6,
+            "title": "JavaScript Asynchrone",
+            "description": "Promises, Async et Await.",
+            "duration": "90 min"
+        },
+        {
+            "id": 7,
+            "title": "Classes & POO",
+            "description": "L'approche orientée objet en JS.",
+            "duration": "75 min"
+        },
+        {
+            "id": 8,
+            "title": "Gestion d'Erreurs",
+            "description": "Try, Catch et Debugging efficace.",
+            "duration": "50 min"
+        },
+        {
+            "id": 9,
+            "title": "Modules & Outillage",
+            "description": "Babel, Webpack et l'écosystème NPM.",
+            "duration": "60 min"
+        },
+        {
+            "id": 10,
+            "title": "Performance & Clean Code",
+            "description": "Optimisation et maintenance du code.",
+            "duration": "70 min"
+        }
+    ]
+}

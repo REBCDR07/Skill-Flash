@@ -1,0 +1,65 @@
+{
+    "courseId": "css",
+    "chapters": [
+        {
+            "id": 1,
+            "title": "Introduction au CSS3",
+            "description": "Les bases du CSS3 et l'intégration dans HTML.",
+            "duration": "45 min"
+        },
+        {
+            "id": 2,
+            "title": "Le Modèle de Boîte (Box Model)",
+            "description": "Comprendre les marges, bordures et paddings.",
+            "duration": "60 min"
+        },
+        {
+            "id": 3,
+            "title": "Flexbox : Le guide complet",
+            "description": "Maîtrisez les mises en page flexibles.",
+            "duration": "90 min"
+        },
+        {
+            "id": 4,
+            "title": "CSS Grid : La puissance du layout",
+            "description": "Créez des grilles complexes facilement.",
+            "duration": "90 min"
+        },
+        {
+            "id": 5,
+            "title": "Animations et Transitions",
+            "description": "Donnez vie à vos interfaces.",
+            "duration": "60 min"
+        },
+        {
+            "id": 6,
+            "title": "Responsive Design & Media Queries",
+            "description": "Adaptez vos sites à tous les écrans.",
+            "duration": "60 min"
+        },
+        {
+            "id": 7,
+            "title": "Sélecteurs Avancés et Pseudo-classes",
+            "description": "Ciblez vos éléments avec une précision chirurgicale.",
+            "duration": "50 min"
+        },
+        {
+            "id": 8,
+            "title": "Variables CSS et Fonctions",
+            "description": "Rendez votre code dynamique et maintenable.",
+            "duration": "45 min"
+        },
+        {
+            "id": 9,
+            "title": "Frameworks CSS (Tailwind, Bootstrap)",
+            "description": "Accélérez votre développement avec des outils modernes.",
+            "duration": "55 min"
+        },
+        {
+            "id": 10,
+            "title": "Optimisation et Architecture CSS",
+            "description": "Méthodologie BEM et bonnes pratiques professionnelles.",
+            "duration": "60 min"
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "courseId": "javascript",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Expliquez la différence entre 'let' et 'const'. Dans quel cas utiliseriez-vous l'un plutôt que l'autre ?",
+            "expectedKeywords": [
+                "réassignation",
+                "modification",
+                "valeur",
+                "variable",
+                "constante"
+            ],
+            "minKeywords": 2
+        },
+        {
+            "id": 2,
+            "question": "Qu'est-ce qu'une 'Arrow Function' et quel est son principal avantage syntaxique ?",
+            "expectedKeywords": [
+                "flèche",
+                "syntaxe",
+                "anonyme",
+                "this",
+                "courte"
+            ],
+            "minKeywords": 2
+        }
+    ]
+}
