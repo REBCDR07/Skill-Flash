@@ -1,0 +1,65 @@
+{
+    "courseId": "react",
+    "chapters": [
+        {
+            "id": 1,
+            "title": "Introduction & JSX",
+            "description": "Découvrez React et la syntaxe JSX.",
+            "duration": "60 min"
+        },
+        {
+            "id": 2,
+            "title": "Composants & Props",
+            "description": "Créez et utilisez des composants réutilisables.",
+            "duration": "60 min"
+        },
+        {
+            "id": 3,
+            "title": "Le State et les Hooks",
+            "description": "Gérez l'état local avec useState et useEffect.",
+            "duration": "90 min"
+        },
+        {
+            "id": 4,
+            "title": "Gestion des Événements",
+            "description": "Rendez vos applications interactives.",
+            "duration": "60 min"
+        },
+        {
+            "id": 5,
+            "title": "Rendu Conditionnel & Listes",
+            "description": "Affichez des données dynamiques.",
+            "duration": "60 min"
+        },
+        {
+            "id": 6,
+            "title": "useEffect Avancé",
+            "description": "Maîtrisez le cycle de vie et les dépendances.",
+            "duration": "60 min"
+        },
+        {
+            "id": 7,
+            "title": "Custom Hooks",
+            "description": "Créez vos propres Hooks pour réutiliser la logique.",
+            "duration": "60 min"
+        },
+        {
+            "id": 8,
+            "title": "Context API",
+            "description": "Gérez l'état global sans prop drilling.",
+            "duration": "90 min"
+        },
+        {
+            "id": 9,
+            "title": "React Router",
+            "description": "Créez des applications monopages (SPA).",
+            "duration": "60 min"
+        },
+        {
+            "id": 10,
+            "title": "Performance",
+            "description": "Optimisez vos composants avec Memo et useCallback.",
+            "duration": "60 min"
+        }
+    ]
+}

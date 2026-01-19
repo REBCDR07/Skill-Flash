@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "question": "Quelle est l'unité de déploiement la plus petite dans K8s ?",
+        "options": [
+            "Pod",
+            "Container",
+            "Node",
+            "Cluster"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 2,
+        "question": "Quel composant gère l'état du cluster ?",
+        "options": [
+            "etcd",
+            "kubelet",
+            "proxy",
+            "scheduler"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 3,
+        "question": "À quoi sert un Service ?",
+        "options": [
+            "Exposer une application réseau",
+            "Stocker des données",
+            "Gérer les logs",
+            "Créer des images"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 4,
+        "question": "Quel outil en ligne de commande interagit avec K8s ?",
+        "options": [
+            "kubectl",
+            "k8s-cli",
+            "kube-cmd",
+            "docker"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 5,
+        "question": "Qu'est-ce qu'un Namespace ?",
+        "options": [
+            "Un cluster virtuel au sein d'un cluster physique",
+            "Un nom de domaine",
+            "Un type de volume",
+            "Une règle réseau"
+        ],
+        "correctAnswer": 0
+    }
+]

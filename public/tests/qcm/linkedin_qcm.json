@@ -1,0 +1,116 @@
+{
+    "title": "Expertise LinkedIn Avancée",
+    "passingScore": 70,
+    "questions": [
+        {
+            "id": 1,
+            "question": "Quel est l'élément le plus important d'un profil LinkedIn ?",
+            "options": [
+                "La bannière",
+                "Le titre (Headline)",
+                "Les recommandations"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le titre est la première chose que les recruteurs voient et scanne pour les mots-clés."
+        },
+        {
+            "id": 2,
+            "question": "Quel format de contenu génère souvent le plus d'engagement éducatif ?",
+            "options": [
+                "Lien externe",
+                "Carrousel PDF",
+                "Vidéo longue"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Les carrousels PDF (documents) sont très performants pour le contenu éducatif step-by-step."
+        },
+        {
+            "id": 3,
+            "question": "Qu'est-ce que le 'marché caché' de l'emploi ?",
+            "options": [
+                "Le Dark Web",
+                "Les offres non publiées",
+                "Les offres premium"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Ce sont les postes pourvus par réseau et cooptation sans annonce publique."
+        },
+        {
+            "id": 4,
+            "question": "Combien de thématiques (piliers) est-il recommandé d'avoir ?",
+            "options": [
+                "10 minimum",
+                "2 à 3",
+                "Aucune limite"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Se focaliser sur 2-3 piliers permet d'être identifié comme expert sur ces sujets."
+        },
+        {
+            "id": 5,
+            "question": "Pour le SEO LinkedIn, où placer les mots-clés ?",
+            "options": [
+                "Uniquement dans les compétences",
+                "Partout (Titre, Résumé, Expérience)",
+                "Dans les messages privés"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Les mots-clés doivent être présents dans toutes les sections indexables du profil."
+        },
+        {
+            "id": 6,
+            "question": "Qu'est-ce que le 'Dwell Time' ?",
+            "options": [
+                "Temps de chargement",
+                "Temps passé sur un post",
+                "Temps de réponse"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est le temps qu'un utilisateur passe à consommer votre contenu."
+        },
+        {
+            "id": 7,
+            "question": "Quelle est la différence principale entre Profil et Page ?",
+            "options": [
+                "Le prix",
+                "Profil = Humain, Page = Marque",
+                "Aucune"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le profil est pour les individus, la page pour les entités."
+        },
+        {
+            "id": 8,
+            "question": "Le Social Selling consiste à :",
+            "options": [
+                "Spammer en MP",
+                "Vendre dès la connexion",
+                "Créer des relations avant de vendre"
+            ],
+            "correctAnswer": 2,
+            "explanation": "C'est l'approche relationnelle de la vente."
+        },
+        {
+            "id": 9,
+            "question": "Que signifie SSI ?",
+            "options": [
+                "Social Selling Index",
+                "Super Social Influencer",
+                "Sales System Interface"
+            ],
+            "correctAnswer": 0,
+            "explanation": "C'est l'indice de vente sociale calculé par LinkedIn."
+        },
+        {
+            "id": 10,
+            "question": "Combien de temps par jour suffit pour une bonne routine ?",
+            "options": [
+                "2 heures",
+                "15 minutes",
+                "8 heures"
+            ],
+            "correctAnswer": 1,
+            "explanation": "La régularité (15 min/jour) bat l'intensité."
+        }
+    ]
+}

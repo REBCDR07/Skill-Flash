@@ -1,32 +1,48 @@
+import { useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { fetchCourses } from '@/lib/courses';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { useCourseProgress, useCertifications, useLeaderboard, useRealtimeSync } from '@/hooks/useProgress';
-import { fetchCourses } from '@/lib/courses';
-import { generateCertificatePDF } from '@/lib/pdf';
-import { Zap, Trophy, BookOpen, Award, ArrowRight, Download, Clock, TrendingUp, Calendar, Activity, Star, Share2, Sparkles, Crown, Medal } from 'lucide-react';
+import { useCourseProgress, useCertifications, useLeaderboard, useRealtimeSync, useQuizResults, useQuizProgress, useProfile } from '@/hooks/useProgress';
 import Navbar from '@/components/Navbar';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { Share2, Crown, Medal, Download, Trophy, Star, Award, TrendingUp, Zap, Sparkles, BookOpen, Activity, ArrowRight, Clock } from 'lucide-react';
+import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area, RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts';
+import { Course, CourseProgress, Certification } from '@/types/course';
+import { generateCertificatePDF } from '@/lib/pdf';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Certification, Course, CourseProgress } from '@/types/course';
-import { AreaChart, Area, RadarChart, PolarGrid, PolarAngleAxis, Radar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { toast } from 'sonner';
 
 const Dashboard = () => {
   useRealtimeSync();
   const navigate = useNavigate();
-  const { user, profile, loading } = useAuth();
+  const { user, profile: authProfile, loading } = useAuth();
+  const { data: reactiveProfile } = useProfile();
+  const profile = reactiveProfile || authProfile;
+
   const { data: allProgress } = useCourseProgress();
   const { data: certifications } = useCertifications();
+
   const { data: leaderboard } = useLeaderboard(10);
+  const { data: quizResults } = useQuizResults();
+  const { getProgress } = useQuizProgress();
 
   const { data: courses } = useQuery({
     queryKey: ['courses'],
     queryFn: fetchCourses
   });
+
+  // Calculate real-time points from certifications and quizzes as a fallback/sync check
+  const calculatedPoints = useMemo(() => {
+    return (quizResults?.reduce((acc, q) => acc + (q.score * 10), 0) || 0) +
+      (certifications?.length || 0) * 100;
+  }, [quizResults, certifications]);
+
+  // Use profile points but fallback or sync visual display
+  const displayPoints = Math.max(profile?.total_points || 0, calculatedPoints);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -99,8 +115,16 @@ const Dashboard = () => {
     if (!course) return null;
     const completedCount = p.completed_chapters?.length || 0;
     const progressPercent = Math.round((completedCount / course.chapters) * 100);
-    return { ...course, progress: p, progressPercent };
-  }).filter((item): item is (Course & { progress: CourseProgress; progressPercent: number }) => !!item && item.progressPercent < 100);
+
+    // Check if final quiz is passed
+    const passedQuiz = quizResults?.some(
+      r => r.course_id === course.id && r.quiz_type === 'final_qcm' && r.score >= 70
+    );
+
+    return { ...course, progress: p, progressPercent, passedQuiz };
+  }).filter((item): item is (Course & { progress: CourseProgress; progressPercent: number; passedQuiz: boolean }) =>
+    !!item && (!item.passedQuiz) // Show if quiz is NOT passed, even if progress is 100%
+  );
 
   const handleDownloadCert = async (cert: Certification) => {
     if (user) {
@@ -110,6 +134,39 @@ const Dashboard = () => {
 
   const topCertifications = certifications?.slice(0, 3) || [];
   const otherCertifications = certifications?.slice(3) || [];
+
+  const handleShare = async (cert: Certification) => {
+    // Stateless sharing: Encode data in URL
+    const payload = {
+      id: cert.id,
+      course_title: cert.course_title,
+      final_score: cert.final_score,
+      issued_at: cert.issued_at,
+      verification_code: cert.verification_code,
+      user_id: cert.user_id,
+      userName: profile?.full_name || user?.email || 'Utilisateur'
+    };
+    const code = btoa(JSON.stringify(payload));
+    const url = `${window.location.origin}/verify/${code}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Certification SkillFlash : ${cert.course_title}`,
+          text: `Je viens d'obtenir ma certification en ${cert.course_title} avec un score de ${cert.final_score}% !`,
+          url
+        });
+      } catch (err) {
+        console.log('Error sharing:', err);
+      }
+    } else {
+      navigator.clipboard.writeText(url);
+      toast({
+        title: "Lien copié !",
+        description: "Le lien de vérification a été copié dans le presse-papier.",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50 via-sky-50 to-amber-50 pb-20 relative overflow-hidden">
@@ -176,13 +233,20 @@ const Dashboard = () => {
                         {new Date(topCertifications[1].issued_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </CardDescription>
                     </CardHeader>
-                    <CardFooter className="pt-0 pb-6">
+                    <CardFooter className="pt-0 pb-6 gap-2">
                       <Button
                         onClick={() => handleDownloadCert(topCertifications[1])}
-                        className="w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 text-white font-black rounded-xl h-12 shadow-lg transition-all duration-300"
+                        className="flex-1 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 text-white font-black rounded-xl h-12 shadow-lg transition-all duration-300 px-2"
                       >
                         <Download className="w-4 h-4 mr-2" />
-                        TÉLÉCHARGER
+                        PDF
+                      </Button>
+                      <Button
+                        onClick={() => handleShareCert(topCertifications[1])}
+                        variant="outline"
+                        className="border-2 border-slate-300 hover:bg-slate-50 font-black rounded-xl h-12 px-2"
+                      >
+                        <Share2 className="w-4 h-4" />
                       </Button>
                     </CardFooter>
                   </Card>
@@ -212,13 +276,20 @@ const Dashboard = () => {
                         {new Date(topCertifications[0].issued_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </CardDescription>
                     </CardHeader>
-                    <CardFooter className="pt-0 pb-6">
+                    <CardFooter className="pt-0 pb-6 gap-3">
                       <Button
                         onClick={() => handleDownloadCert(topCertifications[0])}
-                        className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-white font-black rounded-xl h-14 shadow-xl transition-all duration-300 text-base"
+                        className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-white font-black rounded-xl h-14 shadow-xl transition-all duration-300 text-base px-2"
                       >
                         <Download className="w-5 h-5 mr-2" />
-                        TÉLÉCHARGER CERTIFICAT
+                        CERTIFICAT
+                      </Button>
+                      <Button
+                        onClick={() => handleShareCert(topCertifications[0])}
+                        variant="outline"
+                        className="border-2 border-amber-300 hover:bg-amber-50 font-black rounded-xl h-14 w-14 p-0 shadow-lg"
+                      >
+                        <Share2 className="w-6 h-6 text-amber-600" />
                       </Button>
                     </CardFooter>
                   </Card>
@@ -244,13 +315,20 @@ const Dashboard = () => {
                         {new Date(topCertifications[2].issued_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </CardDescription>
                     </CardHeader>
-                    <CardFooter className="pt-0 pb-6">
+                    <CardFooter className="pt-0 pb-6 gap-2">
                       <Button
                         onClick={() => handleDownloadCert(topCertifications[2])}
-                        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-black rounded-xl h-12 shadow-lg transition-all duration-300"
+                        className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-black rounded-xl h-12 shadow-lg transition-all duration-300 px-2"
                       >
                         <Download className="w-4 h-4 mr-2" />
-                        TÉLÉCHARGER
+                        PDF
+                      </Button>
+                      <Button
+                        onClick={() => handleShareCert(topCertifications[2])}
+                        variant="outline"
+                        className="border-2 border-orange-300 hover:bg-orange-50 font-black rounded-xl h-12 px-2"
+                      >
+                        <Share2 className="w-4 h-4" />
                       </Button>
                     </CardFooter>
                   </Card>
@@ -273,14 +351,24 @@ const Dashboard = () => {
                       <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-3">
                         {new Date(cert.issued_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
                       </p>
-                      <Button
-                        size="sm"
-                        onClick={() => handleDownloadCert(cert)}
-                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl h-9 text-xs shadow-sm"
-                      >
-                        <Download className="w-3 h-3 mr-1.5" />
-                        PDF
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => handleDownloadCert(cert)}
+                          className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl h-9 text-[10px] shadow-sm px-1"
+                        >
+                          <Download className="w-3 h-3 mr-1" />
+                          PDF
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => handleShareCert(cert)}
+                          variant="ghost"
+                          className="w-9 h-9 p-0 rounded-xl hover:bg-gray-100 text-violet-600"
+                        >
+                          <Share2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
@@ -396,7 +484,7 @@ const Dashboard = () => {
                   <Sparkles className="w-6 h-6 text-violet-400" />
                 </div>
                 <div className="space-y-2">
-                  <p className="text-6xl font-black text-gray-900 leading-none">{profile?.total_points || 0}</p>
+                  <p className="text-6xl font-black text-gray-900 leading-none">{displayPoints}</p>
                   <p className="text-violet-700 text-sm font-black uppercase tracking-[0.3em]">Points Flash</p>
                   <div className="flex items-center gap-2 mt-4">
                     <div className="h-2 flex-1 bg-violet-200 rounded-full overflow-hidden">
@@ -472,12 +560,24 @@ const Dashboard = () => {
             {activeCoursesData.length > 0 ? (
               activeCoursesData.map((course) => (
                 <Card key={course.id} className="bg-white border-2 border-gray-200 rounded-[2rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group">
-                  <div className="flex flex-col md:flex-row">
-                    <div className="md:w-72 p-8 flex flex-col justify-center items-center bg-gradient-to-br from-violet-50 to-sky-50 border-r-2 border-gray-200">
-                      <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-200 to-sky-200 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500 border-2 border-violet-300">
-                        <BookOpen className="w-12 h-12 text-violet-700" />
+                  <div className={`flex flex-col md:flex-row ${course.progressPercent === 100 ? 'bg-gradient-to-r from-amber-50/50 to-orange-50/50' : ''}`}>
+                    <div className="md:w-72 p-8 flex flex-col justify-center items-center isolate relative border-r-2 border-gray-100">
+                      {course.progressPercent === 100 && (
+                        <div className="absolute inset-0 bg-white/40 backdrop-blur-sm -z-10"></div>
+                      )}
+
+                      <div className={`w-24 h-24 rounded-3xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500 border-2 
+                        ${course.progressPercent === 100 ? 'bg-gradient-to-br from-amber-200 to-orange-200 border-amber-300' : 'bg-gradient-to-br from-violet-200 to-sky-200 border-violet-300'}
+                      `}>
+                        {course.progressPercent === 100 ? (
+                          <Trophy className="w-12 h-12 text-amber-700" />
+                        ) : (
+                          <BookOpen className="w-12 h-12 text-violet-700" />
+                        )}
                       </div>
-                      <Badge className="bg-white border border-gray-300 text-gray-700 font-bold text-xs tracking-wider px-4 py-1.5">
+                      <Badge className={`border font-bold text-xs tracking-wider px-4 py-1.5
+                        ${course.progressPercent === 100 ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-white text-gray-700 border-gray-300'}
+                      `}>
                         {course.category}
                       </Badge>
                     </div>
@@ -492,31 +592,58 @@ const Dashboard = () => {
                               <Clock className="w-4 h-4" />
                               {course.duration}
                             </span>
-                            <span className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4" />
-                              Mis à jour récemment
-                            </span>
+                            {course.progressPercent === 100 && (
+                              <span className="flex items-center gap-2 text-amber-600">
+                                <Sparkles className="w-4 h-4" />
+                                Certification en attente
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-5xl font-black bg-gradient-to-r from-violet-600 to-sky-600 bg-clip-text text-transparent leading-none">
+                          <p className={`text-5xl font-black bg-clip-text text-transparent leading-none
+                            ${course.progressPercent === 100 ? 'bg-gradient-to-r from-amber-500 to-orange-600' : 'bg-gradient-to-r from-violet-600 to-sky-600'}
+                          `}>
                             {course.progressPercent}%
                           </p>
-                          <p className="text-xs uppercase font-black text-gray-400 tracking-widest mt-2">COMPLÉTÉ</p>
+                          <p className="text-xs uppercase font-black text-gray-400 tracking-widest mt-2">{course.progressPercent === 100 ? 'PRÊT POUR LE TEST' : 'COMPLÉTÉ'}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div className="relative h-4 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
                           <div
-                            className="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-500 via-sky-500 to-amber-500 rounded-full transition-all duration-1000 shadow-md w-progress"
-                            style={{ '--progress': `${course.progressPercent}%` } as React.CSSProperties}
+                            className={`absolute inset-y-0 left-0 rounded-full transition-all duration-1000 shadow-md w-progress
+                                ${course.progressPercent === 100 ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500' : 'bg-gradient-to-r from-violet-500 via-sky-500 to-amber-500'}
+                            `}
+                            style={{ width: `${course.progressPercent}%` }}
                           ></div>
                         </div>
                         <div className="flex justify-end">
-                          <Link to={`/course/${course.id}`}>
-                            <Button className="bg-gradient-to-r from-violet-600 to-sky-600 hover:from-violet-500 hover:to-sky-500 text-white font-black rounded-2xl px-10 h-14 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                              CONTINUER LE COURS
-                              <ArrowRight className="w-5 h-5 ml-3" />
+                          <Link
+                            to={course.savedProgress
+                              ? `/quiz/${course.id}`
+                              : course.progressPercent === 100
+                                ? `/quiz/${course.id}`
+                                : `/course/${course.id}`
+                            }
+                            state={course.savedProgress ? { resume: true } : undefined}
+                          >
+                            <Button className={`
+                              font-black rounded-2xl px-10 h-14 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300
+                              ${course.savedProgress
+                                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500'
+                                : course.progressPercent === 100
+                                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500'
+                                  : 'bg-gradient-to-r from-violet-600 to-sky-600 hover:from-violet-500 hover:to-sky-500'}
+                              text-white
+                            `}>
+                              {course.savedProgress
+                                ? 'POURSUIVRE LE TEST'
+                                : course.progressPercent === 100
+                                  ? 'PASSER LE TEST FINAL'
+                                  : 'CONTINUER LE COURS'
+                              }
+                              {course.savedProgress ? <Zap className="w-5 h-5 ml-3" /> : <ArrowRight className="w-5 h-5 ml-3" />}
                             </Button>
                           </Link>
                         </div>
@@ -597,3 +724,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

@@ -17,9 +17,10 @@ import {
   CheckCircle2,
   PlayCircle,
   Clock,
-  Layout,
   ArrowRight,
-  User
+  User,
+  Lock,
+  Layout
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -143,30 +144,38 @@ const Course = () => {
           </div>
           <ScrollArea className="flex-1">
             <div className="p-2 space-y-1">
-              {chapters?.map((chapter) => {
+              {chapters?.map((chapter, index) => {
                 const active = chapter.id === currentChapterId;
                 const completed = isCompleted(chapter.id);
+                // Lock if previous chapter is not completed (ignoring first chapter)
+                const isLocked = index > 0 && !isCompleted(chapters[index - 1].id);
 
                 return (
                   <button
                     key={chapter.id}
+                    disabled={isLocked}
                     onClick={() => {
-                      setCurrentChapterId(chapter.id);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      if (!isLocked) {
+                        setCurrentChapterId(chapter.id);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
                     }}
-                    className={`w-full flex items-start gap-3 p-3 rounded-lg transition-all text-left group
+                    className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all text-left group relative
                       ${active ? 'bg-primary text-white shadow-lg' : 'hover:bg-sidebar-accent text-sidebar-foreground'}
+                      ${isLocked ? 'opacity-50 cursor-not-allowed hover:bg-transparent' : ''}
                     `}
                   >
-                    <div className="mt-0.5">
+                    <div className="mt-0.5 shrink-0">
                       {completed ? (
                         <CheckCircle2 className={`w-4 h-4 ${active ? 'text-white' : 'text-success'}`} />
+                      ) : isLocked ? (
+                        <Lock className="w-4 h-4 text-muted-foreground" />
                       ) : (
                         <PlayCircle className={`w-4 h-4 ${active ? 'text-white' : 'text-muted-foreground group-hover:text-primary'}`} />
                       )}
                     </div>
-                    <div className="flex-1">
-                      <p className={`text-sm font-medium leading-tight ${active ? 'text-white' : 'text-sidebar-foreground'}`}>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-medium leading-tight truncate ${active ? 'text-white' : 'text-sidebar-foreground'}`}>
                         {chapter.title}
                       </p>
                       <div className={`flex items-center gap-2 mt-1 text-[10px] ${active ? 'text-white/80' : 'text-muted-foreground'}`}>
@@ -174,6 +183,9 @@ const Course = () => {
                         {chapter.duration}
                       </div>
                     </div>
+                    {isLocked && (
+                      <div className="absolute inset-0 bg-background/10 backdrop-blur-[1px] rounded-lg" />
+                    )}
                   </button>
                 );
               })}
@@ -182,7 +194,7 @@ const Course = () => {
         </aside>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto px-4 py-8 lg:px-12">
+        <main className="flex-1 overflow-y-auto px-4 py-8 lg:px-12 bg-background">
           <div className="max-w-3xl mx-auto">
             {currentChapter && (
               <div className="mb-8">
@@ -226,60 +238,76 @@ const Course = () => {
               )}
             </div>
 
-            <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-6 pb-12">
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  disabled={currentChapterId === 1}
-                  onClick={() => {
-                    const prevId = chapters?.[chapters?.findIndex(c => c.id === currentChapterId) - 1]?.id;
-                    if (prevId) {
-                      setCurrentChapterId(prevId);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                  }}
-                >
-                  <ChevronLeft className="w-4 h-4 mr-2" />
-                  Précédent
-                </Button>
-                <Button
-                  variant="outline"
-                  disabled={currentChapterId === chapters?.[chapters.length - 1]?.id}
-                  onClick={() => {
-                    const nextId = chapters?.[chapters?.findIndex(c => c.id === currentChapterId) + 1]?.id;
-                    if (nextId) {
-                      setCurrentChapterId(nextId);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                  }}
-                >
-                  Suivant
-                  <ChevronRight className="w-4 h-4 ml-2" />
-                </Button>
+            {progress?.completed_chapters?.length === course.chapters ? (
+              <div className="mt-16 animate-in slide-in-from-bottom-8 duration-700">
+                <div className="p-8 rounded-[2rem] bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-2 border-amber-500/20 flex flex-col md:flex-row items-center gap-8 shadow-2xl">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shrink-0 shadow-lg rotate-3">
+                    <Zap className="w-10 h-10 text-white fill-white" />
+                  </div>
+                  <div className="text-center md:text-left flex-1 space-y-2">
+                    <h3 className="text-2xl font-black text-gray-900">Cours terminé !</h3>
+                    <p className="text-gray-600 font-medium leading-relaxed">
+                      Vous avez acquis toutes les connaissances nécessaires. Lancez le test final pour valider votre expertise et obtenir votre certificat.
+                    </p>
+                  </div>
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-black h-14 px-8 rounded-xl shadow-xl hover:shadow-amber-500/25 transition-all hover:scale-105 shrink-0"
+                    onClick={() => navigate(`/quiz/${courseId}`)}
+                  >
+                    PASSER LE TEST FINAL
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </div>
               </div>
+            ) : (
+              <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-6 pb-12">
+                <div className="flex items-center gap-4">
+                  <Button
+                    variant="outline"
+                    disabled={currentChapterId === 1}
+                    onClick={() => {
+                      const prevId = chapters?.[chapters?.findIndex(c => c.id === currentChapterId) - 1]?.id;
+                      if (prevId) {
+                        setCurrentChapterId(prevId);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-2" />
+                    Précédent
+                  </Button>
+                  <Button
+                    variant="outline"
+                    disabled={currentChapterId === chapters?.[chapters.length - 1]?.id}
+                    onClick={() => {
+                      const nextId = chapters?.[chapters?.findIndex(c => c.id === currentChapterId) + 1]?.id;
+                      // Strict progression: only allow next if current is completed
+                      if (nextId && isCompleted(currentChapterId)) {
+                        setCurrentChapterId(nextId);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      } else {
+                        toast.error("Veuillez terminer ce chapitre avant de passer au suivant.");
+                      }
+                    }}
+                  >
+                    Suivant
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
 
-              <div className="flex items-center gap-4">
-                <Button
-                  size="lg"
-                  className="gradient-primary text-white shadow-glow"
-                  onClick={() => {
-                    const isLastChapter = currentChapterId === chapters?.[chapters.length - 1]?.id;
-                    if (isLastChapter && isCompleted(currentChapterId)) {
-                      navigate(`/quiz/${courseId}`);
-                    } else {
-                      handleChapterComplete();
-                    }
-                  }}
-                >
-                  {currentChapterId === chapters?.[chapters.length - 1]?.id && isCompleted(currentChapterId)
-                    ? 'Passer le test final'
-                    : isCompleted(currentChapterId) ? 'Chapitre suivant' : 'Marquer comme terminé'
-                  }
-                  <CheckCircle2 className="w-5 h-5 ml-2" />
-                </Button>
+                <div className="flex items-center gap-4">
+                  <Button
+                    size="lg"
+                    className="gradient-primary text-white shadow-glow"
+                    onClick={handleChapterComplete}
+                  >
+                    {isCompleted(currentChapterId) ? 'Chapitre suivant' : 'Marquer comme terminé'}
+                    <CheckCircle2 className="w-5 h-5 ml-2" />
+                  </Button>
+                </div>
               </div>
-
-            </div>
+            )}
           </div>
         </main>
       </div>

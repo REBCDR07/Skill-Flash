@@ -1,8 +1,9 @@
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import QRCode from 'qrcode';
 import { Certification } from '@/types/course';
 
-export const generateCertificatePDF = (cert: Certification, userName: string) => {
+export const generateCertificatePDF = async (cert: Certification, userName: string) => {
     const doc = new jsPDF({
         orientation: 'landscape',
         unit: 'mm',
@@ -106,51 +107,41 @@ export const generateCertificatePDF = (cert: Certification, userName: string) =>
         year: 'numeric'
     });
     doc.text(date, 35, footerY + 6);
-    doc.text('Signé par le Bureau de Certification', 35, footerY + 18);
+    doc.text('SkillFlash Certificat', 35, footerY + 18);
 
-    // Center: Prestige Seal
-    const sealX = centerX;
-    const sealY = pageHeight - 40;
-
-    doc.setFillColor(254, 249, 195); // gold-100 approx
-    doc.circle(sealX, sealY, 15, 'F');
-    doc.setDrawColor(210, 153, 20);
-    doc.setLineWidth(1);
-    doc.circle(sealX, sealY, 15, 'S');
-
-    doc.setFillColor(255, 255, 255);
-    doc.circle(sealX, sealY, 12, 'F');
-    doc.setLineWidth(0.5);
-    doc.setLineDashPattern([1, 1], 0);
-    doc.circle(sealX, sealY, 12, 'S');
-    doc.setLineDashPattern([], 0);
-
-    doc.setTextColor(151, 107, 7); // gold-700 approx
-    doc.setFontSize(6);
-    doc.text('OFFICIEL', sealX, sealY + 5, { align: 'center' });
-
-    // Verification Badge
-    doc.setFillColor(16, 185, 129); // emerald-500
-    doc.roundedRect(sealX + 8, sealY + 8, 15, 6, 2, 2, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(4);
-    doc.text('VÉRIFIÉ', sealX + 15.5, sealY + 12.5, { align: 'center' });
-
-    // Right: Verification ID
+    // Right: QR Code & Verification ID
     doc.setTextColor(148, 163, 184);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7);
-    doc.text('ID DE VÉRIFICATION', pageWidth - 70, footerY);
+    doc.text('VÉRIFICATION NUMÉRIQUE', pageWidth - 70, footerY);
 
+    // Generate QR Code
+    const verificationUrl = `${window.location.origin}/verify/${cert.verification_code}`;
+    try {
+        const qrDataUrl = await QRCode.toDataURL(verificationUrl, {
+            margin: 0,
+            width: 80,
+            color: {
+                dark: '#1e293b',
+                light: '#ffffff'
+            }
+        });
+        doc.addImage(qrDataUrl, 'PNG', pageWidth - 70, footerY + 2, 20, 20);
+    } catch (err) {
+        console.error('QR Code generation failed', err);
+    }
+
+    doc.setTextColor(148, 163, 184);
     doc.setFont('courier', 'bold');
-    doc.setFontSize(8);
-    doc.text(cert.verification_code.slice(0, 16) + '...', pageWidth - 70, footerY + 6);
+    doc.setFontSize(6);
+    doc.text(cert.verification_code, pageWidth - 70, footerY + 24);
 
     doc.setTextColor(148, 163, 184);
     doc.setFont('helvetica', 'italic');
     doc.setFontSize(7);
-    doc.text('SkillFlash Digital Ledger', pageWidth - 70, footerY + 18);
+    doc.text('SkillFlash Digital Ledger', pageWidth - 70, footerY + 28);
 
     // Save with professional filename
     doc.save(`CERTIFICATE_SKILLFLASH_${cert.course_id.toUpperCase()}_${userName.toUpperCase().replace(/\s+/g, '_')}.pdf`);
 };
+

@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "question": "Quelle commande liste les conteneurs actifs ?",
+        "options": [
+            "docker ps",
+            "docker list",
+            "docker run",
+            "docker images"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 2,
+        "question": "Qu'est-ce qu'une image Docker ?",
+        "options": [
+            "Un modèle en lecture seule pour créer des conteneurs",
+            "Une capture d'écran",
+            "Un fichier log",
+            "Un réseau virtuel"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 3,
+        "question": "Quel fichier définit la construction d'une image ?",
+        "options": [
+            "Dockerfile",
+            "docker-compose.yml",
+            "package.json",
+            "config.xml"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 4,
+        "question": "Comment arrêter un conteneur ?",
+        "options": [
+            "docker stop [ID]",
+            "docker kill [ID]",
+            "docker end [ID]",
+            "docker halt [ID]"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 5,
+        "question": "Qu'est-ce que Docker Hub ?",
+        "options": [
+            "Un registre public d'images Docker",
+            "Un outil de monitoring",
+            "Un IDE",
+            "Un système d'exploitation"
+        ],
+        "correctAnswer": 0
+    }
+]

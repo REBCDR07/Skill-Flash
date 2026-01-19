@@ -1,0 +1,116 @@
+{
+    "title": "Maîtrise React Avancée",
+    "passingScore": 70,
+    "questions": [
+        {
+            "id": 1,
+            "question": "Quel Hook est utilisé pour l'état local ?",
+            "options": [
+                "useEffect",
+                "useState",
+                "useContext"
+            ],
+            "correctAnswer": 1,
+            "explanation": "useState permet de déclarer une variable d'état."
+        },
+        {
+            "id": 2,
+            "question": "Pourquoi faut-il une 'key' dans les listes ?",
+            "options": [
+                "Pour le style CSS",
+                "Pour identifier les éléments de manière unique",
+                "C'est optionnel"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Les clés aident React à identifier quels éléments ont changé, ont été ajoutés ou supprimés."
+        },
+        {
+            "id": 3,
+            "question": "Comment empêcher le comportement par défaut d'un formulaire ?",
+            "options": [
+                "return false",
+                "e.preventDefault()",
+                "e.stopPropagation()"
+            ],
+            "correctAnswer": 1,
+            "explanation": "e.preventDefault() est la méthode standard en React pour cela."
+        },
+        {
+            "id": 4,
+            "question": "Peut-on utiliser des Hooks dans une boucle ?",
+            "options": [
+                "Oui",
+                "Non, jamais",
+                "Seulement useState"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Les Hooks doivent toujours être appelés au niveau supérieur (Top Level) du composant."
+        },
+        {
+            "id": 5,
+            "question": "Quelle est la syntaxe correcte pour un événement Click ?",
+            "options": [
+                "onclick={...}",
+                "onClick={...}",
+                "on-click={...}"
+            ],
+            "correctAnswer": 1,
+            "explanation": "React utilise la convention camelCase pour les événements."
+        },
+        {
+            "id": 6,
+            "question": "Que signifie un tableau de dépendances vide [] dans useEffect ?",
+            "options": [
+                "L'effet ne s'exécute jamais",
+                "L'effet s'exécute à chaque rendu",
+                "L'effet s'exécute une seule fois au montage"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Cela simule le comportement de componentDidMount."
+        },
+        {
+            "id": 7,
+            "question": "A quoi sert le Context API ?",
+            "options": [
+                "A gérer le routing",
+                "A éviter le prop drilling",
+                "A optimiser les performances"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Il permet de partager des données globales sans les passer manuellement à chaque niveau."
+        },
+        {
+            "id": 8,
+            "question": "Quelle est la convention de nommage des Custom Hooks ?",
+            "options": [
+                "Doit commencer par 'use'",
+                "Doit commencer par 'hook'",
+                "Aucune convention"
+            ],
+            "correctAnswer": 0,
+            "explanation": "Cela permet à React de vérifier les règles des Hooks automatiquement."
+        },
+        {
+            "id": 9,
+            "question": "Que fait React.memo ?",
+            "options": [
+                "Il cache les résultats d'une fonction",
+                "Il empêche le re-rendu d'un composant si ses props sont identiques",
+                "Il gère la mémoire du navigateur"
+            ],
+            "correctAnswer": 1,
+            "explanation": "C'est une optimisation de performance pour les composants fonctionnels."
+        },
+        {
+            "id": 10,
+            "question": "Quel composant React Router permet la navigation sans rechargement ?",
+            "options": [
+                "<a href>",
+                "<Link to>",
+                "<Navigate href>"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le composant Link utilise l'API History pour changer l'URL sans recharger la page."
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "title": "Pourquoi Docker ?",
+        "duration": "1 heure"
+    },
+    {
+        "id": 2,
+        "title": "Images et Containers",
+        "duration": "1 heure"
+    },
+    {
+        "id": 3,
+        "title": "Docker Compose",
+        "duration": "1 heure"
+    }
+]

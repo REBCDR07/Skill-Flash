@@ -1,0 +1,38 @@
+{
+    "title": "Logique Python Avancée",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Pourquoi est-il préférable d'utiliser 'with open(...)' plutôt que 'open(...)' ?",
+            "expectedKeywords": [
+                "fermeture",
+                "close",
+                "sécurité",
+                "automatique"
+            ],
+            "sampleAnswer": "L'instruction 'with' garantit que le fichier est correctement fermé même si une erreur survient pendant son traitement."
+        },
+        {
+            "id": 2,
+            "question": "Expliquez le concept d'héritage en POO.",
+            "expectedKeywords": [
+                "classe",
+                "parent",
+                "enfant",
+                "réutilisation",
+                "attributs"
+            ],
+            "sampleAnswer": "L'héritage permet de créer une nouvelle classe (enfant) qui reprend les attributs et méthodes d'une classe existante (parent), facilitant la réutilisation du code."
+        },
+        {
+            "id": 3,
+            "question": "Quelle est la différence entre une liste et un tuple ?",
+            "expectedKeywords": [
+                "mutable",
+                "immuable",
+                "modification"
+            ],
+            "sampleAnswer": "Une liste est mutable (on peut la modifier après création), tandis qu'un tuple est immuable (une fois créé, il ne peut plus changer)."
+        }
+    ]
+}

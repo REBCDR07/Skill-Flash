@@ -1,0 +1,116 @@
+{
+    "title": "Expertise Python",
+    "passingScore": 70,
+    "questions": [
+        {
+            "id": 1,
+            "question": "Quel mot-clé est utilisé pour créer une fonction ?",
+            "options": [
+                "func",
+                "def",
+                "function"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le mot-clé 'def' est utilisé pour définir une fonction."
+        },
+        {
+            "id": 2,
+            "question": "Quelle méthode ajoute un élément à la fin d'une liste ?",
+            "options": [
+                "add()",
+                "push()",
+                "append()"
+            ],
+            "correctAnswer": 2,
+            "explanation": ".append() ajoute l'élément à la fin de la liste."
+        },
+        {
+            "id": 3,
+            "question": "Comment ouvrir un fichier en mode écriture ?",
+            "options": [
+                "open('file', 'r')",
+                "open('file', 'w')",
+                "open('file', 'x')"
+            ],
+            "correctAnswer": 1,
+            "explanation": "'w' signifie write (écriture). Attention, cela écrase le contenu existant."
+        },
+        {
+            "id": 4,
+            "question": "Que fait l'opérateur % ?",
+            "options": [
+                "Division",
+                "Pourcentage",
+                "Modulo (Reste de la division)"
+            ],
+            "correctAnswer": 2,
+            "explanation": "C'est l'opérateur modulo."
+        },
+        {
+            "id": 5,
+            "question": "Quelle structure est une collection de clés-valeurs ?",
+            "options": [
+                "Liste",
+                "Tuple",
+                "Dictionnaire"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Les dictionnaires stockent des données sous forme de paires clé:valeur."
+        },
+        {
+            "id": 6,
+            "question": "Quel bloc de code s'exécute toujours dans un try/except ?",
+            "options": [
+                "else",
+                "finally",
+                "catch"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Le bloc finally est exécuté qu'il y ait eu une erreur ou non."
+        },
+        {
+            "id": 7,
+            "question": "Comment s'appelle le constructeur d'une classe en Python ?",
+            "options": [
+                "__construct__",
+                "__init__",
+                "init"
+            ],
+            "correctAnswer": 1,
+            "explanation": "La méthode __init__ initialise les attributs de l'objet."
+        },
+        {
+            "id": 8,
+            "question": "Quel module standard permet de gérer les dates ?",
+            "options": [
+                "time",
+                "calendar",
+                "datetime"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Le module datetime est le plus complet pour gérer dates et heures."
+        },
+        {
+            "id": 9,
+            "question": "Quel code HTTP signifie 'Succès' ?",
+            "options": [
+                "404",
+                "500",
+                "200"
+            ],
+            "correctAnswer": 2,
+            "explanation": "200 OK est la réponse standard pour une requête réussie."
+        },
+        {
+            "id": 10,
+            "question": "Comment convertir une chaîne JSON en objet Python ?",
+            "options": [
+                "json.parse()",
+                "json.loads()",
+                "json.convert()"
+            ],
+            "correctAnswer": 1,
+            "explanation": "json.loads() (load string) est la méthode correcte."
+        }
+    ]
+}

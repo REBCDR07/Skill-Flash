@@ -59,6 +59,90 @@
       "difficulty": "Débutant",
       "chapters": 10,
       "totalQuestions": 40
+    },
+    {
+      "id": "linkedin",
+      "title": "Démarrer avec LinkedIn",
+      "description": "Optimisez votre profil et développez votre réseau professionnel.",
+      "category": "business",
+      "icon": "Linkedin",
+      "color": "linkedin",
+      "duration": "2 heures",
+      "difficulty": "Débutant",
+      "chapters": 10,
+      "totalQuestions": 10
+    },
+    {
+      "id": "react",
+      "title": "React Basics",
+      "description": "Les bases de React pour créer des interfaces utilisateurs modernes.",
+      "category": "development",
+      "icon": "Code",
+      "color": "react",
+      "duration": "2 heures",
+      "difficulty": "Débutant",
+      "chapters": 10,
+      "totalQuestions": 10
+    },
+    {
+      "id": "python",
+      "title": "Python Intro",
+      "description": "Introduction à Python pour le scripting et l'analyse de données.",
+      "category": "development",
+      "icon": "Terminal",
+      "color": "python",
+      "duration": "2 heures",
+      "difficulty": "Débutant",
+      "chapters": 10,
+      "totalQuestions": 10
+    },
+    {
+      "id": "design-basics",
+      "title": "Understanding Design",
+      "description": "Les principes fondamentaux du design visuel et de l'expérience utilisateur.",
+      "category": "design",
+      "icon": "Palette",
+      "color": "design",
+      "duration": "3 heures",
+      "difficulty": "Débutant",
+      "chapters": 3,
+      "totalQuestions": 15
+    },
+    {
+      "id": "figma-mastery",
+      "title": "Figma Mastery",
+      "description": "Maîtrisez l'outil de référence pour le design d'interface et le prototypage.",
+      "category": "design",
+      "icon": "Figma",
+      "color": "figma",
+      "duration": "3 heures",
+      "difficulty": "Intermédiaire",
+      "chapters": 3,
+      "totalQuestions": 15
+    },
+    {
+      "id": "docker-fundamentals",
+      "title": "Docker Fundamentals",
+      "description": "Comprendre les conteneurs et comment dockeriser vos applications.",
+      "category": "devops",
+      "icon": "Container",
+      "color": "docker",
+      "duration": "3 heures",
+      "difficulty": "Débutant",
+      "chapters": 3,
+      "totalQuestions": 15
+    },
+    {
+      "id": "kubernetes-101",
+      "title": "Kubernetes 101",
+      "description": "Orchestration de conteneurs : concepts clés et déploiement de base.",
+      "category": "devops",
+      "icon": "ShipWheel",
+      "color": "kubernetes",
+      "duration": "3 heures",
+      "difficulty": "Avancé",
+      "chapters": 3,
+      "totalQuestions": 15
     }
   ]
 }

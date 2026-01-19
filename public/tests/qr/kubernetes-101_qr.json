@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "question": "Décrivez le rôle du Kubelet.",
+        "answer": "Agent qui s'exécute sur chaque nœud et s'assure que les conteneurs tournent dans les pods."
+    },
+    {
+        "id": 2,
+        "question": "Qu'est-ce qu'un ReplicaSet ?",
+        "answer": "Il garantit qu'un nombre spécifié de répliques de pod s'exécutent à tout moment."
+    },
+    {
+        "id": 3,
+        "question": "Pourquoi utiliser des ConfigMaps ?",
+        "answer": "Pour séparer la configuration de l'image du conteneur afin de rendre les applications portables."
+    }
+]

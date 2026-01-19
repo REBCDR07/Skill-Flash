@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "question": "Quel est le but principal de l'espace négatif (whitespace) ?",
+        "options": [
+            "Remplir l'écran",
+            "Améliorer la lisibilité et la clarté",
+            "Réduire la taille du fichier",
+            "Ajouter de la couleur"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 2,
+        "question": "Qu'est-ce que le contraste en design ?",
+        "options": [
+            "La différence entre les éléments clairs et foncés",
+            "La taille de la police",
+            "Le nombre de couleurs utilisées",
+            "L'alignement du texte"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 3,
+        "question": "Quel mode colorimétrique est utilisé pour les écrans ?",
+        "options": [
+            "CMJN",
+            "Pantone",
+            "RVB",
+            "N&B"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 4,
+        "question": "Qu'est-ce qu'une police 'serif' ?",
+        "options": [
+            "Une police avec des empattements",
+            "Une police manuscrite",
+            "Une police en gras",
+            "Une police sans empattements"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 5,
+        "question": "Quelle est la règle des tiers ?",
+        "options": [
+            "Une technique de composition",
+            "Une règle de typographie",
+            "Une méthode de codage",
+            "Un type de grille"
+        ],
+        "correctAnswer": 0
+    }
+]

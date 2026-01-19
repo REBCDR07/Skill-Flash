@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "question": "Expliquez la différence entre une image et un conteneur.",
+        "answer": "L'image est le modèle statique, le conteneur est l'instance en cours d'exécution."
+    },
+    {
+        "id": 2,
+        "question": "À quoi sert Docker Compose ?",
+        "answer": "À définir et exécuter des applications multi-conteneurs."
+    },
+    {
+        "id": 3,
+        "question": "Qu'est-ce qu'un volume Docker ?",
+        "answer": "Un mécanisme pour persister les données générées par un conteneur."
+    }
+]

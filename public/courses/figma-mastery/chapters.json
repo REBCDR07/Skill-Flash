@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "title": "Découverte de l'interface",
+        "duration": "1 heure"
+    },
+    {
+        "id": 2,
+        "title": "Création de Composants",
+        "duration": "1 heure"
+    },
+    {
+        "id": 3,
+        "title": "Prototypage Interactif",
+        "duration": "1 heure"
+    }
+]

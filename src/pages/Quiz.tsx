@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCourse, fetchQCM, fetchQR } from '@/lib/courses';
-import { useSubmitQuiz, useCreateCertification, useAddPoints } from '@/hooks/useProgress';
+import { useSubmitQuiz, useCreateCertification, useAddPoints, useQuizProgress } from '@/hooks/useProgress';
 import { useAuth } from '@/hooks/useAuth';
 import { generateCertificatePDF } from '@/lib/pdf';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,9 @@ import {
   Star,
   Timer,
   BookOpen,
-  Layout
+  Layout,
+  PauseCircle,
+  RotateCcw
 } from 'lucide-react';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
@@ -49,7 +51,9 @@ const Quiz = () => {
   const chapterId = searchParams.get('chapter') ? parseInt(searchParams.get('chapter')!) : undefined;
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
+  const { getProgress, saveProgress, clearProgress } = useQuizProgress();
 
   const [state, setState] = useState<QuizState>('START');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -57,6 +61,19 @@ const Quiz = () => {
   const [qrAnswers, setQrAnswers] = useState<Record<number, string>>({});
   const [score, setScore] = useState(0);
   const [isPassed, setIsPassed] = useState(false);
+
+  useEffect(() => {
+    if (courseId && location.state?.resume) {
+      const saved = getProgress(courseId);
+      if (saved) {
+        setQcmAnswers(saved.answers.qcm || {});
+        setQrAnswers(saved.answers.qr || {});
+        setCurrentQuestionIndex(saved.currentQuestionIndex || 0);
+        setState('QUESTIONS');
+        toast.info('Test repris avec succès !');
+      }
+    }
+  }, [courseId, location.state, getProgress]);
 
   // Queries
   const { data: course } = useQuery({
@@ -91,6 +108,23 @@ const Quiz = () => {
   const currentQuestion = allQuestions[currentQuestionIndex];
   const progressPercent = ((currentQuestionIndex + 1) / allQuestions.length) * 100;
 
+  const handlePause = () => {
+    if (courseId) {
+      saveProgress.mutate({
+        courseId,
+        progress: {
+          currentQuestionIndex,
+          answers: { qcm: qcmAnswers, qr: qrAnswers }
+        }
+      }, {
+        onSuccess: () => {
+          toast.success('Progression sauvegardée ! Vous pourrez reprendre plus tard.');
+          navigate('/dashboard');
+        }
+      });
+    }
+  };
+
   const handleNext = () => {
     if (currentQuestionIndex < allQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -99,6 +133,7 @@ const Quiz = () => {
       calculateFinalScore();
     }
   };
+
 
   const calculateFinalScore = () => {
     let qcmCorrect = 0;
@@ -166,6 +201,8 @@ const Quiz = () => {
           verification_code: verificationCode
         });
       }
+      // Clear saved progress as the attempt is complete
+      clearProgress.mutate(courseId);
     }
   };
 
@@ -290,6 +327,15 @@ const Quiz = () => {
             </div>
 
             <div className="shrink-0 flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 text-muted-foreground hover:text-primary"
+                onClick={handlePause}
+                title="Pause et Sauvegarder"
+              >
+                <PauseCircle className="w-6 h-6" />
+              </Button>
               <div className="text-right hidden xl:block">
                 <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mb-0.5">Course</p>
                 <p className="text-sm font-bold truncate max-w-[150px]">{course?.title}</p>
@@ -500,6 +546,22 @@ const Quiz = () => {
                   )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {!isPassed && (
+                      <Button
+                        variant="default"
+                        className="h-16 rounded-[1.5rem] font-bold border-border/50 text-lg bg-primary text-white hover:bg-primary/90 shadow-xl shadow-primary/20 col-span-1 sm:col-span-2"
+                        onClick={() => {
+                          setScore(0);
+                          setQcmAnswers({});
+                          setQrAnswers({});
+                          setCurrentQuestionIndex(0);
+                          setState('START');
+                        }}
+                      >
+                        <RotateCcw className="w-6 h-6 mr-3" />
+                        Repasser le test
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       className="h-16 rounded-[1.5rem] font-bold border-border/50 hover:bg-secondary/50 text-lg"

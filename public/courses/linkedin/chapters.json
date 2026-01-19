@@ -1,0 +1,65 @@
+{
+    "courseId": "linkedin",
+    "chapters": [
+        {
+            "id": 1,
+            "title": "Optimiser son Profil",
+            "description": "Apprenez à rendre votre profil irrésistible.",
+            "duration": "45 min"
+        },
+        {
+            "id": 2,
+            "title": "Stratégie de Réseautage",
+            "description": "Développez un réseau professionnel de qualité.",
+            "duration": "45 min"
+        },
+        {
+            "id": 3,
+            "title": "Créer du Contenu Engageant",
+            "description": "Maîtrisez l'art du storytelling sur LinkedIn.",
+            "duration": "60 min"
+        },
+        {
+            "id": 4,
+            "title": "La Recherche d'Emploi",
+            "description": "Utilisez les outils cachés pour trouver votre job.",
+            "duration": "45 min"
+        },
+        {
+            "id": 5,
+            "title": "Personal Branding",
+            "description": "Devenez une référence dans votre domaine.",
+            "duration": "60 min"
+        },
+        {
+            "id": 6,
+            "title": "Algorithme LinkedIn",
+            "description": "Comprendre comment maximiser sa portée.",
+            "duration": "45 min"
+        },
+        {
+            "id": 7,
+            "title": "Pages Entreprise vs Profil",
+            "description": "Quelle stratégie adopter pour le B2B ?",
+            "duration": "45 min"
+        },
+        {
+            "id": 8,
+            "title": "Social Selling",
+            "description": "Prospecter sans vendre agressivement.",
+            "duration": "60 min"
+        },
+        {
+            "id": 9,
+            "title": "Analytics LinkedIn",
+            "description": "Mesurer et optimiser sa performance.",
+            "duration": "45 min"
+        },
+        {
+            "id": 10,
+            "title": "Routine Quotidienne",
+            "description": "Votre checklist de succès en 15 min/jour.",
+            "duration": "30 min"
+        }
+    ]
+}

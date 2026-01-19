@@ -1,0 +1,37 @@
+{
+    "title": "Défis de Code React",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Pourquoi ne doit-on jamais modifier le state directement (ex: state.count = 5) ?",
+            "expectedKeywords": [
+                "re-render",
+                "immutabilité",
+                "mise à jour"
+            ],
+            "sampleAnswer": "Modifier directement le state ne déclenche pas de nouveau rendu du composant. Il faut toujours utiliser la fonction de mise à jour (setState)."
+        },
+        {
+            "id": 2,
+            "question": "Expliquez la différence entre useMemo et useCallback.",
+            "expectedKeywords": [
+                "valeur",
+                "fonction",
+                "mémoïsation",
+                "performance"
+            ],
+            "sampleAnswer": "useMemo mémoïse le résultat d'un calcul (une valeur), tandis que useCallback mémoïse la définition d'une fonction elle-même pour qu'elle reste référentiellement stable."
+        },
+        {
+            "id": 3,
+            "question": "Quand faut-il utiliser une fonction de nettoyage dans useEffect ?",
+            "expectedKeywords": [
+                "souscription",
+                "timer",
+                "fuite mémoire",
+                "cleanup"
+            ],
+            "sampleAnswer": "On utilise le nettoyage (return function) lorsque l'effet crée des ressources persistantes comme des abonnements, des écouteurs d'événements ou des timers, pour éviter les fuites de mémoire."
+        }
+    ]
+}

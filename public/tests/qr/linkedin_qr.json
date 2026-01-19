@@ -1,0 +1,35 @@
+{
+    "title": "Réflexion Stratégique LinkedIn",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Décrivez votre stratégie de 'Personal Branding' en une phrase.",
+            "expectedKeywords": [
+                "expertise",
+                "valeur",
+                "unique"
+            ],
+            "sampleAnswer": "Je me positionne comme expert en [Mon Domaine] en partageant des retours d'expérience concrets pour aider mes pairs."
+        },
+        {
+            "id": 2,
+            "question": "Comment aborderiez-vous un recruteur après une candidature 'Easy Apply' ?",
+            "expectedKeywords": [
+                "message",
+                "personnalisé",
+                "motivation"
+            ],
+            "sampleAnswer": "J'enverrais une demande de connexion avec une note personnalisée mentionnant ma candidature et mon intérêt spécifique pour l'entreprise."
+        },
+        {
+            "id": 3,
+            "question": "Quel est votre score SSI actuel et quel pilier devez-vous améliorer ?",
+            "expectedKeywords": [
+                "SSI",
+                "score",
+                "pilier"
+            ],
+            "sampleAnswer": "Mon score est de 45/100. Je dois améliorer le pilier 'Engager avec des informations' en commentant plus souvent."
+        }
+    ]
+}

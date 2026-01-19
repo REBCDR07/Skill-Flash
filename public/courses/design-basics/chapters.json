@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "title": "Les principes du design",
+        "duration": "1 heure"
+    },
+    {
+        "id": 2,
+        "title": "Couleurs et Typographie",
+        "duration": "1 heure"
+    },
+    {
+        "id": 3,
+        "title": "Composition et Mise en page",
+        "duration": "1 heure"
+    }
+]

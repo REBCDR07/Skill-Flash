@@ -199,6 +199,26 @@ export function useVerifyCertificate(code?: string) {
     queryFn: async () => {
       if (!code) return null;
 
+      // Try to decode generic base64 data first (Stateless)
+      try {
+        const decoded = atob(code);
+        const data = JSON.parse(decoded);
+        // Check if it looks like our certificate payload
+        if (data && data.course_title && data.final_score) {
+          return {
+            ...data,
+            // Ensure issued_at is valid or keep it if present
+            issued_at: data.issued_at || new Date().toISOString(),
+            profiles: {
+              full_name: data.userName || 'Étudiant Certifié',
+              username: data.userName || 'anonyme'
+            }
+          };
+        }
+      } catch (e) {
+        // Not a valid base64 or JSON, proceed to local lookup
+      }
+
       const allCerts = JSON.parse(localStorage.getItem(STORAGE_KEYS.CERTS) || '[]');
       const cert = allCerts.find((c: Certification) => c.verification_code === code);
 
@@ -210,7 +230,7 @@ export function useVerifyCertificate(code?: string) {
       return {
         ...cert,
         profiles: {
-          full_name: profile?.full_name || 'Étudiant',
+          full_name: profile?.full_name || cert.user_name || 'Étudiant',
           username: profile?.username || 'anonyme'
         }
       };
@@ -260,6 +280,27 @@ export function useAddPoints() {
   });
 }
 
+export function useProfile() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useQuery({
+    queryKey: ['profile', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      try {
+        const savedProfiles = JSON.parse(localStorage.getItem('sf_profiles') || '[]');
+        const userProfile = savedProfiles.find((p: UserProfile) => p.user_id === user.id);
+        return userProfile || null;
+      } catch (e) {
+        console.error('Error loading profile:', e);
+        return null;
+      }
+    },
+    enabled: !!user
+  });
+}
+
 export function usePublicPortfolio(username: string) {
   return useQuery({
     queryKey: ['public-portfolio', username],
@@ -286,6 +327,48 @@ export function usePublicPortfolio(username: string) {
         radarData
       };
     },
-    enabled: !!username
   });
+}
+
+export function useQuizProgress() {
+  const queryClient = useQueryClient();
+
+  const getProgress = (courseId: string) => {
+    const allProgress = JSON.parse(localStorage.getItem('sf_quiz_progress') || '{}');
+    return allProgress[courseId];
+  };
+
+  const saveProgress = useMutation({
+    mutationFn: async ({ courseId, progress }: { courseId: string, progress: { currentQuestionIndex: number; answers: { qcm: Record<number, number>; qr: Record<number, string> } } }) => {
+      const allProgress = JSON.parse(localStorage.getItem('sf_quiz_progress') || '{}');
+      allProgress[courseId] = {
+        ...progress,
+        updatedAt: new Date().toISOString()
+      };
+      localStorage.setItem('sf_quiz_progress', JSON.stringify(allProgress));
+      return allProgress[courseId];
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['quiz-progress'] });
+    }
+  });
+
+  const clearProgress = useMutation({
+    mutationFn: async (courseId: string) => {
+      const allProgress = JSON.parse(localStorage.getItem('sf_quiz_progress') || '{}');
+      if (allProgress[courseId]) {
+        delete allProgress[courseId];
+        localStorage.setItem('sf_quiz_progress', JSON.stringify(allProgress));
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['quiz-progress'] });
+    }
+  });
+
+  return {
+    getProgress,
+    saveProgress,
+    clearProgress
+  };
 }

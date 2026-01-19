@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "question": "Quel est le raccourci pour l'outil Pen dans Figma ?",
+        "options": [
+            "P",
+            "V",
+            "T",
+            "R"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 2,
+        "question": "À quoi servent les composants (Components) ?",
+        "options": [
+            "À réutiliser des éléments d'interface",
+            "À exporter des images",
+            "À changer la couleur de fond",
+            "À créer des animations"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 3,
+        "question": "Qu'est-ce qu'une instance dans Figma ?",
+        "options": [
+            "Une copie liée à un composant principal",
+            "Un nouveau calque",
+            "Un plugin",
+            "Un type de texte"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 4,
+        "question": "Comment créer un nouveau Frame ?",
+        "options": [
+            "F",
+            "N",
+            "C",
+            "D"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 5,
+        "question": "Quel onglet permet de gérer les interactions ?",
+        "options": [
+            "Design",
+            "Prototype",
+            "Inspect",
+            "Export"
+        ],
+        "correctAnswer": 1
+    }
+]

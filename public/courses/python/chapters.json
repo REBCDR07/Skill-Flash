@@ -1,0 +1,65 @@
+{
+    "courseId": "python",
+    "chapters": [
+        {
+            "id": 1,
+            "title": "Introduction & Syntaxe",
+            "description": "Premiers pas avec Python.",
+            "duration": "60 min"
+        },
+        {
+            "id": 2,
+            "title": "Structures de Données",
+            "description": "Listes, dictionnaires et tuples.",
+            "duration": "60 min"
+        },
+        {
+            "id": 3,
+            "title": "Les Boucles et Conditions",
+            "description": "Maîtrisez le flux de contrôle.",
+            "duration": "45 min"
+        },
+        {
+            "id": 4,
+            "title": "Fonctions et Modules",
+            "description": "Organisez votre code efficacement.",
+            "duration": "60 min"
+        },
+        {
+            "id": 5,
+            "title": "Manipulation de Fichiers",
+            "description": "Lisez et écrivez dans des fichiers.",
+            "duration": "60 min"
+        },
+        {
+            "id": 6,
+            "title": "Gestion des Erreurs",
+            "description": "Apprenez à gérer les exceptions.",
+            "duration": "45 min"
+        },
+        {
+            "id": 7,
+            "title": "Programmation Orientée Objet",
+            "description": "Classes, Objets et Héritage.",
+            "duration": "90 min"
+        },
+        {
+            "id": 8,
+            "title": "Bibliothèques Standards",
+            "description": "Math, DateTime et plus.",
+            "duration": "60 min"
+        },
+        {
+            "id": 9,
+            "title": "Introduction aux APIs",
+            "description": "Requêtes HTTP avec le module requests.",
+            "duration": "60 min"
+        },
+        {
+            "id": 10,
+            "title": "Mini-Projet Final",
+            "description": "Créez un script complet.",
+            "duration": "120 min"
+        }
+    ]
+}

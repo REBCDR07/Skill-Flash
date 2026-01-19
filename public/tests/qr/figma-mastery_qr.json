@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "question": "Quelle est l'utilité des Auto Layouts ?",
+        "answer": "Ils permettent de créer des designs réactifs qui s'adaptent au contenu."
+    },
+    {
+        "id": 2,
+        "question": "Comment partager un projet Figma ?",
+        "answer": "Via le bouton 'Share' en invitant par email ou en copiant le lien."
+    },
+    {
+        "id": 3,
+        "question": "Qu'est-ce qu'une librairie de styles ?",
+        "answer": "Un ensemble de couleurs, typographies et effets réutilisables dans tout le projet."
+    }
+]

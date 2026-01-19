@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "question": "Expliquez la différence entre CMJN et RVB.",
+        "answer": "CMJN est pour l'impression (encres), RVB est pour les écrans (lumière)."
+    },
+    {
+        "id": 2,
+        "question": "Pourquoi l'alignement est-il important ?",
+        "answer": "Il crée de l'ordre, de l'organisation et améliore la lisibilité."
+    },
+    {
+        "id": 3,
+        "question": "Citez deux types de contraste.",
+        "answer": "Contraste de couleur, de taille, de forme, ou de texture."
+    }
+]

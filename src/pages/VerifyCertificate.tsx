@@ -59,7 +59,7 @@ const CertificateVisual = ({ cert, profileName }: { cert: VerifiedCertificate, p
                         <p className="text-sm md:text-lg font-medium text-slate-500 italic">Ce document atteste solennellement que</p>
 
                         <div className="relative inline-block">
-                            <h3 className="text-3xl md:text-6xl font-serif font-black text-slate-900 leading-tight">
+                            <h3 className="text-3xl md:text-6xl font-serif font-black text-slate-900 leading-tight lowercase first-letter:uppercase">
                                 {profileName}
                             </h3>
                             <div className="absolute -bottom-2 left-0 right-0 h-[1px] bg-gold-600/20"></div>
@@ -78,28 +78,13 @@ const CertificateVisual = ({ cert, profileName }: { cert: VerifiedCertificate, p
                             <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Date de délivrance</p>
                             <p className="text-xs md:text-sm font-bold text-slate-800">{formattedDate}</p>
                             <div className="h-[1px] w-16 bg-gold-600/20 mt-4"></div>
-                            <p className="text-[8px] italic text-slate-400">Signé par le Bureau de Certification</p>
-                        </div>
-
-                        {/* Prestige Seal */}
-                        <div className="relative group cursor-help scale-75 md:scale-100">
-                            <div className="w-24 h-24 rounded-full bg-gold-100/30 border-4 border-gold-500/20 flex items-center justify-center rotate-12 transition-all duration-700 group-hover:rotate-0">
-                                <div className="w-20 h-20 rounded-full border-2 border-dashed border-gold-500/40 flex items-center justify-center bg-white shadow-xl">
-                                    <div className="text-center">
-                                        <Award className="w-8 h-8 text-gold-600 mx-auto" />
-                                        <span className="text-[7px] font-black block text-gold-700 mt-1">OFFICIEL</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="absolute -bottom-2 -right-4 bg-success text-white px-3 py-1 rounded-full text-[8px] font-black tracking-widest shadow-lg border border-success/40">
-                                VÉRIFIÉ
-                            </div>
+                            <p className="text-[8px] italic text-slate-400">SkillFlash Certificat</p>
                         </div>
 
                         <div className="text-right space-y-1">
-                            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">ID de Vérification</p>
+                            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Vérification Numérique</p>
                             <code className="text-[9px] font-mono font-bold text-slate-400">
-                                {cert.verification_code.slice(0, 12)}...
+                                {cert.verification_code}
                             </code>
                             <div className="h-[1px] w-16 bg-gold-600/20 mt-4 ml-auto"></div>
                             <p className="text-[8px] italic text-slate-400">SkillFlash Digital Ledger</p>
@@ -110,6 +95,7 @@ const CertificateVisual = ({ cert, profileName }: { cert: VerifiedCertificate, p
         </div>
     );
 };
+
 
 const VerifyCertificate = () => {
     const { code } = useParams<{ code: string }>();
