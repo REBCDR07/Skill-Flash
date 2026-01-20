@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { useCourseProgress, useCertifications, useLeaderboard, useRealtimeSync, useQuizResults, useQuizProgress, useProfile } from '@/hooks/useProgress';
+import { useCourseProgress, useCertifications, useLeaderboard, useRealtimeSync, useQuizResults, useAllQuizProgress, useProfile } from '@/hooks/useProgress';
 import Navbar from '@/components/Navbar';
 import { Share2, Crown, Medal, Download, Trophy, Star, Award, TrendingUp, Zap, Sparkles, BookOpen, Activity, ArrowRight, Clock } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area, RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts';
@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   const { data: leaderboard } = useLeaderboard(10);
   const { data: quizResults } = useQuizResults();
-  const { getProgress } = useQuizProgress();
+  const { data: allQuizProgress } = useAllQuizProgress();
 
   const { data: courses } = useQuery({
     queryKey: ['courses'],
@@ -92,7 +92,9 @@ const Dashboard = () => {
     }));
   }, [courses, progressArray]);
 
-  if (loading) {
+  console.log('Dashboard: STATE -> loading:', loading, 'user:', user?.id || 'none', 'profile:', !!profile);
+
+  if (loading && !profile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 via-sky-50 to-amber-50">
         <div className="flex flex-col items-center gap-6">
@@ -121,8 +123,10 @@ const Dashboard = () => {
       r => r.course_id === course.id && r.quiz_type === 'final_qcm' && r.score >= 70
     );
 
-    return { ...course, progress: p, progressPercent, passedQuiz };
-  }).filter((item): item is (Course & { progress: CourseProgress; progressPercent: number; passedQuiz: boolean }) =>
+    const savedProgress = allQuizProgress?.[course.id];
+
+    return { ...course, progress: p, progressPercent, passedQuiz, savedProgress };
+  }).filter((item): item is (Course & { progress: CourseProgress; progressPercent: number; passedQuiz: boolean; savedProgress: unknown }) =>
     !!item && (!item.passedQuiz) // Show if quiz is NOT passed, even if progress is 100%
   );
 
@@ -242,7 +246,7 @@ const Dashboard = () => {
                         PDF
                       </Button>
                       <Button
-                        onClick={() => handleShareCert(topCertifications[1])}
+                        onClick={() => handleShare(topCertifications[1])}
                         variant="outline"
                         className="border-2 border-slate-300 hover:bg-slate-50 font-black rounded-xl h-12 px-2"
                       >
@@ -285,7 +289,7 @@ const Dashboard = () => {
                         CERTIFICAT
                       </Button>
                       <Button
-                        onClick={() => handleShareCert(topCertifications[0])}
+                        onClick={() => handleShare(topCertifications[0])}
                         variant="outline"
                         className="border-2 border-amber-300 hover:bg-amber-50 font-black rounded-xl h-14 w-14 p-0 shadow-lg"
                       >
@@ -324,7 +328,7 @@ const Dashboard = () => {
                         PDF
                       </Button>
                       <Button
-                        onClick={() => handleShareCert(topCertifications[2])}
+                        onClick={() => handleShare(topCertifications[2])}
                         variant="outline"
                         className="border-2 border-orange-300 hover:bg-orange-50 font-black rounded-xl h-12 px-2"
                       >
@@ -362,7 +366,7 @@ const Dashboard = () => {
                         </Button>
                         <Button
                           size="sm"
-                          onClick={() => handleShareCert(cert)}
+                          onClick={() => handleShare(cert)}
                           variant="ghost"
                           className="w-9 h-9 p-0 rounded-xl hover:bg-gray-100 text-violet-600"
                         >

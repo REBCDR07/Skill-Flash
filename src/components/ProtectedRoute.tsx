@@ -5,6 +5,8 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const { user, loading } = useAuth();
     const location = useLocation();
 
+    console.log('ProtectedRoute: loading:', loading, 'user:', user?.id || 'none');
+
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background">

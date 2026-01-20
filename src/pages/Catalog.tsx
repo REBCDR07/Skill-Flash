@@ -60,6 +60,8 @@ const Catalog = () => {
   const { data: allProgress } = useCourseProgress();
   const { data: certifications } = useCertifications();
 
+  console.log('Catalog: STATE -> user:', user?.id || 'none', 'isLoading:', isLoading, 'courses:', courses?.length || 0);
+
   const getProgressForCourse = (courseId: string) => {
     if (!Array.isArray(allProgress)) return null;
     return allProgress.find(p => p.course_id === courseId);
@@ -76,7 +78,9 @@ const Catalog = () => {
     return matchesSearch && matchesCategory;
   });
 
-  if (isLoading) {
+  // Only show loading if we are actually loading AND have no cached/fetched data yet
+  if (isLoading && (!courses || courses.length === 0)) {
+    console.log('Catalog: RENDERING SPINNER');
     return (
       <div className="min-h-screen flex items-center justify-center bg-background/95">
         <div className="flex flex-col items-center gap-6">
@@ -128,8 +132,8 @@ const Catalog = () => {
                   variant={activeCategory === cat ? 'default' : 'ghost'}
                   size="sm"
                   className={`rounded-[1.8rem] capitalize h-12 px-8 font-bold transition-all ${activeCategory === cat
-                      ? 'gradient-primary shadow-lg shadow-primary/20 scale-105'
-                      : 'hover:bg-muted/50'
+                    ? 'gradient-primary shadow-lg shadow-primary/20 scale-105'
+                    : 'hover:bg-muted/50'
                     }`}
                   onClick={() => setActiveCategory(cat)}
                 >

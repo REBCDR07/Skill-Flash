@@ -53,7 +53,7 @@ const Quiz = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  const { getProgress, saveProgress, clearProgress } = useQuizProgress();
+  const { progress: savedProgressData, saveProgress, clearProgress, isLoading: progressLoading } = useQuizProgress(courseId);
 
   const [state, setState] = useState<QuizState>('START');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -63,17 +63,15 @@ const Quiz = () => {
   const [isPassed, setIsPassed] = useState(false);
 
   useEffect(() => {
-    if (courseId && location.state?.resume) {
-      const saved = getProgress(courseId);
-      if (saved) {
-        setQcmAnswers(saved.answers.qcm || {});
-        setQrAnswers(saved.answers.qr || {});
-        setCurrentQuestionIndex(saved.currentQuestionIndex || 0);
-        setState('QUESTIONS');
-        toast.info('Test repris avec succès !');
-      }
+    console.log('Quiz: Mounting, checking for resume state');
+    if (courseId && location.state?.resume && savedProgressData) {
+      setQcmAnswers(savedProgressData.answers.qcm || {});
+      setQrAnswers(savedProgressData.answers.qr || {});
+      setCurrentQuestionIndex(savedProgressData.currentQuestionIndex || 0);
+      setState('QUESTIONS');
+      toast.info('Test repris avec succès !');
     }
-  }, [courseId, location.state, getProgress]);
+  }, [courseId, location.state, savedProgressData]);
 
   // Queries
   const { data: course } = useQuery({
@@ -587,6 +585,8 @@ const Quiz = () => {
       </div>
     );
   }
+
+  console.log('Quiz: FINAL FALLBACK -> state:', state, 'qcmData:', !!qcmData, 'allQuestions:', allQuestions.length);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">

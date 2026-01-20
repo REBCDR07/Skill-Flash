@@ -10,10 +10,11 @@ import Navbar from '@/components/Navbar';
 import { Link } from 'react-router-dom';
 
 const Leaderboard = () => {
-  const { data: leaderboard, isLoading } = useLeaderboard(50);
   const { user } = useAuth();
-  
-  if (isLoading) {
+  const { data: leaderboard, isLoading } = useLeaderboard(50);
+  console.log('Leaderboard: STATE -> isLoading:', isLoading, 'items:', leaderboard?.length || 0);
+
+  if (isLoading && (!leaderboard || leaderboard.length === 0)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
@@ -27,7 +28,7 @@ const Leaderboard = () => {
   return (
     <div className="min-h-screen bg-background selection:bg-primary/10">
       <Navbar />
-      
+
       <main className="container mx-auto px-4 pt-32 pb-20">
         <div className="space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="text-center space-y-6">

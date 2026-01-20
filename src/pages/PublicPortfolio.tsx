@@ -41,7 +41,9 @@ const PublicPortfolio = () => {
         toast.success('Lien copié dans le presse-papier !');
     };
 
-    if (isLoading) {
+    console.log('PublicPortfolio: STATE -> isLoading:', isLoading, 'data:', !!data);
+
+    if (isLoading && !data) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background/95">
                 <div className="flex flex-col items-center gap-6">

@@ -2,17 +2,31 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from './useAuth';
 import { CourseProgress, QuizResult, Certification, UserProfile } from '@/types/course';
 import { useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
-const STORAGE_KEYS = {
-  PROGRESS: 'sf_progress',
-  RESULTS: 'sf_results',
-  CERTS: 'sf_certs'
-};
-
-// Hook for real-time sync (now null action as it's local)
+// Hook for real-time sync
 export function useRealtimeSync() {
-  // No-op for localStorage version
-  useEffect(() => { }, []);
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user) return;
+
+    const channels = [
+      supabase.channel('course_progress_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'course_progress', filter: `user_id=eq.${user.id}` },
+          () => queryClient.invalidateQueries({ queryKey: ['course-progress'] }))
+        .subscribe(),
+      supabase.channel('profile_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles', filter: `user_id=eq.${user.id}` },
+          () => queryClient.invalidateQueries({ queryKey: ['profile'] }))
+        .subscribe()
+    ];
+
+    return () => {
+      channels.forEach(ch => supabase.removeChannel(ch));
+    };
+  }, [user, queryClient]);
 }
 
 export function useCourseProgress(courseId?: string) {
@@ -23,20 +37,29 @@ export function useCourseProgress(courseId?: string) {
     queryFn: async () => {
       if (!user) return null;
 
-      try {
-        const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '[]');
-        const userProgress = Array.isArray(allProgress) ? allProgress.filter((p: CourseProgress) => p.user_id === user.id) : [];
-
-        if (courseId) {
-          const singleProgress = userProgress.find((p: CourseProgress) => p.course_id === courseId);
-          return singleProgress || null;
+      if (courseId) {
+        const { data, error } = await supabase
+          .from('course_progress')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('course_id', courseId)
+          .maybeSingle();
+        if (error) {
+          console.error('Error fetching course progress for courseId:', courseId, error);
+          throw error;
         }
-
-        return userProgress;
-      } catch (e) {
-        console.error('Error loading progress:', e);
-        return courseId ? null : [];
+        return (data as unknown as CourseProgress) || null;
       }
+
+      const { data, error } = await supabase
+        .from('course_progress')
+        .select('*')
+        .eq('user_id', user.id);
+      if (error) {
+        console.error('Error fetching all course progress:', error);
+        throw error;
+      }
+      return (data as unknown as CourseProgress[]) || [];
     },
     enabled: !!user
   });
@@ -55,27 +78,21 @@ export function useUpdateProgress() {
     }) => {
       if (!user) throw new Error('Not authenticated');
 
-      const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '[]');
-      const index = allProgress.findIndex((p: CourseProgress) => p.user_id === user.id && p.course_id === courseId);
+      const { data, error } = await supabase
+        .from('course_progress')
+        .upsert({
+          user_id: user.id,
+          course_id: courseId,
+          current_chapter: currentChapter,
+          completed_chapters: completedChapters,
+          completed_at: completedAt,
+          started_at: new Date().toISOString()
+        }, { onConflict: 'user_id, course_id' })
+        .select()
+        .single();
 
-      const updatedProgress: CourseProgress = {
-        id: index !== -1 ? allProgress[index].id : Math.random().toString(36).substr(2, 9),
-        user_id: user.id,
-        course_id: courseId,
-        current_chapter: currentChapter,
-        completed_chapters: completedChapters,
-        started_at: index !== -1 ? allProgress[index].started_at : new Date().toISOString(),
-        completed_at: completedAt || (index !== -1 ? allProgress[index].completed_at : null)
-      };
-
-      if (index !== -1) {
-        allProgress[index] = updatedProgress;
-      } else {
-        allProgress.push(updatedProgress);
-      }
-
-      localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(allProgress));
-      return updatedProgress;
+      if (error) throw error;
+      return data as CourseProgress;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['course-progress'] });
@@ -91,19 +108,18 @@ export function useQuizResults(courseId?: string) {
     queryFn: async () => {
       if (!user) return [];
 
-      try {
-        const allResults = JSON.parse(localStorage.getItem(STORAGE_KEYS.RESULTS) || '[]');
-        const userResults = Array.isArray(allResults) ? allResults.filter((r: QuizResult) => r.user_id === user.id) : [];
+      let query = supabase
+        .from('quiz_results')
+        .select('*')
+        .eq('user_id', user.id);
 
-        if (courseId) {
-          return userResults.filter((r: QuizResult) => r.course_id === courseId);
-        }
-
-        return userResults;
-      } catch (e) {
-        console.error('Error loading quiz results:', e);
-        return [];
+      if (courseId) {
+        query = query.eq('course_id', courseId);
       }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return data as QuizResult[];
     },
     enabled: !!user
   });
@@ -117,17 +133,19 @@ export function useSubmitQuiz() {
     mutationFn: async (result: Omit<QuizResult, 'id' | 'user_id' | 'completed_at'>) => {
       if (!user) throw new Error('Not authenticated');
 
-      const allResults = JSON.parse(localStorage.getItem(STORAGE_KEYS.RESULTS) || '[]');
-      const newResult: QuizResult = {
-        ...result,
-        id: Math.random().toString(36).substr(2, 9),
-        user_id: user.id,
-        completed_at: new Date().toISOString()
-      };
+      const { data, error } = await supabase
+        .from('quiz_results')
+        .insert({
+          ...result,
+          user_id: user.id,
+          completed_at: new Date().toISOString(),
+          answers: result.answers as Record<string, unknown>
+        })
+        .select()
+        .single();
 
-      allResults.push(newResult);
-      localStorage.setItem(STORAGE_KEYS.RESULTS, JSON.stringify(allResults));
-      return newResult;
+      if (error) throw error;
+      return data as QuizResult;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['quiz-results'] });
@@ -143,13 +161,13 @@ export function useCertifications() {
     queryFn: async () => {
       if (!user) return [];
 
-      try {
-        const allCerts = JSON.parse(localStorage.getItem(STORAGE_KEYS.CERTS) || '[]');
-        return Array.isArray(allCerts) ? allCerts.filter((c: Certification) => c.user_id === user.id) : [];
-      } catch (e) {
-        console.error('Error loading certifications:', e);
-        return [];
-      }
+      const { data, error } = await supabase
+        .from('certifications')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      return data as Certification[];
     },
     enabled: !!user
   });
@@ -163,27 +181,28 @@ export function useCreateCertification() {
     mutationFn: async (cert: Omit<Certification, 'id' | 'user_id' | 'issued_at'>) => {
       if (!user) throw new Error('Not authenticated');
 
-      const allCerts = JSON.parse(localStorage.getItem(STORAGE_KEYS.CERTS) || '[]');
-      const newCert: Certification = {
-        ...cert,
-        id: Math.random().toString(36).substr(2, 9),
-        user_id: user.id,
-        issued_at: new Date().toISOString()
-      };
+      // 1. Create certification
+      const { data, error: certError } = await supabase
+        .from('certifications')
+        .insert({
+          ...cert,
+          user_id: user.id,
+          issued_at: new Date().toISOString()
+        })
+        .select()
+        .single();
 
-      allCerts.push(newCert);
-      localStorage.setItem(STORAGE_KEYS.CERTS, JSON.stringify(allCerts));
+      if (certError) throw certError;
 
-      // Add points locally
-      const profiles = JSON.parse(localStorage.getItem('sf_profiles') || '[]');
-      const pIndex = profiles.findIndex((p: UserProfile) => p.user_id === user.id);
-      if (pIndex !== -1) {
-        profiles[pIndex].total_points += 100;
-        profiles[pIndex].updated_at = new Date().toISOString();
-        localStorage.setItem('sf_profiles', JSON.stringify(profiles));
-      }
+      // 2. Add points to profile
+      const { error: pointError } = await supabase.rpc('add_points', {
+        p_user_id: user.id,
+        p_points: 100
+      });
 
-      return newCert;
+      if (pointError) console.error('Error adding points:', pointError);
+
+      return data as Certification;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['certifications'] });
@@ -199,15 +218,13 @@ export function useVerifyCertificate(code?: string) {
     queryFn: async () => {
       if (!code) return null;
 
-      // Try to decode generic base64 data first (Stateless)
+      // Try stateless decode first
       try {
         const decoded = atob(code);
         const data = JSON.parse(decoded);
-        // Check if it looks like our certificate payload
         if (data && data.course_title && data.final_score) {
           return {
             ...data,
-            // Ensure issued_at is valid or keep it if present
             issued_at: data.issued_at || new Date().toISOString(),
             profiles: {
               full_name: data.userName || 'Étudiant Certifié',
@@ -216,24 +233,21 @@ export function useVerifyCertificate(code?: string) {
           };
         }
       } catch (e) {
-        // Not a valid base64 or JSON, proceed to local lookup
+        // Fallback to DB lookup if stateless decode fails
       }
 
-      const allCerts = JSON.parse(localStorage.getItem(STORAGE_KEYS.CERTS) || '[]');
-      const cert = allCerts.find((c: Certification) => c.verification_code === code);
+      // Lookup in DB
+      const { data, error } = await supabase
+        .from('certifications')
+        .select('*, profiles(full_name, username)')
+        .eq('verification_code', code)
+        .maybeSingle();
 
-      if (!cert) return null;
-
-      const profiles = JSON.parse(localStorage.getItem('sf_profiles') || '[]');
-      const profile = profiles.find((p: UserProfile) => p.user_id === cert.user_id);
-
-      return {
-        ...cert,
-        profiles: {
-          full_name: profile?.full_name || cert.user_name || 'Étudiant',
-          username: profile?.username || 'anonyme'
-        }
-      };
+      if (error) {
+        console.error('Error verifying certificate:', code, error);
+        throw error;
+      }
+      return data as unknown;
     },
     enabled: !!code
   });
@@ -243,16 +257,19 @@ export function useLeaderboard(limit = 10) {
   return useQuery({
     queryKey: ['leaderboard', limit],
     queryFn: async () => {
-      try {
-        const profiles = JSON.parse(localStorage.getItem('sf_profiles') || '[]');
-        if (!Array.isArray(profiles)) return [];
-        return (profiles as UserProfile[])
-          .sort((a: UserProfile, b: UserProfile) => b.total_points - a.total_points)
-          .slice(0, limit);
-      } catch (e) {
-        console.error('Error loading leaderboard:', e);
-        return [];
+      console.log('useLeaderboard: Fetching starting...');
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('total_points', { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        console.error('useLeaderboard: Error:', error);
+        throw error;
       }
+      console.log('useLeaderboard: Fetched', data?.length || 0, 'items');
+      return data as UserProfile[];
     }
   });
 }
@@ -265,13 +282,12 @@ export function useAddPoints() {
     mutationFn: async (points: number) => {
       if (!user) throw new Error('Not authenticated');
 
-      const profiles = JSON.parse(localStorage.getItem('sf_profiles') || '[]');
-      const pIndex = profiles.findIndex((p: UserProfile) => p.user_id === user.id);
-      if (pIndex !== -1) {
-        profiles[pIndex].total_points += points;
-        profiles[pIndex].updated_at = new Date().toISOString();
-        localStorage.setItem('sf_profiles', JSON.stringify(profiles));
-      }
+      const { error } = await supabase.rpc('add_points', {
+        p_user_id: user.id,
+        p_points: points
+      });
+
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
@@ -282,20 +298,19 @@ export function useAddPoints() {
 
 export function useProfile() {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: ['profile', user?.id],
     queryFn: async () => {
       if (!user) return null;
-      try {
-        const savedProfiles = JSON.parse(localStorage.getItem('sf_profiles') || '[]');
-        const userProfile = savedProfiles.find((p: UserProfile) => p.user_id === user.id);
-        return userProfile || null;
-      } catch (e) {
-        console.error('Error loading profile:', e);
-        return null;
-      }
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data as UserProfile;
     },
     enabled: !!user
   });
@@ -305,15 +320,22 @@ export function usePublicPortfolio(username: string) {
   return useQuery({
     queryKey: ['public-portfolio', username],
     queryFn: async () => {
-      const profiles = JSON.parse(localStorage.getItem('sf_profiles') || '[]');
-      const profile = profiles.find((p: UserProfile) => p.username === username);
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('username', username)
+        .single();
 
-      if (!profile) throw new Error('Profil non trouvé');
+      if (profileError) throw profileError;
 
-      const allCerts = JSON.parse(localStorage.getItem(STORAGE_KEYS.CERTS) || '[]');
-      const certifications = allCerts.filter((c: Certification) => c.user_id === profile.user_id);
+      const { data: certifications, error: certError } = await supabase
+        .from('certifications')
+        .select('*')
+        .eq('user_id', profile.user_id);
 
-      // Mocked radar data as before
+      if (certError) throw certError;
+
+      // Mock radar data
       const categories = ['Développement', 'Business', 'Marketing', 'Soft Skills', 'Design'];
       const radarData = categories.map(cat => ({
         subject: cat,
@@ -322,52 +344,100 @@ export function usePublicPortfolio(username: string) {
       }));
 
       return {
-        profile,
-        certifications,
+        profile: profile as UserProfile,
+        certifications: certifications as Certification[],
         radarData
       };
     },
   });
 }
 
-export function useQuizProgress() {
+export function useAllQuizProgress() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ['all-quiz-progress', user?.id],
+    queryFn: async () => {
+      if (!user) return {};
+      const { data, error } = await supabase
+        .from('user_quiz_progress')
+        .select('course_id, progress')
+        .eq('user_id', user.id);
+
+      if (error) return {};
+      return data.reduce((acc, curr) => {
+        acc[curr.course_id] = curr.progress;
+        return acc;
+      }, {} as Record<string, unknown>);
+    },
+    enabled: !!user
+  });
+}
+
+export function useQuizProgress(courseId?: string) {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const getProgress = (courseId: string) => {
-    const allProgress = JSON.parse(localStorage.getItem('sf_quiz_progress') || '{}');
-    return allProgress[courseId];
-  };
+  const progressQuery = useQuery({
+    queryKey: ['quiz-progress', user?.id, courseId],
+    queryFn: async () => {
+      if (!user || !courseId) return null;
+      const { data, error } = await supabase
+        .from('user_quiz_progress')
+        .select('progress')
+        .eq('user_id', user.id)
+        .eq('course_id', courseId)
+        .maybeSingle();
+
+      if (error) return null;
+      return data?.progress;
+    },
+    enabled: !!user && !!courseId
+  });
 
   const saveProgress = useMutation({
-    mutationFn: async ({ courseId, progress }: { courseId: string, progress: { currentQuestionIndex: number; answers: { qcm: Record<number, number>; qr: Record<number, string> } } }) => {
-      const allProgress = JSON.parse(localStorage.getItem('sf_quiz_progress') || '{}');
-      allProgress[courseId] = {
-        ...progress,
-        updatedAt: new Date().toISOString()
-      };
-      localStorage.setItem('sf_quiz_progress', JSON.stringify(allProgress));
-      return allProgress[courseId];
+    mutationFn: async ({ courseId: cid, progress }: { courseId: string, progress: unknown }) => {
+      if (!user) throw new Error('Not authenticated');
+
+      const { data, error } = await supabase
+        .from('user_quiz_progress')
+        .upsert({
+          user_id: user.id,
+          course_id: cid,
+          progress: {
+            ...progress,
+            updatedAt: new Date().toISOString()
+          }
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data.progress;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['quiz-progress'] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['quiz-progress', user?.id, variables.courseId] });
+      queryClient.invalidateQueries({ queryKey: ['all-quiz-progress', user?.id] });
     }
   });
 
   const clearProgress = useMutation({
-    mutationFn: async (courseId: string) => {
-      const allProgress = JSON.parse(localStorage.getItem('sf_quiz_progress') || '{}');
-      if (allProgress[courseId]) {
-        delete allProgress[courseId];
-        localStorage.setItem('sf_quiz_progress', JSON.stringify(allProgress));
-      }
+    mutationFn: async (cid: string) => {
+      if (!user) return;
+      await supabase
+        .from('user_quiz_progress')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('course_id', cid);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['quiz-progress'] });
+    onSuccess: (_, cid) => {
+      queryClient.invalidateQueries({ queryKey: ['quiz-progress', user?.id, cid] });
+      queryClient.invalidateQueries({ queryKey: ['all-quiz-progress', user?.id] });
     }
   });
 
   return {
-    getProgress,
+    progress: progressQuery.data,
+    isLoading: progressQuery.isLoading,
     saveProgress,
     clearProgress
   };
