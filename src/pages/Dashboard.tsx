@@ -493,7 +493,7 @@ const Dashboard = () => {
                     <div className="h-2 flex-1 bg-violet-200 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-violet-600 to-violet-500 rounded-full transition-all duration-1000 w-[var(--progress)]"
-                        style={{ '--progress': `${Math.min(100, (displayPoints / 1000) * 100)}%` } as React.CSSProperties}
+                        style={{ '--progress': `${Math.min(100, (displayPoints / 1000) * 100)}%` } as React.CSSProperties} // eslint-disable-line
                       ></div>
                     </div>
                   </div>
@@ -517,7 +517,7 @@ const Dashboard = () => {
                     <div className="h-2 flex-1 bg-sky-200 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-sky-600 to-sky-500 rounded-full transition-all duration-1000 w-[var(--progress)]"
-                        style={{ '--progress': `${Math.min(100, (stats.activeCount / 10) * 100)}%` } as React.CSSProperties}
+                        style={{ '--progress': `${Math.min(100, (stats.activeCount / 10) * 100)}%` } as React.CSSProperties} // eslint-disable-line
                       ></div>
                     </div>
                   </div>
@@ -541,7 +541,7 @@ const Dashboard = () => {
                     <div className="h-2 flex-1 bg-amber-200 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-amber-600 to-amber-500 rounded-full transition-all duration-1000 w-[var(--progress)]"
-                        style={{ '--progress': `${Math.min(100, (stats.certCount / 5) * 100)}%` } as React.CSSProperties}
+                        style={{ '--progress': `${Math.min(100, (stats.certCount / 5) * 100)}%` } as React.CSSProperties} // eslint-disable-line
                       ></div>
                     </div>
                   </div>
@@ -624,7 +624,7 @@ const Dashboard = () => {
                             className={`absolute inset-y-0 left-0 rounded-full transition-all duration-1000 shadow-md w-progress
                                 ${course.progressPercent === 100 ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500' : 'bg-gradient-to-r from-violet-500 via-sky-500 to-amber-500'}
                             `}
-                            style={{ "--progress": `${course.progressPercent}%` } as React.CSSProperties}
+                            style={{ "--progress": `${course.progressPercent}%` } as React.CSSProperties} // eslint-disable-line
                           ></div>
                         </div>
                         <div className="flex justify-end">

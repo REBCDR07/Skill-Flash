@@ -65,6 +65,7 @@ const Quiz = () => {
   useEffect(() => {
     console.log('Quiz: Mounting, checking for resume state');
     if (courseId && location.state?.resume && savedProgressData) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const progress = savedProgressData as any;
       setQcmAnswers(progress.answers?.qcm || {});
       setQrAnswers(progress.answers?.qr || {});

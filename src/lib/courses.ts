@@ -149,7 +149,7 @@ export async function fetchQCM(courseId: string): Promise<{ title: string; passi
         supabase
           .from('questions')
           .select('*')
-          .eq('quiz_id', quiz.id as any),
+          .eq('quiz_id', quiz.id as any), // eslint-disable-line @typescript-eslint/no-explicit-any
         SHORT_TIMEOUT
       ) as { data: Record<string, unknown>[] | null; error: Error | null };
 
@@ -191,7 +191,7 @@ export async function fetchQR(courseId: string): Promise<{ title: string; questi
         supabase
           .from('questions')
           .select('*')
-          .eq('quiz_id', quiz.id as any),
+          .eq('quiz_id', quiz.id as any), // eslint-disable-line @typescript-eslint/no-explicit-any
         SHORT_TIMEOUT
       ) as { data: Record<string, unknown>[] | null; error: Error | null };
 
