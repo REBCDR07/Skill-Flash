@@ -60,13 +60,15 @@ const Dashboard = () => {
   }, [progressArray, certifications, courses]);
 
   const chartData = useMemo(() => {
+    // Zeroed out mock data, only current day (Dim for example) shows actual points
+    // In a real app, this would fetch activity history from a dedicated table
     return [
-      { name: 'Lun', points: 120 },
-      { name: 'Mar', points: 250 },
-      { name: 'Mer', points: 400 },
-      { name: 'Jeu', points: 580 },
-      { name: 'Ven', points: 800 },
-      { name: 'Sam', points: 1050 },
+      { name: 'Lun', points: 0 },
+      { name: 'Mar', points: 0 },
+      { name: 'Mer', points: 0 },
+      { name: 'Jeu', points: 0 },
+      { name: 'Ven', points: 0 },
+      { name: 'Sam', points: 0 },
       { name: 'Dim', points: profile?.total_points || 0 },
     ];
   }, [profile]);
@@ -109,8 +111,6 @@ const Dashboard = () => {
   }
 
   if (!user) return null;
-
-  const userRank = leaderboard?.findIndex(p => p.user_id === user.id) ?? -1;
 
   const activeCoursesData = progressArray.map(p => {
     const course = courses?.find(c => c.id === p.course_id);
@@ -491,9 +491,11 @@ const Dashboard = () => {
                   <p className="text-violet-700 text-sm font-black uppercase tracking-[0.3em]">Points Flash</p>
                   <div className="flex items-center gap-2 mt-4">
                     <div className="h-2 flex-1 bg-violet-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-violet-600 to-violet-500 rounded-full w-[75%]"></div>
+                      <div
+                        className="h-full bg-gradient-to-r from-violet-600 to-violet-500 rounded-full transition-all duration-1000 w-[var(--progress)]"
+                        style={{ '--progress': `${Math.min(100, (displayPoints / 1000) * 100)}%` } as React.CSSProperties}
+                      ></div>
                     </div>
-                    <span className="text-xs text-violet-600 font-bold">+15%</span>
                   </div>
                 </div>
               </CardContent>
@@ -513,9 +515,11 @@ const Dashboard = () => {
                   <p className="text-sky-700 text-sm font-black uppercase tracking-[0.3em]">En Cours</p>
                   <div className="flex items-center gap-2 mt-4">
                     <div className="h-2 flex-1 bg-sky-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-sky-600 to-sky-500 rounded-full w-[60%]"></div>
+                      <div
+                        className="h-full bg-gradient-to-r from-sky-600 to-sky-500 rounded-full transition-all duration-1000 w-[var(--progress)]"
+                        style={{ '--progress': `${Math.min(100, (stats.activeCount / 10) * 100)}%` } as React.CSSProperties}
+                      ></div>
                     </div>
-                    <span className="text-xs text-sky-600 font-bold">+8%</span>
                   </div>
                 </div>
               </CardContent>
@@ -535,9 +539,11 @@ const Dashboard = () => {
                   <p className="text-amber-700 text-sm font-black uppercase tracking-[0.3em]">Expertises</p>
                   <div className="flex items-center gap-2 mt-4">
                     <div className="h-2 flex-1 bg-amber-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-amber-600 to-amber-500 rounded-full w-[90%]"></div>
+                      <div
+                        className="h-full bg-gradient-to-r from-amber-600 to-amber-500 rounded-full transition-all duration-1000 w-[var(--progress)]"
+                        style={{ '--progress': `${Math.min(100, (stats.certCount / 5) * 100)}%` } as React.CSSProperties}
+                      ></div>
                     </div>
-                    <span className="text-xs text-amber-600 font-bold">+22%</span>
                   </div>
                 </div>
               </CardContent>

@@ -139,7 +139,7 @@ export function useSubmitQuiz() {
           ...result,
           user_id: user.id,
           completed_at: new Date().toISOString(),
-          answers: result.answers as Record<string, unknown>
+          answers: result.answers as any
         })
         .select()
         .single();
@@ -275,19 +275,12 @@ export function useLeaderboard(limit = 10) {
           return data as UserProfile[];
         }
 
-        console.warn('useLeaderboard: No data in Supabase. Falling back to mock data.');
+        console.warn('useLeaderboard: No data in Supabase.');
+        return [];
       } catch (err) {
-        console.warn('useLeaderboard: Fetch failed. Falling back to mock data.', err);
+        console.error('useLeaderboard: Fetch failed.', err);
+        return [];
       }
-
-      // Mock Data Fallback
-      return [
-        { user_id: 'mock-1', username: 'Alexandre', total_points: 1250, full_name: 'Alexandre D.', avatar_url: null, bio: null, location: null, website: null, created_at: new Date().toISOString() },
-        { user_id: 'mock-2', username: 'Sophie', total_points: 1100, full_name: 'Sophie L.', avatar_url: null, bio: null, location: null, website: null, created_at: new Date().toISOString() },
-        { user_id: 'mock-3', username: 'Thomas', total_points: 950, full_name: 'Thomas M.', avatar_url: null, bio: null, location: null, website: null, created_at: new Date().toISOString() },
-        { user_id: 'mock-4', username: 'Léa', total_points: 800, full_name: 'Léa R.', avatar_url: null, bio: null, location: null, website: null, created_at: new Date().toISOString() },
-        { user_id: 'mock-5', username: 'Nicolas', total_points: 750, full_name: 'Nicolas V.', avatar_url: null, bio: null, location: null, website: null, created_at: new Date().toISOString() }
-      ] as UserProfile[];
     }
   });
 }
@@ -353,11 +346,11 @@ export function usePublicPortfolio(username: string) {
 
       if (certError) throw certError;
 
-      // Mock radar data
-      const categories = ['Développement', 'Business', 'Marketing', 'Soft Skills', 'Design'];
-      const radarData = categories.map(cat => ({
+      // Real categories, but zeroed if no specific calculation yet
+      const radarCategories = ['Développement', 'Business', 'Marketing', 'Soft Skills', 'Design'];
+      const radarData = radarCategories.map(cat => ({
         subject: cat,
-        value: Math.floor(Math.random() * 40) + 60,
+        value: 0,
         fullMark: 100
       }));
 
@@ -422,7 +415,7 @@ export function useQuizProgress(courseId?: string) {
           user_id: user.id,
           course_id: cid,
           progress: {
-            ...progress,
+            ...(typeof progress === 'object' ? progress : {}),
             updatedAt: new Date().toISOString()
           }
         })

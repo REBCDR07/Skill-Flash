@@ -115,12 +115,12 @@ const PublicPortfolio = () => {
                                         {profile.total_points.toLocaleString()} PTS
                                     </Badge>
                                     <Badge variant="outline" className="border-border/50 text-[10px] font-black px-4 py-1.5 rounded-full uppercase">
-                                        RANG #{(profile.total_points > 1000 ? 12 : 142)}
+                                        Membre Actif
                                     </Badge>
                                 </div>
 
                                 <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
-                                    Apprenant passionné par l'innovation numérique et la performance business sur SkillFlash Academy.
+                                    Apprenant sur SkillFlash Academy.
                                 </p>
                             </div>
 
@@ -161,12 +161,10 @@ const PublicPortfolio = () => {
                     {/* Main Content: Certifications & Stats */}
                     <div className="lg:col-span-8 space-y-10">
                         {/* Stats Header */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-2 md:grid-cols-2 gap-6">
                             {[
                                 { label: "Points Flash", val: profile.total_points.toLocaleString(), icon: Zap },
                                 { label: "Diplômes", val: certifications.length, icon: Award },
-                                { label: "Cours", val: 5, icon: Trophy },
-                                { label: "Elite Rate", val: "94%", icon: Sparkles }
                             ].map((stat, i) => (
                                 <Card key={i} className="rounded-3xl border-none bg-card/40 backdrop-blur-xl p-6 flex flex-col items-center text-center group hover:scale-105 transition-all duration-500 shadow-xl">
                                     <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
