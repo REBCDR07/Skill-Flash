@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Course, Chapter, QCMQuestion, QRQuestion } from '@/types/course';
 
-const FETCH_TIMEOUT = 10000; // Increase to 10 seconds for better reliability
+const FETCH_TIMEOUT = 20000; // Increase to 20 seconds for better reliability with slow cold starts
 
 async function fetchWithTimeout<T>(promise: PromiseLike<T>, timeoutMs: number = FETCH_TIMEOUT): Promise<T> {
   let timeoutId: NodeJS.Timeout;
