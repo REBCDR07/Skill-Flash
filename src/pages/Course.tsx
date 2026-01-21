@@ -56,12 +56,24 @@ const Course = () => {
 
   const isCompleted = (id: number) => progress?.completed_chapters?.includes(id) || false;
 
+  const goToNextChapter = () => {
+    // Go to next chapter or quiz
+    const currentIndex = chapters?.findIndex(c => c.id === currentChapterId) ?? -1;
+    if (currentIndex < (chapters?.length ?? 0) - 1) {
+      setCurrentChapterId(chapters![currentIndex + 1].id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      toast.success('Félicitations ! Vous avez terminé tous les chapitres. Vous pouvez maintenant passer le test final.');
+    }
+  };
+
   const handleChapterComplete = () => {
     if (!courseId) return;
 
     const currentCompleted = progress?.completed_chapters || [];
     const newCompleted = [...new Set([...currentCompleted, currentChapterId])];
 
+    // Optimistically update or at least proceed if Supabase is slow
     updateProgress({
       courseId,
       currentChapter: currentChapterId,
@@ -72,18 +84,12 @@ const Course = () => {
           addPoints(10);
           toast.success('Chapitre terminé ! +10 points');
         }
-
-        // Go to next chapter or quiz
-        const currentIndex = chapters?.findIndex(c => c.id === currentChapterId) ?? -1;
-        if (currentIndex < (chapters?.length ?? 0) - 1) {
-          setCurrentChapterId(chapters![currentIndex + 1].id);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          toast.success('Félicitations ! Vous avez terminé tous les chapitres. Vous pouvez maintenant passer le test final.');
-        }
+        goToNextChapter();
       },
-      onError: () => {
-        toast.error('Erreur lors de la sauvegarde de la progression. Veuillez réessayer.');
+      onError: (error) => {
+        console.error('Error saving progress:', error);
+        toast.warning('Progrès non sauvegardé (problème de connexion), mais vous pouvez continuer.');
+        goToNextChapter(); // Still proceed
       }
     });
   };
