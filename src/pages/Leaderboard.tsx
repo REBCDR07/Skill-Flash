@@ -13,7 +13,10 @@ import { UserProfile } from '@/types/course';
 const Leaderboard = () => {
   const { user } = useAuth();
   const { data: leaderboard, isLoading } = useLeaderboard(50);
-  console.log('Leaderboard: STATE -> isLoading:', isLoading, 'items:', leaderboard?.length || 0);
+  console.log('Leaderboard: FETCH STATUS -> isLoading:', isLoading, 'items:', leaderboard?.length, 'user:', user?.id);
+  if (leaderboard && leaderboard.length === 0) {
+    console.warn('Leaderboard: Leaderboard query returned an empty array. This is expected if no profiles have points yet.');
+  }
 
   if (isLoading && (!leaderboard || (leaderboard as UserProfile[]).length === 0)) {
     return (

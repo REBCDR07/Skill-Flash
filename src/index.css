@@ -8,28 +8,28 @@
 
 @layer base {
   :root {
-    --background: 250 100% 99%;
-    --foreground: 250 25% 10%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 250 25% 10%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 250 25% 10%;
+    --popover-foreground: 0 0% 10%;
 
-    /* Primary - Vibrant Purple/Blue gradient base */
-    --primary: 262 83% 58%;
+    /* Primary - Cobalt Blue #0047AB */
+    --primary: 215 100% 34%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Soft purple tint */
-    --secondary: 262 30% 96%;
-    --secondary-foreground: 262 50% 30%;
+    /* Secondary - Light Grey #D3D3D3 */
+    --secondary: 0 0% 83%;
+    --secondary-foreground: 0 0% 20%;
 
-    --muted: 250 20% 96%;
-    --muted-foreground: 250 10% 45%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 50%;
 
-    /* Accent - Bright cyan/teal for highlights */
-    --accent: 174 72% 56%;
+    /* Accent - Medium Grey #808080 */
+    --accent: 0 0% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -56,9 +56,9 @@
     --bronze: 30 55% 50%;
     --points: 262 83% 58%;
 
-    --border: 250 20% 90%;
-    --input: 250 20% 92%;
-    --ring: 262 83% 58%;
+    --border: 0 0% 83%;
+    --input: 0 0% 90%;
+    --ring: 215 100% 34%;
 
     /* Luxury Gold Palette */
     --gold-100: 45 100% 90%;
@@ -83,11 +83,11 @@
     --sidebar-ring: 262 83% 58%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(210 100% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(174 72% 56%), hsl(190 90% 50%));
+    --gradient-primary: linear-gradient(135deg, hsl(215 100% 34%), hsl(215 60% 50%));
+    --gradient-accent: linear-gradient(135deg, hsl(0 0% 50%), hsl(0 0% 70%));
     --gradient-success: linear-gradient(135deg, hsl(142 76% 45%), hsl(160 80% 50%));
     --gradient-gold: linear-gradient(135deg, hsl(45 93% 47%), hsl(35 100% 55%));
-    --gradient-hero: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(210 100% 60%) 50%, hsl(174 72% 56%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(215 100% 34%) 0%, hsl(215 50% 60%) 100%);
   }
 
   .dark {

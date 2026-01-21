@@ -60,7 +60,10 @@ const Catalog = () => {
   const { data: allProgress } = useCourseProgress();
   const { data: certifications } = useCertifications();
 
-  console.log('Catalog: STATE -> user:', user?.id || 'none', 'isLoading:', isLoading, 'courses:', courses?.length || 0);
+  console.log('Catalog: FETCH STATUS -> isLoading:', isLoading, 'courses:', courses?.length, 'user:', user?.id);
+  if (courses && courses.length === 0) {
+    console.warn('Catalog: Courses query returned an empty array. Check if the database "courses" table is seeded.');
+  }
 
   const getProgressForCourse = (courseId: string) => {
     if (!Array.isArray(allProgress)) return null;
