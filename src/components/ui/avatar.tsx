@@ -35,4 +35,19 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-export { Avatar, AvatarImage, AvatarFallback };
+const AvatarBadge = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "absolute bottom-0 right-0 flex h-3 w-3 shrink-0 rounded-full border-2 border-background bg-green-500",
+      className
+    )}
+    {...props}
+  />
+));
+AvatarBadge.displayName = "AvatarBadge";
+
+export { Avatar, AvatarImage, AvatarFallback, AvatarBadge };

@@ -8,13 +8,14 @@ import { useLeaderboard } from '@/hooks/useProgress';
 import { useAuth } from '@/hooks/useAuth';
 import Navbar from '@/components/Navbar';
 import { Link } from 'react-router-dom';
+import { UserProfile } from '@/types/course';
 
 const Leaderboard = () => {
   const { user } = useAuth();
   const { data: leaderboard, isLoading } = useLeaderboard(50);
   console.log('Leaderboard: STATE -> isLoading:', isLoading, 'items:', leaderboard?.length || 0);
 
-  if (isLoading && (!leaderboard || leaderboard.length === 0)) {
+  if (isLoading && (!leaderboard || (leaderboard as UserProfile[]).length === 0)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
@@ -178,4 +179,5 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
+
 

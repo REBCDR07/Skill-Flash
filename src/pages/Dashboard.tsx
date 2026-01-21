@@ -165,8 +165,7 @@ const Dashboard = () => {
       }
     } else {
       navigator.clipboard.writeText(url);
-      toast({
-        title: "Lien copié !",
+      toast.success("Lien copié !", {
         description: "Le lien de vérification a été copié dans le presse-papier.",
       });
     }
@@ -619,7 +618,7 @@ const Dashboard = () => {
                             className={`absolute inset-y-0 left-0 rounded-full transition-all duration-1000 shadow-md w-progress
                                 ${course.progressPercent === 100 ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500' : 'bg-gradient-to-r from-violet-500 via-sky-500 to-amber-500'}
                             `}
-                            style={{ width: `${course.progressPercent}%` }}
+                            style={{ "--progress": `${course.progressPercent}%` } as React.CSSProperties}
                           ></div>
                         </div>
                         <div className="flex justify-end">
@@ -728,4 +727,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
 
