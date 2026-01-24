@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { fetchCourse, fetchChapters, fetchChapterContent } from '@/lib/courses';
-import { useCourseProgress, useUpdateProgress, useAddPoints } from '@/hooks/useProgress';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -18,20 +16,45 @@ import {
   PlayCircle,
   Clock,
   ArrowRight,
-  User,
   Lock,
-  Layout
+  Layout,
+  Trophy,
+  Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Navbar from '@/components/Navbar';
 
 const Course = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   const [currentChapterId, setCurrentChapterId] = useState<number>(1);
-  const { mutate: updateProgress } = useUpdateProgress();
-  const { mutate: addPoints } = useAddPoints();
+  const [localProgress, setLocalProgress] = useState<{ completedChapters: number[] }>({
+    completedChapters: [],
+  });
+
+  // Load progress from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('sf_progress');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed[courseId!]) {
+          setLocalProgress(parsed[courseId!]);
+        }
+      } catch (e) {
+        console.error('Failed to load progress', e);
+      }
+    }
+  }, [courseId]);
+
+  // Save progress to localStorage
+  const saveProgress = (newProgress: typeof localProgress) => {
+    const saved = localStorage.getItem('sf_progress') || '{}';
+    const allProgress = JSON.parse(saved);
+    allProgress[courseId!] = newProgress;
+    localStorage.setItem('sf_progress', JSON.stringify(allProgress));
+    setLocalProgress(newProgress);
+  };
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', courseId],
@@ -51,50 +74,23 @@ const Course = () => {
     enabled: !!courseId && !!currentChapterId
   });
 
-  const { data: progressData } = useCourseProgress(courseId);
-  const progress = progressData as import('@/types/course').CourseProgress | undefined;
+  const isCompleted = (id: number) => localProgress.completedChapters.includes(id);
 
-  const isCompleted = (id: number) => progress?.completed_chapters?.includes(id) || false;
+  const handleChapterAction = () => {
+    // Validate current chapter
+    const newCompleted = [...new Set([...localProgress.completedChapters, currentChapterId])];
+    saveProgress({ completedChapters: newCompleted });
 
-  const goToNextChapter = () => {
-    // Go to next chapter or quiz
     const currentIndex = chapters?.findIndex(c => c.id === currentChapterId) ?? -1;
     if (currentIndex < (chapters?.length ?? 0) - 1) {
+      // Go to next chapter
       setCurrentChapterId(chapters![currentIndex + 1].id);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      toast.success('Félicitations ! Vous avez terminé tous les chapitres. Vous pouvez maintenant passer le test final.');
+      // Last chapter reached, redirect to final test
+      navigate(`/quiz/${courseId}`);
     }
   };
-
-  const handleChapterComplete = () => {
-    if (!courseId) return;
-
-    const currentCompleted = progress?.completed_chapters || [];
-    const newCompleted = [...new Set([...currentCompleted, currentChapterId])];
-
-    // Optimistically update or at least proceed if Supabase is slow
-    updateProgress({
-      courseId,
-      currentChapter: currentChapterId,
-      completedChapters: newCompleted
-    }, {
-      onSuccess: () => {
-        if (!currentCompleted.includes(currentChapterId)) {
-          addPoints(10);
-          toast.success('Chapitre terminé ! +10 points');
-        }
-        goToNextChapter();
-      },
-      onError: (error) => {
-        console.error('Error saving progress:', error);
-        toast.warning('Progrès non sauvegardé (problème de connexion), mais vous pouvez continuer.');
-        goToNextChapter(); // Still proceed
-      }
-    });
-  };
-
-  console.log('Course: STATE -> courseLoading:', courseLoading, 'chaptersLoading:', chaptersLoading, 'course:', !!course, 'chapters:', chapters?.length || 0);
 
   if ((courseLoading || chaptersLoading) && (!course || !chapters)) {
     return (
@@ -107,15 +103,17 @@ const Course = () => {
   if (!course) return <div>Cours non trouvé</div>;
 
   const currentChapter = chapters?.find(c => c.id === currentChapterId);
+  const isLastChapter = currentChapterId === (chapters?.[chapters.length - 1]?.id);
 
   return (
     <div className="min-h-screen bg-background flex flex-col pt-[73px]">
       <Navbar />
+
       {/* Header */}
       <header className="sticky top-[73px] z-40 glass border-b border-border/50 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link to="/catalog">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="rounded-xl">
               <ChevronLeft className="w-5 h-5" />
             </Button>
           </Link>
@@ -127,117 +125,106 @@ const Course = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {progress?.completed_chapters?.length === course.chapters ? (
-            <Button onClick={() => navigate(`/quiz/${courseId}`)}>
-              Passer le test final
-              <Zap className="w-4 h-4 ml-2 fill-current" />
-            </Button>
-          ) : (
-            <Link to="/dashboard">
-              <Button variant="outline" size="sm" className="hidden md:flex">Quitter</Button>
-            </Link>
-          )}
-        </div>
       </header>
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar */}
-        <aside className="hidden lg:flex w-80 border-r border-border/50 flex-col bg-sidebar-background">
-          <div className="p-4 border-b border-sidebar-border/50">
-            <h2 className="font-display font-semibold flex items-center gap-2">
-              <Layout className="w-4 h-4 text-primary" />
-              Sommaire
+      <div className="container max-w-6xl mx-auto flex gap-12 relative">
+        {/* Sidebar - Sticky */}
+        <aside className="hidden lg:block w-80 shrink-0 sticky top-[146px] h-[calc(100vh-146px)] overflow-y-auto py-8 no-scrollbar">
+          <div className="mb-6 px-2">
+            <h2 className="font-display font-black text-xs uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+              <Layout className="w-3.5 h-3.5" />
+              SOMMAIRE DU CURSUS
             </h2>
           </div>
-          <ScrollArea className="flex-1">
-            <div className="p-2 space-y-1">
-              {chapters?.map((chapter, index) => {
-                const active = chapter.id === currentChapterId;
-                const completed = isCompleted(chapter.id);
-                // Lock if previous chapter is not completed (ignoring first chapter)
-                const isLocked = index > 0 && !isCompleted(chapters[index - 1].id);
+          <div className="space-y-1">
+            {chapters?.map((chapter, index) => {
+              const active = chapter.id === currentChapterId;
+              const completed = isCompleted(chapter.id);
+              const isLocked = index > 0 && !isCompleted(chapters[index - 1].id) && !active;
 
-                return (
-                  <button
-                    key={chapter.id}
-                    disabled={isLocked}
-                    onClick={() => {
-                      if (!isLocked) {
-                        setCurrentChapterId(chapter.id);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }
-                    }}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all text-left group relative
-                      ${active ? 'bg-primary text-white shadow-lg' : 'hover:bg-sidebar-accent text-sidebar-foreground'}
-                      ${isLocked ? 'opacity-50 cursor-not-allowed hover:bg-transparent' : ''}
-                    `}
-                  >
-                    <div className="mt-0.5 shrink-0">
-                      {completed ? (
-                        <CheckCircle2 className={`w-4 h-4 ${active ? 'text-white' : 'text-success'}`} />
-                      ) : isLocked ? (
-                        <Lock className="w-4 h-4 text-muted-foreground" />
-                      ) : (
-                        <PlayCircle className={`w-4 h-4 ${active ? 'text-white' : 'text-muted-foreground group-hover:text-primary'}`} />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium leading-tight truncate ${active ? 'text-white' : 'text-sidebar-foreground'}`}>
-                        {chapter.title}
-                      </p>
-                      <div className={`flex items-center gap-2 mt-1 text-[10px] ${active ? 'text-white/80' : 'text-muted-foreground'}`}>
-                        <Clock className="w-3 h-3" />
-                        {chapter.duration}
+              return (
+                <button
+                  key={chapter.id}
+                  disabled={isLocked}
+                  onClick={() => !isLocked && setCurrentChapterId(chapter.id)}
+                  className={`w-full flex items-center gap-3 p-4 rounded-2xl transition-all text-left group relative
+                    ${active ? 'bg-primary text-white shadow-xl shadow-primary/20 scale-[1.02] z-10' : 'hover:bg-secondary/50 text-foreground'}
+                    ${isLocked ? 'opacity-40 cursor-not-allowed grayscale' : ''}
+                  `}
+                >
+                  <div className="mt-0.5 shrink-0">
+                    {completed ? (
+                      <CheckCircle2 className={`w-5 h-5 ${active ? 'text-white' : 'text-success'}`} />
+                    ) : isLocked ? (
+                      <Lock className="w-4 h-4" />
+                    ) : (
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-[10px] font-bold ${active ? 'border-white text-white' : 'border-muted-foreground text-muted-foreground'}`}>
+                        {index + 1}
                       </div>
-                    </div>
-                    {isLocked && (
-                      <div className="absolute inset-0 bg-background/10 backdrop-blur-[1px] rounded-lg" />
                     )}
-                  </button>
-                );
-              })}
-            </div>
-          </ScrollArea>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-bold leading-tight truncate ${active ? 'text-white' : 'text-foreground'}`}>
+                      {chapter.title}
+                    </p>
+                    <div className={`flex items-center gap-2 mt-1 text-[10px] font-medium ${active ? 'text-white/70' : 'text-muted-foreground'}`}>
+                      <Clock className="w-3 h-3" />
+                      {chapter.duration}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </aside>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto px-4 py-8 lg:px-12 bg-background">
+        <main className="flex-1 py-12 px-2 lg:px-0">
           <div className="max-w-3xl mx-auto">
             {currentChapter && (
-              <div className="mb-8">
-                <Badge variant="outline" className="mb-2 text-primary border-primary/20 bg-primary/5">
-                  Chapitre {currentChapterId}
-                </Badge>
-                <h2 className="text-3xl font-display font-bold mb-4">{currentChapter.title}</h2>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground pb-8 border-b border-border/50">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <Clock className="w-4 h-4" /> {currentChapter.duration}
-                  </span>
-                  <Separator orientation="vertical" className="h-4" />
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <Layout className="w-4 h-4" /> {course.difficulty}
-                  </span>
+              <div className="mb-12">
+                <div className="flex items-center gap-3 mb-6">
+                  <Badge variant="outline" className="px-4 py-1.5 border-primary/30 text-primary uppercase tracking-[0.2em] text-[10px] font-black bg-primary/5 rounded-full">
+                    ÉTAPE {currentChapterId} / {course.chapters}
+                  </Badge>
+                  {isCompleted(currentChapterId) && (
+                    <Badge className="bg-success/10 text-success border-success/20 px-3 py-1 rounded-full text-[10px] font-black tracking-widest">
+                      LU
+                    </Badge>
+                  )}
+                </div>
+                <h2 className="text-4xl md:text-5xl font-display font-black mb-8 leading-[1.1] tracking-tight">{currentChapter.title}</h2>
+                <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground pb-8 border-b border-border/50">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-secondary/30 rounded-xl font-bold">
+                    <Clock className="w-4 h-4 text-primary" /> {currentChapter.duration} de lecture
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-secondary/30 rounded-xl font-bold">
+                    <Layout className="w-4 h-4 text-primary" /> Niveau {course.difficulty}
+                  </div>
                 </div>
               </div>
             )}
 
             <div className="prose prose-slate dark:prose-invert max-w-none 
-              prose-headings:font-display prose-headings:font-bold 
-              prose-h1:text-4xl prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6
-              prose-p:text-lg prose-p:leading-relaxed prose-p:text-muted-foreground
-              prose-strong:text-foreground prose-strong:font-bold
-              prose-pre:bg-secondary prose-pre:rounded-xl prose-pre:p-6
-              prose-code:text-primary prose-code:bg-primary/5 prose-code:px-1 prose-code:rounded
-              prose-img:rounded-2xl prose-img:shadow-xl
-              prose-ul:list-disc prose-li:text-muted-foreground
+              prose-headings:font-display prose-headings:font-black 
+              prose-h1:text-4xl prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:tracking-tight
+              prose-p:text-xl prose-p:leading-relaxed prose-p:text-slate-600 dark:prose-p:text-slate-400
+              prose-strong:text-foreground prose-strong:font-black
+              prose-pre:bg-slate-900 prose-pre:rounded-2xl prose-pre:p-8 prose-pre:shadow-2xl
+              prose-code:text-primary prose-code:bg-primary/5 prose-code:px-2 prose-code:py-0.5 prose-code:rounded-lg prose-code:font-bold
+              prose-img:rounded-[2.5rem] prose-img:shadow-2xl
+              prose-ul:list-disc prose-li:text-lg prose-li:font-medium
+              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl
             ">
               {contentLoading ? (
-                <div className="space-y-4">
-                  <div className="h-4 bg-muted animate-pulse rounded w-3/4"></div>
-                  <div className="h-4 bg-muted animate-pulse rounded w-1/2"></div>
-                  <div className="h-4 bg-muted animate-pulse rounded w-5/6"></div>
-                  <div className="h-4 bg-muted animate-pulse rounded w-2/3"></div>
+                <div className="space-y-8 py-12">
+                  <div className="h-10 bg-muted animate-pulse rounded-2xl w-3/4"></div>
+                  <div className="space-y-4">
+                    <div className="h-6 bg-muted animate-pulse rounded-xl w-full"></div>
+                    <div className="h-6 bg-muted animate-pulse rounded-xl w-full"></div>
+                    <div className="h-6 bg-muted animate-pulse rounded-xl w-5/6"></div>
+                  </div>
+                  <div className="h-[300px] bg-muted animate-pulse rounded-[2.5rem] w-full"></div>
                 </div>
               ) : (
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -246,76 +233,41 @@ const Course = () => {
               )}
             </div>
 
-            {progress?.completed_chapters?.length === course.chapters ? (
-              <div className="mt-16 animate-in slide-in-from-bottom-8 duration-700">
-                <div className="p-8 rounded-[2rem] bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-2 border-amber-500/20 flex flex-col md:flex-row items-center gap-8 shadow-2xl">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shrink-0 shadow-lg rotate-3">
-                    <Zap className="w-10 h-10 text-white fill-white" />
-                  </div>
-                  <div className="text-center md:text-left flex-1 space-y-2">
-                    <h3 className="text-2xl font-black text-gray-900">Cours terminé !</h3>
-                    <p className="text-gray-600 font-medium leading-relaxed">
-                      Vous avez acquis toutes les connaissances nécessaires. Lancez le test final pour valider votre expertise et obtenir votre certificat.
-                    </p>
-                  </div>
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-black h-14 px-8 rounded-xl shadow-xl hover:shadow-amber-500/25 transition-all hover:scale-105 shrink-0"
-                    onClick={() => navigate(`/quiz/${courseId}`)}
-                  >
-                    PASSER LE TEST FINAL
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-6 pb-12">
-                <div className="flex items-center gap-4">
-                  <Button
-                    variant="outline"
-                    disabled={currentChapterId === 1}
-                    onClick={() => {
-                      const prevId = chapters?.[chapters?.findIndex(c => c.id === currentChapterId) - 1]?.id;
-                      if (prevId) {
-                        setCurrentChapterId(prevId);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }
-                    }}
-                  >
-                    <ChevronLeft className="w-4 h-4 mr-2" />
-                    Précédent
-                  </Button>
-                  <Button
-                    variant="outline"
-                    disabled={currentChapterId === chapters?.[chapters.length - 1]?.id}
-                    onClick={() => {
-                      const nextId = chapters?.[chapters?.findIndex(c => c.id === currentChapterId) + 1]?.id;
-                      // Strict progression: only allow next if current is completed
-                      if (nextId && isCompleted(currentChapterId)) {
-                        setCurrentChapterId(nextId);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      } else {
-                        toast.error("Veuillez terminer ce chapitre avant de passer au suivant.");
-                      }
-                    }}
-                  >
-                    Suivant
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
+            <div className="mt-20 pt-10 border-t-2 border-border/30 flex flex-col sm:flex-row items-center justify-between gap-8 pb-20">
+              <Button
+                variant="ghost"
+                size="lg"
+                className="rounded-2xl h-16 px-8 font-bold text-muted-foreground hover:text-foreground hover:bg-secondary/50 group"
+                disabled={currentChapterId === 1}
+                onClick={() => {
+                  const prevId = chapters?.[chapters?.findIndex(c => c.id === currentChapterId) - 1]?.id;
+                  if (prevId) {
+                    setCurrentChapterId(prevId);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+              >
+                <ChevronLeft className="w-5 h-5 mr-3 group-hover:-translate-x-1 transition-transform" />
+                Chapitre précédent
+              </Button>
 
-                <div className="flex items-center gap-4">
-                  <Button
-                    size="lg"
-                    className="gradient-primary text-white shadow-glow"
-                    onClick={handleChapterComplete}
-                  >
-                    {isCompleted(currentChapterId) ? 'Chapitre suivant' : 'Marquer comme terminé'}
-                    <CheckCircle2 className="w-5 h-5 ml-2" />
-                  </Button>
-                </div>
-              </div>
-            )}
+              <Button
+                size="lg"
+                className={`h-20 px-12 rounded-[1.5rem] text-xl font-black shadow-2xl transition-all active:scale-95 group overflow-hidden relative
+                   ${isLastChapter ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'gradient-primary text-white shadow-primary/20'}
+                `}
+                onClick={handleChapterAction}
+              >
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="relative z-10 flex items-center gap-3">
+                  {isLastChapter ? 'PASSER LE TEST FINAL' : 'CHAPITRE SUIVANT'}
+                  {isLastChapter ? <Sparkles className="w-6 h-6 animate-pulse" /> : <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />}
+                </span>
+                {isLastChapter && (
+                  <div className="absolute -right-4 -top-4 w-12 h-12 bg-white/20 rounded-full blur-xl" />
+                )}
+              </Button>
+            </div>
           </div>
         </main>
       </div>

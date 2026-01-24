@@ -1,168 +1,106 @@
-# SkillFlash Academy ⚡
+# ⚡ SkillFlash Academy
 
-SkillFlash est une plateforme d'apprentissage moderne, rapide et gamifiée, conçue pour offrir une expérience éducative premium et interactive.
+[![React](https://img.shields.io/badge/React-18.3-blue?logo=react&logoColor=white)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🚀 Stack Technique
-
-### Frontend
-
-- **Framework** : React 18 avec Vite pour un rechargement instantané.
-- **Langage** : TypeScript pour un typage strict et une maintenance aisée.
-- **Styles** : Tailwind CSS avec des animations personnalisées (`tailwindcss-animate`).
-- **UI Components** : Shadcn UI (basé sur Radix UI).
-- **Icônes** : Lucide React.
-
-### État & Backend
-
-- **Authentification** : Supabase Auth (Email/Password).
-- **Data Fetching** : TanStack Query (React Query) pour la gestion du cache et des états de chargement.
-- **Stockage Local** : Gestion de la progression et des profils via `localStorage` avec synchronisation réactive.
-
-### Utilitaires de Données
-
-- **PDF** : `jsPDF` pour la génération de certificats.
-- **QR Code** : `qrcode.react` pour la validation externe.
-- **Validation** : Zod pour les schémas de données.
+**SkillFlash Academy** est une plateforme de micro-learning d'élite conçue pour une montée en compétences ultra-rapide. Grâce à un catalogue dynamique et une interface hautement interactive, les apprenants peuvent maîtriser les technologies digitales les plus demandées en quelques minutes par jour.
 
 ---
 
-## 🏗️ Architecture du Projet
+## ✨ Fonctionnalités "Élite"
 
-```text
-├── public/                 # Assets statiques et Données
-│   ├── courses/            # JSON/Markdown des cours
-│   └── tests/              # Bases de données des quiz (QCM/QR)
-├── src/
-│   ├── components//        # Composants réutilisables
-│   │   ├── ui/             # Composants de base Shadcn
-│   │   └── landing/        # Sections de la page d'accueil
-│   ├── hooks/              # Logique métier (useAuth, useProgress)
-│   ├── lib//               # Clients et utilitaires (Supabase, PDF)
-│   ├── pages/              # Vues (Dashboard, Catalog, Course, Quiz)
-│   └── types/              # Interfaces TypeScript globales
-└── vercel.json             # Configuration pour le déploiement Vercel
-```
+- 🎓 **Catalogue Dynamique de 12 Formations** : Couvrant le Développement (React, Python, JS), le Design (Figma, Design Fundamentals), le Business (Marketing, LinkedIn) et le DevOps (Docker, Kubernetes).
+- 📖 **Expérience de Lecture Immersive** : Sidebar sticky, typographie aérée et parcours séquentiel fluide pour une absorption maximale du contenu.
+- ⏱️ **Examen de Certification Chronométré** : Un test complet combinant 20 QCM et 5 Questions de Réflexion (QR) pour valider une expertise réelle.
+- ⏸️ **Contrôle Total** : Mise en pause de l'examen et sauvegarde de la progression pour une flexibilité maximale.
+- 🏆 **Génération de Diplômes PNG** : Certificats haute fidélité générés à la volée avec score de réussite et code de vérification unique.
+- 📱 **Partage Social Natif** : Partage direct du fichier image de la certification sur LinkedIn, WhatsApp et réseaux sociaux via la Web Share API.
 
 ---
 
-## 📖 Guide par l'Exemple (Documentation Technique)
+## 🛠️ Stack Technologique
 
-Cette section détaille comment le contenu est structuré pour permettre une extension facile de la plateforme.
+SkillFlash utilise une architecture moderne "Headless Content" sans base de données SQL complexe pour une rapidité d'exécution et une scalabilité optimale.
 
-### 1. Définition d'un Cours (`public/courses/index.json`)
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18 (Hooks, Suspense), Vite |
+| **Styling** | Tailwind CSS (Design System), Radix UI (Primitives) |
+| **Data Fetching** | TanStack Query (React Query) |
+| **Content Engine** | Markdown (remark-gfm), JSON Dynamics |
+| **Media/Assets** | html-to-image, Lucide React Icons |
+| **Notifications** | Sonner |
 
-C'est le catalogue central. Chaque objet définit une carte de cours.
+---
 
-```json
-{
-  "id": "python",
-  "title": "Python Intro",
-  "description": "Introduction à Python pour le scripting.",
-  "category": "development",
-  "icon": "Terminal",
-  "color": "python",
-  "duration": "2 heures",
-  "difficulty": "Débutant",
-  "chapters": 10,
-  "totalQuestions": 10
-}
-```
+## 📐 Architecture Technique
 
-### 2. Structure des Chapitres (`public/courses/[id]/chapters.json`)
+Le flux de données de SkillFlash repose sur une séparation stricte entre le moteur de lecture et les actifs pédagogiques.
 
-Définit la liste des modules d'un cours spécifique.
+```mermaid
+graph TD
+    subgraph "External Assets (public/)"
+        A[index.json] -->|Catalog| B[Course Files]
+        B -->|MD| C[Chapter Contents]
+        B -->|JSON| D[Test Banks]
+    end
 
-```json
-{
-  "courseId": "python",
-  "chapters": [
-    {
-      "id": 1,
-      "title": "Introduction & Syntaxe",
-      "description": "Premiers pas avec Python.",
-      "duration": "60 min"
-    }
-  ]
-}
-```
+    subgraph "Core Logic (src/lib/)"
+        E[courses.ts] -->|Dynamic Fetch| A
+        E -->|Parsing| C
+        E -->|Partitioning| D
+    end
 
-### 3. Format des Quiz QCM (`public/tests/qcm/[id]_qcm.json`)
+    subgraph "Interface (src/pages/)"
+        F[Catalog.tsx] <--> E
+        G[Course.tsx] <--> E
+        H[Quiz.tsx] <--> E
+    end
 
-```json
-{
-  "title": "Expertise Python",
-  "passingScore": 70,
-  "questions": [
-    {
-      "id": 1,
-      "question": "Quel mot-clé est utilisé pour créer une fonction ?",
-      "options": ["func", "def", "function"],
-      "correctAnswer": 1,
-      "explanation": "Le mot-clé 'def' est utilisé pour définir une fonction."
-    }
-  ]
-}
-```
-
-### 4. Format des Quiz QR (`public/tests/qr/[id]_qr.json`)
-
-```json
-{
-  "title": "Logique Python Avancée",
-  "questions": [
-    {
-      "id": 1,
-      "question": "Pourquoi utiliser 'with' pour ouvrir un fichier ?",
-      "expectedKeywords": ["fermeture", "automatique", "sécurité"],
-      "sampleAnswer": "Il garantit que le fichier est fermé automatiquement."
-    }
-  ]
-}
+    H -->|Local Storage| I[User Progress]
+    H --> J[Certificate Generation]
+    J -->|Web Share API| K[Social Media]
 ```
 
 ---
 
-## ✨ Fonctionnalités Avancées
+## 🚀 Installation & Lancement
 
-### Gamification & Points
+### Pré-requis
+- Node.js (v18+)
+- npm ou yarn
 
-- **Quizz Réussis** : +50 points.
-- **Chapitres Complétés** : +10 points.
-- **Classement** : Mise à jour réactive des scores dans le Leaderboard via le hook `useProfile`.
-
-### Certifications Statistiques
-
-Le système génère un certificat PDF incluant :
-
-- Le score final.
-- Un QR Code unique encodant les données (Nom, Cours, Date, ID).
-- Une URL de vérification dynamique : `/verify?d=[BASE64_DATA]`.
-
-### Mode Hors-ligne & Résilience
-
-- La progression est sauvegardée localement.
-- Un `ErrorBoundary` global capture les erreurs inattendues pour éviter les écrans blancs.
+### Setup Local
+1. Clonez le repository
+2. Installez les dépendances :
+   ```bash
+   npm install
+   ```
+3. Lancez le serveur de développement :
+   ```bash
+   npm run dev
+   ```
 
 ---
 
-## 🛠️ Installation & Développement
+## ✍️ Guide de Personnalisation : Ajouter un Cours
 
-### 1. Installation
+Il n'est pas nécessaire de toucher au code (`src/`) pour ajouter ou modifier des cours. Tout se passe dans le dossier `public/`.
 
-```bash
-npm install
-```
-
-### 2. Scripts Disponibles
-
-- `npm run dev` : Lance le serveur de dev.
-- `npm run build` : Génère le bundle de production.
-- `npm run test` : Exécute les tests unitaires via Vitest.
-- `npm run lint` : Vérifie la qualité du code.
+1. **Déclarer le cours** : Ajoutez une entrée dans `public/courses/index.json`.
+2. **Créer le dossier** : Créez un sous-dossier `public/courses/[votre-id]/`.
+3. **Rédiger les chapitres** : Créez 10 fichiers `chapter-1.md` à `chapter-10.md` dans ce dossier.
+4. **Configurer les tests** : Ajoutez vos questions dans `public/tests/qcm/[votre-id]_qcm.json` et `public/tests/qr/[votre-id]_qr.json`.
 
 ---
 
-## 📄 Licence & Crédits
+## 📄 Licence
 
-Développé par **SkillFlash Team**. Tous droits réservés.
-Documentation générée pour la version test avant backend
+Ce projet est distribué sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+---
+
+© 2026 SkillFlash Academy • Conçu pour l'Excellence.

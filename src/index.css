@@ -227,3 +227,17 @@
     width: var(--progress, 0%);
   }
 }
+/* Certificate Custom Styles */
+.certificate-container {
+    background-image: radial-gradient(circle at 2px 2px, #f1f5f9 1px, transparent 0);
+    background-size: 24px 24px;
+}
+
+.certificate-signature {
+    font-family: 'Dancing Script', cursive;
+}
+
+/* Dynamic Progress Bar Helper */
+.progress-bar-fill {
+    width: var(--fill-width, 0%);
+}

@@ -84,18 +84,18 @@ export const FeatureShowcase: React.FC = () => {
 
             {/* Portal Card */}
             <Card className="p-6 md:p-10 flex flex-col min-h-[400px] md:min-h-[480px] shadow-sm hover:shadow-md transition-all border-none bg-slate-900 text-white">
-                <Badge className="w-fit mb-6 bg-white/10 text-slate-300 border-none">Sécurité</Badge>
-                <h3 className="text-2xl md:text-3xl font-black tracking-tighter mb-4">Vérification <span className="text-emerald-400 italic">Smart</span></h3>
-                <p className="text-slate-400 font-medium text-xs md:text-base mb-6 md:mb-10 leading-relaxed">Accès universel pour la confirmation de vos compétences.</p>
+                <Badge className="w-fit mb-6 bg-white/10 text-slate-300 border-none">Liberté</Badge>
+                <h3 className="text-2xl md:text-3xl font-black tracking-tighter mb-4">Accès <span className="text-emerald-400 italic">Universel</span></h3>
+                <p className="text-slate-400 font-medium text-xs md:text-base mb-6 md:mb-10 leading-relaxed">Pas de compte, pas de mot de passe. Apprenez et certifiez-vous instantanément.</p>
 
                 <div className="flex-1 bg-white/5 rounded-2xl md:rounded-3xl p-6 md:p-8 space-y-4 md:space-y-6">
                     <div className="flex items-center gap-3 md:gap-4">
                         <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500/10 rounded-xl md:rounded-2xl flex items-center justify-center border border-emerald-500/20">
-                            <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
+                            <Zap className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
                         </div>
                         <div className="text-left">
                             <p className="text-[7px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Status</p>
-                            <p className="text-sm md:text-base font-black text-emerald-400 tracking-tight">ACTIF / VALIDE</p>
+                            <p className="text-sm md:text-base font-black text-emerald-400 tracking-tight">VITESSE MAXIMALE</p>
                         </div>
                     </div>
                     <div className="space-y-1.5 opacity-5">
@@ -106,8 +106,8 @@ export const FeatureShowcase: React.FC = () => {
                     <div className="flex items-center justify-between pt-4 border-t border-white/5">
                         <FileCheck className="w-7 h-7 md:w-8 md:h-8 text-indigo-400 opacity-20" />
                         <div className="text-right">
-                            <p className="text-[6px] font-black text-slate-500 uppercase">Vérification</p>
-                            <p className="text-[8px] font-mono text-slate-400">SF_PROTO_v2</p>
+                            <p className="text-[6px] font-black text-slate-500 uppercase">Protocole</p>
+                            <p className="text-[8px] font-mono text-slate-400">SF_LOCAL_v1</p>
                         </div>
                     </div>
                 </div>

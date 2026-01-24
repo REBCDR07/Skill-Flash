@@ -21,7 +21,6 @@ import { Card } from "@/components/ui/card";
 import Navbar from '@/components/Navbar';
 import { DashboardPreview } from '@/components/landing/DashboardPreview';
 import { FeatureShowcase } from '@/components/landing/FeatureShowcase';
-import { useAuth } from '@/hooks/useAuth';
 
 const AnimatedNumber = ({ value }: { value: string }) => {
   const [displayValue, setDisplayValue] = useState(0);
@@ -99,7 +98,6 @@ const useScrollReveal = () => {
 };
 
 const Index: React.FC = () => {
-  const { user } = useAuth();
   useScrollReveal();
 
   return (
@@ -123,11 +121,11 @@ const Index: React.FC = () => {
           </h1>
 
           <p className="text-sm md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 md:mb-16 font-medium leading-relaxed px-2 animate-[fade-in-up_0.8s_ease-out_0.4s_both]">
-            L'académie de micro-formation certifiante pour les <span className="text-slate-900 font-black">architectes du digital</span>. Une approche haute performance.
+            L'académie de micro-formation certifiante pour les <span className="text-slate-900 font-black">architectes du digital</span>. Une approche haute performance, sans inscription.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-4 mb-12 md:mb-20 animate-[fade-in-up_0.8s_ease-out_0.6s_both]">
-            <Link to={user ? "/catalog" : "/auth"} className="w-full sm:w-auto">
+            <Link to="/catalog" className="w-full sm:w-auto">
               <Button size="lg" className="w-full sm:w-auto h-14 md:h-20 px-8 md:px-12 text-base md:text-xl shadow-xl">
                 LANCER LE CURSUS
                 <ChevronRight className="w-5 h-5 ml-1 md:ml-2" />
@@ -286,7 +284,7 @@ const Index: React.FC = () => {
               </p>
 
               <div className="flex flex-col items-center gap-8 pt-2">
-                <Link to={user ? "/catalog" : "/auth"} className="w-full sm:w-auto">
+                <Link to="/catalog" className="w-full sm:w-auto">
                   <Button size="lg" className="w-full sm:w-auto h-16 md:h-20 px-10 md:px-16 text-base md:text-xl rounded-full bg-white text-slate-900 hover:bg-slate-50 transition-colors shadow-2xl">
                     COMMENCER MAINTENANT
                   </Button>

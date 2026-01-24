@@ -21,15 +21,18 @@ import {
   Lock,
   Star,
   Layers,
-  Sparkles
+  Sparkles,
+  Linkedin,
+  Terminal,
+  Figma,
+  Box,
+  ShipWheel
 } from 'lucide-react';
-import { useCourseProgress, useCertifications } from '@/hooks/useProgress';
-import { useAuth } from '@/hooks/useAuth';
 import Navbar from '@/components/Navbar';
 import { Progress } from '@/components/ui/progress';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Code, Palette, Braces, TrendingUp, MessageCircle
+  Code, Palette, Braces, TrendingUp, MessageCircle, Linkedin, Terminal, Figma, Box, ShipWheel
 };
 
 const colorMap: Record<string, string> = {
@@ -37,7 +40,14 @@ const colorMap: Record<string, string> = {
   css: 'text-blue-500 bg-blue-500/10',
   javascript: 'text-yellow-500 bg-yellow-500/10',
   marketing: 'text-purple-500 bg-purple-500/10',
-  communication: 'text-green-500 bg-green-500/10'
+  communication: 'text-green-500 bg-green-500/10',
+  linkedin: 'text-blue-600 bg-blue-600/10',
+  react: 'text-cyan-500 bg-cyan-500/10',
+  python: 'text-blue-400 bg-blue-400/10',
+  design: 'text-pink-500 bg-pink-500/10',
+  figma: 'text-purple-400 bg-purple-400/10',
+  docker: 'text-blue-500 bg-blue-500/10',
+  kubernetes: 'text-blue-600 bg-blue-600/10'
 };
 
 const gradientMap: Record<string, string> = {
@@ -45,11 +55,17 @@ const gradientMap: Record<string, string> = {
   css: 'from-blue-500/20 to-blue-600/5',
   javascript: 'from-yellow-500/20 to-yellow-600/5',
   marketing: 'from-purple-500/20 to-purple-600/5',
-  communication: 'from-green-500/20 to-green-600/5'
+  communication: 'from-green-500/20 to-green-600/5',
+  linkedin: 'from-blue-600/20 to-blue-700/5',
+  react: 'from-cyan-500/20 to-cyan-600/5',
+  python: 'from-blue-400/20 to-blue-500/5',
+  design: 'from-pink-500/20 to-pink-600/5',
+  figma: 'from-purple-400/20 to-purple-500/5',
+  docker: 'from-blue-500/20 to-darkblue-600/5',
+  kubernetes: 'from-blue-600/20 to-blue-800/5'
 };
 
 const Catalog = () => {
-  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [activeCategory, setActiveCategory] = React.useState<'all' | 'development' | 'business'>('all');
 
@@ -57,21 +73,47 @@ const Catalog = () => {
     queryKey: ['courses'],
     queryFn: fetchCourses
   });
-  const { data: allProgress } = useCourseProgress();
-  const { data: certifications } = useCertifications();
 
-  console.log('Catalog: FETCH STATUS -> isLoading:', isLoading, 'courses:', courses?.length, 'user:', user?.id);
-  if (courses && courses.length === 0) {
-    console.warn('Catalog: Courses query returned an empty array. Check if the database "courses" table is seeded.');
-  }
+  const [localProgress, setLocalProgress] = React.useState<Record<string, number>>({});
+  const [certifiedCourses, setCertifiedCourses] = React.useState<string[]>([]);
 
-  const getProgressForCourse = (courseId: string) => {
-    if (!Array.isArray(allProgress)) return null;
-    return allProgress.find(p => p.course_id === courseId);
+  React.useEffect(() => {
+    const savedProgress = localStorage.getItem('sf_progress');
+    const savedCerts = localStorage.getItem('sf_certs');
+
+    if (savedProgress) {
+      try {
+        const parsed = JSON.parse(savedProgress);
+        const progressMap: Record<string, number> = {};
+        Object.keys(parsed).forEach(courseId => {
+          const courseData = parsed[courseId];
+          const course = courses?.find(c => c.id === courseId); // Changed from COURSES_DATA
+          if (course && courseData.completedChapters) {
+            progressMap[courseId] = Math.round((courseData.completedChapters.length / course.chapters) * 100);
+          }
+        });
+        setLocalProgress(progressMap);
+      } catch (e) {
+        console.error('Failed to parse progress', e);
+      }
+    }
+
+    if (savedCerts) {
+      try {
+        const parsed = JSON.parse(savedCerts);
+        setCertifiedCourses(Object.keys(parsed));
+      } catch (e) {
+        console.error('Failed to parse certs', e);
+      }
+    }
+  }, [courses]); // Added courses to dependency array
+
+  const getProgressPercent = (courseId: string) => {
+    return localProgress[courseId] || 0;
   };
 
-  const hasCertification = (courseId: string) => {
-    return certifications?.some(c => c.course_id === courseId);
+  const isCourseCertified = (courseId: string) => {
+    return certifiedCourses.includes(courseId);
   };
 
   const filteredCourses = courses?.filter(course => {
@@ -82,7 +124,7 @@ const Catalog = () => {
   });
 
   // Only show loading if we are actually loading AND have no cached/fetched data yet
-  if (isLoading && (!courses || courses.length === 0)) {
+  if (isLoading && !courses) {
     console.log('Catalog: RENDERING SPINNER');
     return (
       <div className="min-h-screen flex items-center justify-center bg-background/95">
@@ -128,8 +170,8 @@ const Catalog = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="flex gap-2 p-1 bg-muted/30 rounded-[2.2rem]">
-              {(['all', 'development', 'business'] as const).map((cat) => (
+            <div className="flex gap-2 p-1 bg-muted/30 rounded-[2.2rem] overflow-x-auto no-scrollbar">
+              {(['all', 'development', 'business', 'design', 'devops'] as const).map((cat) => (
                 <Button
                   key={cat}
                   variant={activeCategory === cat ? 'default' : 'ghost'}
@@ -140,7 +182,7 @@ const Catalog = () => {
                     }`}
                   onClick={() => setActiveCategory(cat)}
                 >
-                  {cat === 'all' ? 'Tous' : cat === 'development' ? 'Dev' : 'Business'}
+                  {cat === 'all' ? 'Tous' : cat === 'development' ? 'Dev' : cat === 'business' ? 'Business' : cat === 'design' ? 'Design' : 'DevOps'}
                 </Button>
               ))}
             </div>
@@ -151,11 +193,8 @@ const Catalog = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredCourses?.map((course, idx) => {
             const Icon = iconMap[course.icon] || Code;
-            const progress = getProgressForCourse(course.id);
-            const certified = hasCertification(course.id);
-            const progressPercent = progress
-              ? Math.round((progress.completed_chapters.length / course.chapters) * 100)
-              : 0;
+            const progressPercent = getProgressPercent(course.id);
+            const certified = isCourseCertified(course.id);
 
             return (
               <Link to={`/course/${course.id}`} key={course.id} className="group">
@@ -192,7 +231,7 @@ const Catalog = () => {
 
                   <CardContent className="px-10 pb-10 flex-grow flex flex-col justify-end relative z-10">
                     {/* Activity or Info Section */}
-                    {progress ? (
+                    {progressPercent > 0 ? (
                       <div className="mb-8 space-y-4 bg-background/30 p-6 rounded-[2rem] border border-border/30">
                         <div className="flex justify-between items-end">
                           <div className="space-y-1">
@@ -217,7 +256,7 @@ const Catalog = () => {
                     )}
 
                     <Button className="w-full h-16 rounded-[1.8rem] font-black text-lg gap-3 transition-all duration-500 overflow-hidden group-hover:gradient-primary group-hover:text-white shadow-xl shadow-primary/5 hover:shadow-primary/20">
-                      <span className="relative z-10">{progress ? 'REPRENDRE LE CURSUS' : 'COMMENCER L\'EXPÉRIENCE'}</span>
+                      <span className="relative z-10">{progressPercent > 0 ? 'REPRENDRE LE CURSUS' : 'COMMENCER L\'EXPÉRIENCE'}</span>
                       <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-2 transition-transform" />
                     </Button>
                   </CardContent>
