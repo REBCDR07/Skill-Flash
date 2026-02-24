@@ -7,6 +7,8 @@ import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
 import { checkAndAwardBadges, BADGE_DEFINITIONS } from "@/lib/badges";
 
+import { AIService } from "@/lib/api-services";
+
 const ModulePage = () => {
   const { courseId, moduleId } = useParams();
   const moduleNum = parseInt(moduleId || "1");
@@ -25,22 +27,44 @@ const ModulePage = () => {
     setLoading(true);
     setIsCompleted(false);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-course", {
-        body: { courseSlug: courseId, moduleNumber: moduleNum },
-      });
-      if (error) throw error;
-      setModuleData(data.module);
+      // Obtenir le titre du cours pour le prompt
+      const { data: courseData } = await supabase.from("courses").select("title, level").eq("slug", courseId).single();
+      if (!courseData) throw new Error("Course not found");
+
+      // Appel direct au service IA (Local)
+      const data = await AIService.generateModule(courseData.title, courseData.level, moduleNum);
+
+      // Sauvegarder dans la DB via Supabase
+      const { data: mod, error: modError } = await supabase.from("modules").upsert({
+        course_id: (await supabase.from("courses").select("id").eq("slug", courseId).single()).data?.id,
+        module_number: moduleNum,
+        title: data.title,
+        content: {
+          explanation: data.explanation,
+          examples: data.examples,
+          exercise: data.exercise
+        }
+      }, { onConflict: "course_id, module_number" }).select().single();
+
+      if (modError) throw modError;
+
+      // Sauvegarder le quiz
+      await supabase.from("quizzes").upsert({
+        module_id: mod.id,
+        course_id: (await supabase.from("courses").select("id").eq("slug", courseId).single()).data?.id,
+        quiz_type: "module",
+        questions: {
+          qcm: data.qcm_questions,
+          open: data.open_questions
+        }
+      }, { onConflict: "module_id" });
+
+      setModuleData(mod);
 
       if (user) {
-        const { data: courseData } = await supabase.from("courses").select("id").eq("slug", courseId).single();
-        if (courseData) {
-          const { data: mod } = await supabase.from("modules").select("id").eq("course_id", courseData.id).eq("module_number", moduleNum).single();
-          if (mod) {
-            const { data: prog } = await supabase.from("user_module_progress")
-              .select("completed").eq("user_id", user.id).eq("module_id", mod.id).single();
-            if (prog?.completed) setIsCompleted(true);
-          }
-        }
+        const { data: prog } = await supabase.from("user_module_progress")
+          .select("completed").eq("user_id", user.id).eq("module_id", mod.id).single();
+        if (prog?.completed) setIsCompleted(true);
       }
     } catch (e: any) {
       toast.error(e.message || "Erreur lors de la génération du module");

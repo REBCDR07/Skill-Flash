@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
+import { AIService, EmailService } from "@/lib/api-services";
 
 type Phase = "intro" | "qcm" | "open" | "result";
 
@@ -136,35 +137,75 @@ const CertificationExam = () => {
     if (!user) return;
     setSubmitting(true);
     try {
-      // Call evaluate-answers with questions included for certification
-      const { data: evalData, error: evalError } = await supabase.functions.invoke("evaluate-answers", {
-        body: {
-          answers: { qcm: qcmAnswers, open: openAnswers },
-          courseId: course.id,
-          userId: user.id,
-          quizType: "certification",
-          qcmQuestions,
-          openQuestions,
-        },
+      // Évaluation locale via AIService
+      const evalData = await AIService.evaluateAnswers({
+        qcmQuestions,
+        openQuestions,
+        answers: { qcm: qcmAnswers, open: openAnswers }
       });
 
-      if (evalError) throw evalError;
-
-      const totalScore = evalData?.score ?? 0;
-      const qcmPercent = evalData?.qcmPercent ?? 0;
-      const openPercent = evalData?.openPercent ?? 0;
+      const totalScore = evalData.totalScore;
+      const qcmPercent = evalData.qcmPercent;
+      const openPercent = evalData.openPercent;
       const passed = totalScore >= 80;
 
+      // Sauvegarder le résultat dans Supabase
+      const { data: resultEntry } = await supabase.from("results").insert({
+        user_id: user.id,
+        course_id: course.id,
+        score: totalScore,
+        max_score: 100,
+        answers: { qcm: qcmAnswers, open: openAnswers }
+      }).select().single();
+
       if (passed) {
-        const { data: certData } = await supabase.functions.invoke("generate-certificate", {
-          body: { userId: user.id, courseId: course.id, score: totalScore },
+        // Génération de certificat locale
+        const verificationCode = `SF-${course.slug.toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
+        const { data: certData, error: certError } = await supabase.from("certificates").insert({
+          user_id: user.id,
+          course_id: course.id,
+          verification_code: verificationCode,
+          score: totalScore
+        }).select().single();
+
+        if (certError) throw certError;
+
+        // Mise à jour du profil (Points et Badges)
+        const { data: profile } = await supabase.from("profiles").select("*").eq("user_id", user.id).single();
+        const newPoints = (profile?.points || 0) + 100;
+        const newBadges = [...(profile?.badges || [])];
+        if (!newBadges.includes('Certifié')) newBadges.push('Certifié');
+
+        await supabase.from("profiles").update({ points: newPoints, badges: newBadges }).eq("user_id", user.id);
+
+        setResult({
+          passed: true,
+          score: totalScore,
+          qcmScore: qcmPercent,
+          openPercent,
+          certificate: certData,
+          verificationCode
         });
-        setResult({ passed: true, score: totalScore, qcmScore: qcmPercent, openPercent, certificate: certData?.certificate, verificationCode: certData?.verificationCode });
+
         toast.success("Certification obtenue ! 🎉🏆");
 
-        supabase.functions.invoke("send-certificate-email", {
-          body: { userId: user.id, courseId: course.id, verificationCode: certData?.verificationCode, type: "certificate" },
+        // Envoi d'email local via EmailService
+        const userName = profile?.name || "Apprenant";
+        const emailBody = `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0b; color: white; padding: 40px; border-radius: 16px;">
+            <h1 style="color: #10b981; text-align: center;">🏆 Certification obtenue !</h1>
+            <p style="text-align: center;">Félicitations ${userName}, vous avez réussi <strong>${course.title}</strong></p>
+            <div style="background: #18181b; padding: 24px; border-radius: 12px; text-align: center;">
+              <p>Code de vérification : <strong>${verificationCode}</strong></p>
+            </div>
+          </div>`;
+
+        EmailService.sendEmail({
+          to: user.email!,
+          subject: `🏆 Félicitations ! Votre certificat ${course.title} est prêt`,
+          html: emailBody
         }).catch(console.error);
+
       } else {
         setResult({ passed: false, score: totalScore, qcmScore: qcmPercent, openPercent });
         toast.error(`Score insuffisant (${Math.round(totalScore)}%). Il faut ≥ 80%.`);
@@ -301,11 +342,10 @@ const CertificationExam = () => {
             <div className="mt-4 space-y-2">
               {q.options?.map((opt: string, i: number) => (
                 <button key={i} onClick={() => handleQcmAnswer(i)}
-                  className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition-all ${
-                    qcmAnswers[qcmCurrent] === i 
-                      ? "border-primary bg-primary/10 text-foreground scale-[1.01]" 
-                      : "border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
-                  }`}>
+                  className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition-all ${qcmAnswers[qcmCurrent] === i
+                    ? "border-primary bg-primary/10 text-foreground scale-[1.01]"
+                    : "border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
+                    }`}>
                   <div className={`h-4 w-4 shrink-0 rounded-full border-2 transition-colors ${qcmAnswers[qcmCurrent] === i ? "border-primary bg-primary" : "border-muted-foreground"}`} />
                   {opt}
                 </button>
@@ -338,7 +378,7 @@ const CertificationExam = () => {
         </div>
         <div className="mt-4 flex justify-end">
           {openCurrent < openQuestions.length - 1 ? (
-            <button 
+            <button
               onClick={() => canAdvanceOpen() && setOpenCurrent(openCurrent + 1)}
               disabled={!canAdvanceOpen()}
               className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed">

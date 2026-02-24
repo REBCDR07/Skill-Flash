@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
+import { AIService } from "@/lib/api-services";
 
 const Quiz = () => {
   const { courseId, moduleId } = useParams();
@@ -27,35 +28,102 @@ const Quiz = () => {
 
   const loadQuiz = async () => {
     setLoading(true);
-    // First ensure module is generated
-    const { data } = await supabase.functions.invoke("generate-course", {
-      body: { courseSlug: courseId, moduleNumber: moduleNum },
-    });
-    if (data?.quiz) {
-      setQuiz(data.quiz);
+    try {
+      const { data: courseData } = await supabase.from("courses").select("id, title, level").eq("slug", courseId).single();
+      if (!courseData) throw new Error("Course not found");
+
+      const { data: mod } = await supabase.from("modules").select("id").eq("course_id", courseData.id).eq("module_number", moduleNum).single();
+
+      let existingQuiz = null;
+      if (mod) {
+        const { data } = await supabase.from("quizzes").select("*").eq("module_id", mod.id).single();
+        existingQuiz = data;
+      }
+
+      if (existingQuiz) {
+        setQuiz(existingQuiz);
+      } else {
+        const data = await AIService.generateModule(courseData.title, courseData.level, moduleNum);
+
+        const { data: newMod } = await supabase.from("modules").upsert({
+          course_id: courseData.id,
+          module_number: moduleNum,
+          title: data.title,
+          content: {
+            explanation: data.explanation,
+            examples: data.examples,
+            exercise: data.exercise
+          }
+        }, { onConflict: "course_id, module_number" }).select().single();
+
+        const { data: newQuiz } = await supabase.from("quizzes").upsert({
+          module_id: newMod!.id,
+          course_id: courseData.id,
+          quiz_type: "module",
+          questions: {
+            qcm: data.qcm_questions,
+            open: data.open_questions
+          }
+        }, { onConflict: "module_id" }).select().single();
+
+        setQuiz(newQuiz);
+      }
+    } catch (e: any) {
+      console.error("Erreur de chargement du quiz:", e);
+      toast.error(e.message || "Erreur de chargement");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="flex min-h-screen items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </div>
-    );
-  }
+  const handleFinish = async () => {
+    if (!user) { toast.error("Connectez-vous pour soumettre"); return; }
+    setSubmitting(true);
+    try {
+      const { data: courseData } = await supabase.from("courses").select("id").eq("slug", courseId).single();
+      const { data: moduleData } = await supabase.from("modules").select("id").eq("course_id", courseData!.id).eq("module_number", moduleNum).single();
+
+      const questions = quiz.questions as any;
+      const evalData = await AIService.evaluateAnswers({
+        qcmQuestions: questions.qcm || [],
+        openQuestions: questions.open || [],
+        answers
+      });
+
+      await supabase.from("results").insert({
+        user_id: user.id,
+        course_id: courseData!.id,
+        module_id: moduleData?.id,
+        quiz_id: quiz.id,
+        score: evalData.totalScore,
+        max_score: 100,
+        answers
+      });
+
+      setResult({
+        ...evalData,
+        qcmTotal: (questions.qcm || []).length,
+        openTotal: (questions.open || []).length * 5,
+        passed: evalData.totalScore >= 60
+      });
+
+      setSubmitted(true);
+      if (evalData.totalScore >= 60) toast.success("Module validé ! 🎉");
+      else toast.error("Score insuffisant. Réessayez !");
+    } catch (e: any) {
+      toast.error(e.message || "Erreur d'évaluation");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const questions = quiz?.questions as any;
   const allQuestions = [
-    ...(questions?.qcm || []).map((q: any, i: number) => ({ ...q, type: "qcm", index: i })),
-    ...(questions?.open || []).map((q: any, i: number) => ({ ...q, type: "open", index: i })),
+    ...(questions?.qcm || []).map((qm: any, i: number) => ({ ...qm, type: "qcm", index: i })),
+    ...(questions?.open || []).map((qo: any, i: number) => ({ ...qo, type: "open", index: i })),
   ];
 
   const q = allQuestions[current];
-  if (!q) return null;
 
   const handleSelectQCM = (optionIndex: number) => {
     if (currentSubmitted) return;
@@ -71,35 +139,16 @@ const Quiz = () => {
     }
   };
 
-  const handleFinish = async () => {
-    if (!user) { toast.error("Connectez-vous pour soumettre"); return; }
-    setSubmitting(true);
-    try {
-      // Get course ID from DB
-      const { data: courseData } = await supabase.from("courses").select("id").eq("slug", courseId).single();
-      const { data: moduleData } = await supabase.from("modules").select("id").eq("course_id", courseData!.id).eq("module_number", moduleNum).single();
-
-      const { data, error } = await supabase.functions.invoke("evaluate-answers", {
-        body: {
-          answers,
-          quizId: quiz.id,
-          moduleId: moduleData?.id,
-          courseId: courseData!.id,
-          userId: user.id,
-          quizType: "module",
-        },
-      });
-      if (error) throw error;
-      setResult(data);
-      setSubmitted(true);
-      if (data.passed) toast.success("Module validé ! 🎉");
-      else toast.error("Score insuffisant. Réessayez !");
-    } catch (e: any) {
-      toast.error(e.message || "Erreur d'évaluation");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="flex min-h-screen items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
 
   if (submitted && result) {
     return (
@@ -115,7 +164,7 @@ const Quiz = () => {
             <h1 className="mt-4 font-display text-2xl font-bold text-foreground">
               {result.passed ? "Module validé ! 🎉" : "Pas encore..."}
             </h1>
-            <p className="mt-2 text-4xl font-bold text-gradient-primary">{Math.round(result.score)}%</p>
+            <p className="mt-2 text-4xl font-bold text-gradient-primary">{Math.round(result.totalScore)}%</p>
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <p>QCM : {result.qcmScore}/{result.qcmTotal}</p>
               <p>Questions ouvertes : {result.openScore}/{result.openTotal} points</p>
@@ -135,6 +184,8 @@ const Quiz = () => {
       </div>
     );
   }
+
+  if (!q) return null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -164,12 +215,11 @@ const Quiz = () => {
                 const isWrong = currentSubmitted && isSelected && i !== q.correct;
                 return (
                   <button key={i} onClick={() => handleSelectQCM(i)}
-                    className={`flex w-full items-center gap-3 rounded-lg border p-4 text-left text-sm transition-colors ${
-                      isCorrect ? "border-primary bg-primary/10 text-primary"
-                        : isWrong ? "border-destructive bg-destructive/10 text-destructive"
+                    className={`flex w-full items-center gap-3 rounded-lg border p-4 text-left text-sm transition-colors ${isCorrect ? "border-primary bg-primary/10 text-primary"
+                      : isWrong ? "border-destructive bg-destructive/10 text-destructive"
                         : isSelected ? "border-primary/40 bg-primary/5 text-foreground"
-                        : "border-border bg-background text-muted-foreground hover:text-foreground"
-                    }`}>
+                          : "border-border bg-background text-muted-foreground hover:text-foreground"
+                      }`}>
                     {currentSubmitted && isCorrect && <CheckCircle2 className="h-4 w-4 shrink-0" />}
                     {currentSubmitted && isWrong && <XCircle className="h-4 w-4 shrink-0" />}
                     {!currentSubmitted && <div className={`h-4 w-4 shrink-0 rounded-full border ${isSelected ? "border-primary bg-primary" : "border-muted-foreground"}`} />}
